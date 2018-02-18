@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+}
+
+group 'org.sheinbergon'
+version '0.0.2'
+
+apply plugin: 'groovy'
+apply plugin: 'java'
+
+sourceCompatibility = 1.9
+
+repositories {
+    mavenCentral()
+}
+
+ext.depVersions = [
+        jna         : '4.5.1',
+        commonsLang3: '3.7',
+        lombok      : '1.16.20'
+]
+
+ext.testDepVersions = [
+        junit: '5.1.0',
+]
+
+
+
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.5.1'
+}
+
+dependencies {
+    // JNA
+    compile "net.java.dev.jna:jna:${depVersions.jna}"
+
+    // Utility
+    compile "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
+
+    // Junit 5
+    testCompile "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
+}
