@@ -2,7 +2,9 @@ package org.sheinbergon.aac.jna.v015.structure;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
+import com.sun.jna.ptr.ShortByReference;
 import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
@@ -33,18 +35,24 @@ public class AACEncoder extends Structure {
     public Pointer hMetadataEnc;
     public int metaDataAllowed;
     public Pointer hTpEnc;
-    public Pointer outBuffer;
+    public ByteByReference outBuffer;
     public int outBufferInBytes;
-    public Pointer inputBuffer;
+    public ShortByReference inputBuffer;
     public int inputBufferOffset;
     public int nSamplesToRead;
     public int nSamplesRead;
     public int nZerosAppended;
     public int nDelay;
+    /*
+        Arrays - 1D, 2D or even 3D, are initialized as 1D to accommodate for size allocation.
+        This is due to the fact JNA doesn't support mapping multi-dimensional array inside structs with simple
+        preservation of size/memory allocation for primitives. As we won't be using these values, I'm
+        perfectly
+     */
     public AACEncExtPayload[] extPayload = new AACEncExtPayload[MAX_TOTAL_EXT_PAYLOADS];
-    public Pointer extPayloadData;
-    public Pointer extPayloadSize;
-    public int InitFlags;
+    public byte[] extPayloadData = new byte[8 * MAX_PAYLOAD_SIZE];
+    public int[] extPayloadSize = new int[8];
+    public long InitFlags;
     public int nMaxAacElements;
     public int nMaxAacChannels;
     public int nMaxSbrElements;

@@ -2,6 +2,7 @@ package org.sheinbergon.aac.jna.v015.structure;
 
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.ByteByReference;
 import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
@@ -9,13 +10,13 @@ import java.util.List;
 
 @ToString
 public class AACEncExtPayload extends Structure {
-    
+
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncExtPayload.class);
 
     /**
      * pointer to extension payload data
      */
-    public Pointer pData;
+    public ByteByReference pData;
     /**
      * extension payload data size in bits
      */

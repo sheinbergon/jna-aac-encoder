@@ -1,14 +1,26 @@
 package org.sheinbergon.aac.jna.v015.structure;
 
+import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
+import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
+import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
 public class AACEncBufDesc extends Structure {
-    
+
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncBufDesc.class);
+
+    public final static AACEncBufDesc NULL = new AACEncBufDesc(Pointer.NULL);
+
+    private AACEncBufDesc(Pointer pointer) {
+        super(pointer);
+    }
+
+    public AACEncBufDesc() {
+    }
 
     /**
      * Number of buffers.
@@ -17,7 +29,7 @@ public class AACEncBufDesc extends Structure {
     /**
      * Pointer to vector containing buffer addresses.
      */
-    public IntByReference[] bufs;
+    public PointerByReference bufs;
     /**
      * Identifier of each buffer element. See ::AACENC_BufferIdentifier.
      */

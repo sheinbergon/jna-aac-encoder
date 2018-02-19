@@ -1,11 +1,7 @@
 package org.sheinbergon.aac;
 
-import com.sun.jna.Structure;
-import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.jna.v015.FdkAAC;
 import org.sheinbergon.aac.jna.v015.structure.AACEncoder;
-import org.sheinbergon.aac.jna.v015.structure.LibInfo;
-import org.sheinbergon.aac.jna.v015.util.AACEncError;
 import org.sheinbergon.aac.jna.v015.util.AACEncParam;
 
 import java.util.Arrays;
@@ -14,6 +10,8 @@ import java.util.Objects;
 public class Examples {
     public static void main(String[] args) {
 
+        System.out.println("Library information...");
+        System.out.println("########################");
         // Get Library info
         Arrays.stream(FdkAAC.getLibInfo())
                 .filter(info -> Objects.nonNull(info.title))
@@ -22,13 +20,32 @@ public class Examples {
         // Open encoder handle
         AACEncoder encoder = FdkAAC.openEncoder(0, 0);
 
-        // Test Set parameter functionality
-        System.out.println("Before set - " + encoder.extParam.userSamplerate);
-        FdkAAC.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, 44100);
-        int paramAfter = FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE);
-        System.out.println("After set - " + encoder.extParam.userSamplerate);
+        // Set some parameters (ChannelMode is mandatory!)
+        System.out.println();
+        System.out.println("Clean values :");
+        System.out.println("##############");
+        System.out.println("Sample Rate - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE));
+        System.out.println("Channel Mode - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE));
+        System.out.println("Bit Rate - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_BITRATE));
 
-        // Close encoder handle
+        FdkAAC.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, 44100);
+        FdkAAC.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE, 2);
+        FdkAAC.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, 262144);
+
+        System.out.println();
+        System.out.println("Init Flags after initial settings - " + encoder.InitFlags);
+        // Initialize encoder. Having the init-flags initiates encoder adaptations;
+        FdkAAC.initEncoder(encoder);
+
+        // Check parameters set post initialization
+        System.out.println();
+        System.out.println("After Set & Initialization :");
+        System.out.println("###########################");
+        System.out.println("Sample Rate - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE));
+        System.out.println("Channel Mode - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE));
+        System.out.println("Bit Rate - " + FdkAAC.getEncoderParam(encoder, AACEncParam.AACENC_BITRATE));
+
+
         FdkAAC.closeEncoder(encoder);
     }
 }

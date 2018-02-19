@@ -1,5 +1,6 @@
 package org.sheinbergon.aac.jna.v015.structure;
 
+import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
@@ -8,6 +9,16 @@ import java.util.List;
 public class AACEncOutArgs extends Structure {
 
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncOutArgs.class);
+
+    public final static AACEncOutArgs NULL = new AACEncOutArgs(Pointer.NULL);
+
+    private AACEncOutArgs(Pointer pointer) {
+        super(pointer);
+    }
+
+
+    public AACEncOutArgs() {
+    }
 
     /**
      * Number of valid bitstream bytes generated during aacEncEncode().
