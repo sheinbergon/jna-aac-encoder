@@ -20,7 +20,9 @@ public class AACEncoder extends Structure {
 
     // TODO - Protect against null values
     public static AACEncoder of(PointerByReference pointerReference) {
-        return new AACEncoder(pointerReference.getValue());
+        AACEncoder encoder = new AACEncoder(pointerReference.getValue());
+        encoder.read();
+        return encoder;
     }
 
     private AACEncoder(Pointer pointer) {
@@ -47,7 +49,7 @@ public class AACEncoder extends Structure {
         Arrays - 1D, 2D or even 3D, are initialized as 1D to accommodate for size allocation.
         This is due to the fact JNA doesn't support mapping multi-dimensional array inside structs with simple
         preservation of size/memory allocation for primitives. As we won't be using these values, I'm
-        perfectly
+        perfectly fine with it
      */
     public AACEncExtPayload[] extPayload = new AACEncExtPayload[MAX_TOTAL_EXT_PAYLOADS];
     public byte[] extPayloadData = new byte[8 * MAX_PAYLOAD_SIZE];

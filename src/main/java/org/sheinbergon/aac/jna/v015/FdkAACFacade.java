@@ -1,10 +1,12 @@
 package org.sheinbergon.aac.jna.v015;
 
+import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import org.apache.commons.lang3.ArrayUtils;
 import org.sheinbergon.aac.jna.v015.structure.*;
 import org.sheinbergon.aac.jna.v015.util.AACEncError;
 import org.sheinbergon.aac.jna.v015.util.AACEncParam;
@@ -19,9 +21,7 @@ public class FdkAACFacade {
         PointerByReference pointerRef = new PointerByReference();
         AACEncError result = AACEncError.valueOf(FdkAAC.aacEncOpen(pointerRef, modules, maxChannels));
         handleResult(result, FdkAAC.Methods.OPEN);
-        AACEncoder encoder = AACEncoder.of(pointerRef);
-        encoder.read(); // TODO - Read additional fields here...
-        return encoder;
+        return AACEncoder.of(pointerRef);
     }
 
     public static void closeEncoder(AACEncoder encoder) {
@@ -31,7 +31,7 @@ public class FdkAACFacade {
     }
 
     public static void initEncoder(AACEncoder encoder) {
-        AACEncError result = AACEncError.valueOf(FdkAAC.aacEncEncode(encoder, AACEncBufDesc.NULL, AACEncBufDesc.NULL, AACEncInArgs.NULL, AACEncOutArgs.NULL));
+        AACEncError result = AACEncError.valueOf(FdkAAC.aacEncEncode(encoder, null, null, null, null));
         handleResult(result, FdkAAC.Methods.ENCODE);
     }
 
@@ -41,17 +41,19 @@ public class FdkAACFacade {
         AACEncOutArgs outArgs = new AACEncOutArgs();
         AACEncBufDesc inBuf = new AACEncBufDesc();
         inBuf.numBufs = 1;
-        Byte[] convereted = IntStream.range(0, length)
+        byte[] converted = ArrayUtils.toPrimitive(IntStream.range(0, length)
                 .filter(index -> index % 2 == 0)
-                .mapToObj(index -> data[index] | (data[index + 1] << 8))
-                .toArray(Byte[]::new);
-        inBuf.bufs = new PointerByReference(new ByteByReference(convereted[0]).getPointer());
+                .mapToObj(index -> (byte) (data[index] | (data[index + 1] << 8)))
+                .toArray(Byte[]::new));
+        Memory in = new Memory(converted.length);
+        in.write(0, converted, 0, converted.length);
+        inBuf.bufs = new PointerByReference(in);
         inBuf.bufferIdentifiers = new IntByReference(0);
         inBuf.bufSizes = new IntByReference(length);
         inBuf.bufElSizes = new IntByReference(2);
         AACEncBufDesc outBuf = new AACEncBufDesc();
         outBuf.numBufs = 1;
-        outBuf.bufs = new PointerByReference(new ByteByReference((new byte[20480])[0]).getPointer());
+        outBuf.bufs = new PointerByReference(new Memory(20480));
         outBuf.bufferIdentifiers = new IntByReference(3);
         outBuf.bufSizes = new IntByReference(20480);
         outBuf.bufElSizes = new IntByReference(1);

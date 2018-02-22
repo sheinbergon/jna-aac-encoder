@@ -8,7 +8,7 @@ version '0.0.1'
 apply plugin: 'groovy'
 apply plugin: 'java'
 
-sourceCompatibility = 1.9
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
@@ -20,7 +20,7 @@ task wrapper(type: Wrapper) {
 
 dependencies {
     compile 'net.java.dev.jna:jna:4.5.1'
-    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'org.apache.commons:commons-lang3:3.7'
     compileOnly 'org.projectlombok:lombok:1.16.20'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
