@@ -6,9 +6,11 @@ import org.sheinbergon.aac.jna.v015.FdkAACFacade;
 import org.sheinbergon.aac.jna.v015.structure.AACEncoder;
 import org.sheinbergon.aac.jna.v015.util.AACEncParam;
 
+import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Vector;
@@ -37,36 +39,30 @@ public class Examples {
 
         FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, 44100);
         FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE, 2);
-        FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, 131072);
+        FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, 64000);
+        FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_AFTERBURNER, 1);
+        FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELORDER, 1);
+        FdkAACFacade.setEncoderParam(encoder, AACEncParam.AACENC_AOT, 2);
 
         System.out.println();
         System.out.println("Init Flags after initial settings - " + encoder.InitFlags);
         // Initialize encoder. Having the init-flags initiates encoder adaptations;
         FdkAACFacade.initEncoder(encoder);
 
-        // Check parameters set post initialization
-        System.out.println();
-        System.out.println("After Set & Initialization :");
-        System.out.println("###########################");
-        System.out.println("Sample Rate - " + FdkAACFacade.getEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE));
-        System.out.println("Channel Mode - " + FdkAACFacade.getEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE));
-        System.out.println("Bit Rate - " + FdkAACFacade.getEncoderParam(encoder, AACEncParam.AACENC_BITRATE));
-
-
-        // Check parameters set post initialization
-        System.out.println();
-        System.out.println("Reading WAV file");
-        System.out.println("###########################");
-        System.out.flush();
-        System.out.flush();
-        // TODO - these functionality should be abstracted
+        // This needs to be sized according to the number of channels
         byte[] buffer = new byte[4096];
-        AudioInputStream stream = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
-        int read = stream.read(buffer);
-        System.out.println("Read " + read + " bytes, lets encode");
-        FdkAACFacade.encode(encoder, read, buffer);
-        System.out.println("Encoded");
-        stream.close();
+        AudioInputStream wav = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
+        FileOutputStream aac = new FileOutputStream("/tmp/test.aac");
+        int read = 0;
+        while ((read = wav.read(buffer)) != -1) {
+            byte[] encoded = FdkAACFacade.encode(encoder, read, buffer, false);
+            aac.write(encoded);
+        }
+        byte[] encoded = FdkAACFacade.encode(encoder, read, buffer, true);
+        aac.write(encoded);
+        aac.flush();
+        aac.close();
+        wav.close();
         FdkAACFacade.closeEncoder(encoder);
     }
 }
