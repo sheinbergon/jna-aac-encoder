@@ -36,7 +36,7 @@ public class AACEncConfig extends Structure {
      */
     public int averageBits;
     /**
-     * encoder bitrate mode (CBR/VBR)
+     * encoder bitRate mode (CBR/VBR)
      */
     public int bitrateMode;
     /**
@@ -105,7 +105,7 @@ public class AACEncConfig extends Structure {
      */
     public byte useIS;
     /**
-     * flag: use afterburner
+     * flag: use afterBurner
      */
     public byte useRequant;
 

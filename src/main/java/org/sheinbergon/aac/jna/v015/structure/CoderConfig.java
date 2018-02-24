@@ -32,7 +32,7 @@ public class CoderConfig extends Structure {
      */
     public int extSamplingRate;
     /**
-     * Average bitrate.
+     * Average bitRate.
      */
     public int bitRate;
     /**

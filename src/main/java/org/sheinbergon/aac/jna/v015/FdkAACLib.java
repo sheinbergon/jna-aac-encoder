@@ -1,27 +1,17 @@
 package org.sheinbergon.aac.jna.v015;
 
 import com.sun.jna.Native;
-import com.sun.jna.NativeLibrary;
-import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
-import com.sun.jna.ptr.ByteByReference;
-import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import lombok.RequiredArgsConstructor;
 import org.sheinbergon.aac.jna.v015.structure.*;
-import org.sheinbergon.aac.jna.v015.util.AACEncError;
-import org.sheinbergon.aac.jna.v015.util.AACEncParam;
-import org.sheinbergon.aac.jna.v015.util.FdkAACException;
 
-import java.util.Optional;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-
-public class FdkAAC {
+public class FdkAACLib {
 
     @RequiredArgsConstructor
     enum Methods {
+        INFO("aacEncInfo"),
         GET_LIB_INFO("aacEncGetLibInfo"),
+        GET_PARAM("aacEncoder_GetParam"),
         SET_PARAM("aacEncoder_SetParam"),
         OPEN("accEncOpen"),
         CLOSE("accEncClose"),
@@ -43,6 +33,8 @@ public class FdkAAC {
     static native int aacEncEncode(AACEncoder hAacEncoder, AACEncBufDesc inBufDesc, AACEncBufDesc outBufDesc, AACEncInArgs inargs, AACEncOutArgs outargs);
 
     static native int aacEncGetLibInfo(LibInfo libInfo);
+
+    static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
 
     static native int aacEncoder_SetParam(AACEncoder encoder, int param, int value);
 
