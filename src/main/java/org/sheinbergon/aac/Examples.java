@@ -52,6 +52,7 @@ public class Examples {
         AACEncInfo info = FdkAACLibFacade.getEncoderInfo(encoder);
 
         AudioInputStream wav = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
+        System.out.println(wav.getFormat().getEncoding());
         FileOutputStream aac = new FileOutputStream("/tmp/test.aac");
         byte[] buffer = new byte[info.frameLength * 2 * wav.getFormat().getChannels()];
 

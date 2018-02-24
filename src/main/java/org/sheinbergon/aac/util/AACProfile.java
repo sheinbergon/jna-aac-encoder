@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum FdkAACEncoderProfile {
+public enum AACProfile {
     AAC_LC(2),
     HE_AAC(5),
     HE_AAC_V2(29),
