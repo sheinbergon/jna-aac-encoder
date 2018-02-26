@@ -11,7 +11,7 @@ import java.util.Objects;
 
 @Getter
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class WAVAudioInput {
 
     private final static Integer SUPPORTED_SAMPLE_SIZE = 16;
@@ -45,39 +45,22 @@ public class WAVAudioInput {
         private WAVAudioFormat audioFormat = null;
 
         public WAVAudioInput build() {
-            WAVAudioInput input = new WAVAudioInput();
-            if (ArrayUtils.isNotEmpty(data)) {
-                input.data = data;
-            } else {
+            if (ArrayUtils.isEmpty(data)) {
                 throw new WAVAudioInputException("data", "Empty/Null array");
-            }
-            if (size >= 0 && size <= data.length) {
-                input.size = size;
-            } else {
+            } else if (size < 0 || size > data.length) {
                 throw new WAVAudioInputException("size", String.valueOf(size));
-            }
-            if (sampleSize == SUPPORTED_SAMPLE_SIZE) {
-                input.sampleSize = sampleSize;
-            } else {
+            } else if (sampleSize != SUPPORTED_SAMPLE_SIZE) {
                 throw new WAVAudioInputException("sampleSize", String.valueOf(sampleSize));
-            }
-            if (SUPPORTED_CHANNELS_RANGE.contains(channels)) {
-                input.channels = channels;
-            } else {
+            } else if (!SUPPORTED_CHANNELS_RANGE.contains(channels)) {
                 throw new WAVAudioInputException("channels", String.valueOf(channels));
-            }
-            if (Objects.equals(audioFormat, WAVAudioFormat.PCM)) {
-                input.audioFormat = audioFormat;
-            } else {
+            } else if (!Objects.equals(audioFormat, WAVAudioFormat.PCM)) {
                 throw new WAVAudioInputException("audioFormat", String.valueOf(audioFormat));
+            } else {
+                return new WAVAudioInput(data, channels);
             }
-            return input;
         }
     }
 
-    private byte[] data;
-    private int size;
-    private int sampleSize;
-    private int channels;
-    private WAVAudioFormat audioFormat;
+    private final byte[] data;
+    private final int channels;
 }

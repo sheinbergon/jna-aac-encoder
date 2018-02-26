@@ -5,6 +5,7 @@ import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import org.sheinbergon.aac.WAVAudioInput;
 import org.sheinbergon.aac.jna.v015.structure.*;
 import org.sheinbergon.aac.jna.v015.util.AACEncError;
 import org.sheinbergon.aac.jna.v015.util.AACEncParam;
@@ -14,6 +15,18 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 public class FdkAACLibFacade {
+
+    private final static int IN_BUFFER_COUNT = 1;
+    private final static int IN_BUFFER_IDENTIFIER = 0;
+    private final static int IN_BUFFER_ELEMENT_SIZE = 2;
+
+    // This buffer just needs to be big enough to contain the encoded data
+    private final static int OUT_BUFFER_SIZE = 20480;
+    private final static int OUT_BUFFER_COUNT = 1;
+    private final static int OUT_BUFFER_IDENTIFIER = 3;
+    private final static int OUT_BUFFER_ELEMENT_SIZE = 1;
+
+
     public static AACEncoder openEncoder(int modules, int maxChannels) {
         PointerByReference pointerRef = new PointerByReference();
         AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncOpen(pointerRef, modules, maxChannels));
@@ -32,33 +45,23 @@ public class FdkAACLibFacade {
         verifyResult(result, FdkAACLib.Methods.ENCODE);
     }
 
-    public static byte[] encode(AACEncoder encoder, int length, byte[] data, boolean terminal) {
+    public static byte[] encode(AACEncoder encoder, int length, byte[] data) {
         AACEncInArgs inArgs = new AACEncInArgs();
         AACEncOutArgs outArgs = new AACEncOutArgs();
-        AACEncBufDesc outBuf = new AACEncBufDesc(), inBuf = new AACEncBufDesc();
-        if (terminal) {
-            inArgs.numInSamples = -1;
+        AACEncBufDesc inBufferDesc, outBufferDesc;
+        if (length == -1) {
+            inArgs.numInSamples = length;
+            inBufferDesc = new AACEncBufDesc();
         } else {
             inArgs.numInSamples = length;
-            inBuf.numBufs = 1;
-
-            Memory in = new Memory(data.length);
-            in.write(0, data, 0, length);
-            inBuf.bufs = new PointerByReference(in);
-            inBuf.bufSizes = new IntByReference(length);
-            inBuf.bufferIdentifiers = new IntByReference(0);
-            inBuf.bufElSizes = new IntByReference(2);
+            inBufferDesc = inBufferDescriptor(data, length);
         }
-
-        outBuf.numBufs = 1;
-        // Contained buffer just needs to be big enough to contain the encoded data
-        outBuf.bufs = new PointerByReference(new Memory(20480));
-        outBuf.bufSizes = new IntByReference(20480);
-        outBuf.bufferIdentifiers = new IntByReference(3);
-        outBuf.bufElSizes = new IntByReference(1);
-        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBuf, outBuf, inArgs, outArgs));
+        outBufferDesc = outBufferDescriptor();
+        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDesc, outBufferDesc, inArgs, outArgs));
         verifyResult(result, FdkAACLib.Methods.GET_LIB_INFO);
-        return outBuf.bufs.getValue().getByteArray(0, outArgs.numOutBytes);
+        return outBufferDesc.bufs
+                .getValue()
+                .getByteArray(0, outArgs.numOutBytes);
     }
 
     public static LibInfo[] getLibInfo() {
@@ -92,5 +95,27 @@ public class FdkAACLibFacade {
                 .ifPresent(error -> {
                     throw new FdkAACLibException(error, method.method);
                 });
+    }
+
+    private static AACEncBufDesc outBufferDescriptor() {
+        AACEncBufDesc bufDesc = new AACEncBufDesc();
+        bufDesc.numBufs = OUT_BUFFER_COUNT;
+        bufDesc.bufs = new PointerByReference(new Memory(OUT_BUFFER_SIZE));
+        bufDesc.bufSizes = new IntByReference(OUT_BUFFER_SIZE);
+        bufDesc.bufferIdentifiers = new IntByReference(OUT_BUFFER_IDENTIFIER);
+        bufDesc.bufElSizes = new IntByReference(OUT_BUFFER_ELEMENT_SIZE);
+        return bufDesc;
+    }
+
+    private static AACEncBufDesc inBufferDescriptor(byte[] data, int length) {
+        AACEncBufDesc bufDesc = new AACEncBufDesc();
+        bufDesc.numBufs = IN_BUFFER_COUNT;
+        Memory memory = new Memory(length);
+        bufDesc.bufs = new PointerByReference(memory);
+        memory.write(0, data, 0, length);
+        bufDesc.bufSizes = new IntByReference(length);
+        bufDesc.bufferIdentifiers = new IntByReference(IN_BUFFER_IDENTIFIER);
+        bufDesc.bufElSizes = new IntByReference(IN_BUFFER_ELEMENT_SIZE);
+        return bufDesc;
     }
 }

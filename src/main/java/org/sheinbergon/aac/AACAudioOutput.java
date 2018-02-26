@@ -17,19 +17,19 @@ public class AACAudioOutput {
     }
 
     @NoArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Accumulator {
+    static class Accumulator {
 
         // Default values
         private byte[] data = null;
         private int size = 0;
 
-        public Accumulator accumulate(byte[] data, int size) {
-            this.data = ArrayUtils.addAll(this.data, data);
-            this.size += size;
+        Accumulator accumulate(byte[] data) {
+            this.data = ArrayUtils.addAll(this.data);
+            this.size += data.length;
             return this;
         }
 
-        public AACAudioOutput done() {
+        AACAudioOutput done() {
             AACAudioOutput output = new AACAudioOutput();
             if (ArrayUtils.isNotEmpty(data)) {
                 output.data = data;
