@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.sheinbergon'
-version '0.0.1'
+version '0.0.2'
 
 apply plugin: 'groovy'
 apply plugin: 'java'
@@ -14,13 +14,20 @@ repositories {
     mavenCentral()
 }
 
+ext.depVersions = [
+        jna         : '4.5.1',
+        commonsLang3: '3.7',
+        lombok      : '1.16.20'
+]
+
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.5.1'
 }
 
 dependencies {
-    compile 'net.java.dev.jna:jna:4.5.1'
-    compile 'org.apache.commons:commons-lang3:3.7'
-    compileOnly 'org.projectlombok:lombok:1.16.20'
+    compile "net.java.dev.jna:jna:${depVersions.jna}"
+    compile "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
+    compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
