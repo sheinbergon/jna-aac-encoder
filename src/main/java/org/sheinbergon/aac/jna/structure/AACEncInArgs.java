@@ -1,21 +1,20 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
+import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
+@ToString
+/**
+ * Maps to AACENC_InArgs struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
 public class AACEncInArgs extends Structure {
 
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncInArgs.class);
 
-    /**
-     * Number of valid input audio samples (multiple of input channels).
-     */
     public int numInSamples;
-    /**
-     * Number of ancillary data bytes to be encoded.
-     */
     public int numAncBytes;
 
     @Override

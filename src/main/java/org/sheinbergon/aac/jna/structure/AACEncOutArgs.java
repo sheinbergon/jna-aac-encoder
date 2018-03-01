@@ -1,25 +1,21 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
+import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
+@ToString
+/**
+ * Maps to AACENC_OutArgs struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
 public class AACEncOutArgs extends Structure {
 
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncOutArgs.class);
-    
-    /**
-     * Number of valid bitstream bytes generated during aacEncEncode().
-     */
+
     public int numOutBytes;
-    /**
-     * Number of valid input audio samples (multiple of input channels).
-     */
     public int numInSamples;
-    /**
-     * Number of ancillary data bytes to be encoded.
-     */
     public int numAncBytes;
 
     @Override

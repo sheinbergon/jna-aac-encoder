@@ -7,21 +7,15 @@ import org.sheinbergon.aac.jna.util.JNAUtil;
 import java.util.List;
 
 @ToString
+/**
+ * Maps to USER_PARAM struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ */
 public class UserParam extends Structure {
 
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(UserParam.class);
 
-    /**
-     * Audio Object Type.
-     */
     public int userAOT;
-    /**
-     * Sampling frequency.
-     */
     public int userSamplerate;
-    /**
-     * will be set via channelMode.
-     */
     public int nChannels;
     public int userChannelMode;
     public int userBitrate;
@@ -31,60 +25,19 @@ public class UserParam extends Structure {
     public int userFramelength;
     public int userAncDataRate;
     public int userPeakBitrate;
-    /**
-     * Use TNS coding.
-     */
     public byte userTns;
-    /**
-     * Use PNS coding.
-     */
     public byte userPns;
-    /**
-     * Use Intensity coding.
-     */
     public byte userIntensity;
-    /**
-     * Transport type
-     */
     public int userTpType;
-    /**
-     * Extension AOT signaling mode.
-     */
     public byte userTpSignaling;
-    /**
-     * Number of sub frames in a transport frame for LOAS/LATM or ADTS (default 1).
-     */
     public byte userTpNsubFrames;
-    /**
-     * AudioMuxVersion to be used for LATM (default 0).
-     */
     public byte userTpAmxv;
     public byte userTpProtection;
-    /**
-     * Parameter used to configure LATM/LOAS SMC rate. Moreover this parameters is
-     * used to configure repetition rate of PCE in raw_data_block.
-     */
     public byte userTpHeaderPeriod;
-
-    /**
-     * Use VCB11, HCR and/or RVLC ER tool.
-     */
     public byte userErTools;
-    /**
-     * Configure additional bits in PCE.
-     */
     public int userPceAdditions;
-    /**
-     * Meta data library configuration.
-     */
     public byte userMetaDataMode;
-    /**
-     * Enable SBR for ELD.
-     */
     public byte userSbrEnabled;
-    /**
-     * SBR sampling rate ratio. Dual- or single-rate.
-     */
     public int userSbrRatio;
 
     @Override

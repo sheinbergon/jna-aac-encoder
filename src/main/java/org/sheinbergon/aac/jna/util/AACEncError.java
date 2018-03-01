@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
@@ -14,6 +15,7 @@ import java.util.stream.Stream;
  */
 public enum AACEncError {
 
+    AACENC_UNKNOWN(-0x0001),
     AACENC_OK(0x0000),
     AACENC_INVALID_HANDLE(0x0020),
     AACENC_MEMORY_ERROR(0x0021),
@@ -27,14 +29,11 @@ public enum AACEncError {
     AACENC_ENCODE_ERROR(0x0060),
     AACENC_ENCODE_EOF(0x0080);
 
-    private final static Map<Integer, AACEncError> valueToEnumMap = new HashMap<>();
-
-    static {
-        Stream.of(AACEncError.values()).forEach(constant -> valueToEnumMap.put(constant.value, constant));
-    }
+    private final static Map<Integer, AACEncError> valueToEnumMap = Stream.of(values())
+            .collect(Collectors.toMap(AACEncError::getValue, err -> err));
 
     public static AACEncError valueOf(Integer value) {
-        return valueToEnumMap.get(value);
+        return valueToEnumMap.getOrDefault(value, AACENC_UNKNOWN);
     }
 
     private final int value;

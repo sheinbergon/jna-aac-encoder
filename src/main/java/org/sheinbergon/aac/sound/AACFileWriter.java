@@ -107,9 +107,4 @@ public final class AACFileWriter extends AudioFileWriter {
         }
         return encoded;
     }
-
-    public final static void main (String [] args) throws  Exception{
-        AudioInputStream ais = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
-        AudioSystem.write(ais,AACFileTypes.AAC_LC,new File("/tmp/out.aac"));
-    }
 }

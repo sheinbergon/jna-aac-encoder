@@ -6,30 +6,17 @@ import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
-
+/**
+ * Maps to AACENC_BufDesc struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
 public class AACEncBufDesc extends Structure {
 
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncBufDesc.class);
 
-    /**
-     * Number of buffers.
-     */
     public int numBufs;
-    /**
-     * Pointer to vector containing buffer addresses.
-     */
     public PointerByReference bufs;
-    /**
-     * Identifier of each buffer element. See ::AACENC_BufferIdentifier.
-     */
     public IntByReference bufferIdentifiers;
-    /**
-     * Size of each buffer in 8-bit bytes.
-     */
     public IntByReference bufSizes;
-    /*
-     *Size of each buffer element in bytes.
-     */
     public IntByReference bufElSizes;
 
     @Override

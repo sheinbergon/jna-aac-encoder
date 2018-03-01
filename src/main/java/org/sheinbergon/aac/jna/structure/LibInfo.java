@@ -7,6 +7,9 @@ import org.sheinbergon.aac.jna.util.JNAUtil;
 import java.util.List;
 
 @ToString
+/**
+ * Maps to LIB_INFO struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
+ */
 public class LibInfo extends Structure {
 
     private final static int LAST_MODULE = 32;
