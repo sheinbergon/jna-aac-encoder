@@ -1,9 +1,9 @@
-package org.sheinbergon.aac.jna.v015;
+package org.sheinbergon.aac.jna;
 
 import com.sun.jna.Native;
 import com.sun.jna.ptr.PointerByReference;
 import lombok.RequiredArgsConstructor;
-import org.sheinbergon.aac.jna.v015.structure.*;
+import org.sheinbergon.aac.jna.structure.*;
 
 public class FdkAACLib {
 

@@ -6,7 +6,10 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.Range;
 import org.sheinbergon.aac.util.WAVAudioInputException;
 import org.sheinbergon.aac.util.WAVAudioFormat;
+import org.sheinbergon.aac.util.WAVAudioSupport;
 
+import java.nio.ByteOrder;
+import java.util.Arrays;
 import java.util.Objects;
 
 @Getter
@@ -14,16 +17,15 @@ import java.util.Objects;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class WAVAudioInput {
 
-    private final static Integer SUPPORTED_SAMPLE_SIZE = 16;
     private final static WAVAudioFormat SUPPORTED_AUDIO_FORMATS = WAVAudioFormat.PCM;
-    private final static Range<Integer> SUPPORTED_CHANNELS_RANGE = Range.between(1, 6);
 
-    public static WAVAudioInput pcms16le(byte[] data, int size) {
+    public static WAVAudioInput pcms16le(byte[] data, int length, int channels) {
         return builder().audioFormat(WAVAudioFormat.PCM)
-                .channels(2)
-                .sampleSize(SUPPORTED_SAMPLE_SIZE)
+                .channels(channels)
+                .endianness(ByteOrder.LITTLE_ENDIAN)
+                .sampleSize(WAVAudioSupport.SUPPORTED_SAMPLE_SIZE)
                 .data(data)
-                .size(size)
+                .length(length)
                 .build();
     }
 
@@ -39,24 +41,27 @@ public class WAVAudioInput {
 
         // Default values
         private byte[] data = null;
-        private int size = 0;
+        private int length = 0;
         private int sampleSize = 0;
         private int channels = 0;
+        private ByteOrder endianness = null;
         private WAVAudioFormat audioFormat = null;
 
         public WAVAudioInput build() {
             if (ArrayUtils.isEmpty(data)) {
                 throw new WAVAudioInputException("data", "Empty/Null array");
-            } else if (size < 0 || size > data.length) {
-                throw new WAVAudioInputException("size", String.valueOf(size));
-            } else if (sampleSize != SUPPORTED_SAMPLE_SIZE) {
+            } else if (length < 0 || length > data.length) {
+                throw new WAVAudioInputException("length", String.valueOf(length));
+            } else if (sampleSize != WAVAudioSupport.SUPPORTED_SAMPLE_SIZE) {
                 throw new WAVAudioInputException("sampleSize", String.valueOf(sampleSize));
-            } else if (!SUPPORTED_CHANNELS_RANGE.contains(channels)) {
+            } else if (!WAVAudioSupport.SUPPORTED_CHANNELS_RANGE.contains(channels)) {
                 throw new WAVAudioInputException("channels", String.valueOf(channels));
             } else if (!Objects.equals(audioFormat, WAVAudioFormat.PCM)) {
                 throw new WAVAudioInputException("audioFormat", String.valueOf(audioFormat));
+            } else if (Objects.equals(endianness, ByteOrder.LITTLE_ENDIAN)) {
+                throw new WAVAudioInputException("endianness", String.valueOf(endianness));
             } else {
-                return new WAVAudioInput(data, channels);
+                return new WAVAudioInput(Arrays.copyOf(data, length), channels);
             }
         }
     }

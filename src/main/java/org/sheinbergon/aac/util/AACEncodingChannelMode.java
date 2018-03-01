@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor
-public enum AACChannelMode {
+public enum AACEncodingChannelMode {
     MODE_INVALID(-1, -1),
     MODE_1(1, 1),
     MODE_2(2, 2),
@@ -18,11 +18,11 @@ public enum AACChannelMode {
     MODE_1_2_2(5, 5),
     MODE_1_2_2_1(6, 6);
 
-    private final static Map<Integer, AACChannelMode> countToEnumMap = Arrays
+    private final static Map<Integer, AACEncodingChannelMode> countToEnumMap = Arrays
             .stream(values())
-            .collect(Collectors.toMap(AACChannelMode::getCount, facm -> facm));
+            .collect(Collectors.toMap(AACEncodingChannelMode::getCount, facm -> facm));
 
-    public static AACChannelMode valueOf(int count) {
+    public static AACEncodingChannelMode valueOf(int count) {
         return countToEnumMap.getOrDefault(count, MODE_INVALID);
     }
 

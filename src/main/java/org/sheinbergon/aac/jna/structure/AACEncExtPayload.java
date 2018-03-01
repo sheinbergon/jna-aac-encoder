@@ -1,9 +1,7 @@
-package org.sheinbergon.aac.jna.v015.structure;
+package org.sheinbergon.aac.jna.structure;
 
-import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
-import com.sun.jna.ptr.PointerByReference;
 import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 

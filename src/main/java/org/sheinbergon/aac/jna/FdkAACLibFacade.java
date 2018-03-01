@@ -1,15 +1,14 @@
-package org.sheinbergon.aac.jna.v015;
+package org.sheinbergon.aac.jna;
 
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import org.sheinbergon.aac.WAVAudioInput;
-import org.sheinbergon.aac.jna.v015.structure.*;
-import org.sheinbergon.aac.jna.v015.util.AACEncError;
-import org.sheinbergon.aac.jna.v015.util.AACEncParam;
-import org.sheinbergon.aac.jna.v015.util.FdkAACLibException;
+import org.sheinbergon.aac.jna.structure.*;
+import org.sheinbergon.aac.jna.util.AACEncError;
+import org.sheinbergon.aac.jna.util.AACEncParam;
+import org.sheinbergon.aac.jna.util.FdkAACLibException;
 
 import java.util.Optional;
 import java.util.stream.Stream;
@@ -49,11 +48,10 @@ public class FdkAACLibFacade {
         AACEncInArgs inArgs = new AACEncInArgs();
         AACEncOutArgs outArgs = new AACEncOutArgs();
         AACEncBufDesc inBufferDesc, outBufferDesc;
+        inArgs.numInSamples = length;
         if (length == -1) {
-            inArgs.numInSamples = length;
             inBufferDesc = new AACEncBufDesc();
         } else {
-            inArgs.numInSamples = length;
             inBufferDesc = inBufferDescriptor(data, length);
         }
         outBufferDesc = outBufferDescriptor();

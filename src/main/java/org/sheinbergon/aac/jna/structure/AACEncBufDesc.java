@@ -1,9 +1,6 @@
-package org.sheinbergon.aac.jna.v015.structure;
+package org.sheinbergon.aac.jna.structure;
 
-import com.sun.jna.Memory;
-import com.sun.jna.Pointer;
 import com.sun.jna.Structure;
-import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.jna.util.JNAUtil;
