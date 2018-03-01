@@ -1,4 +1,4 @@
-package org.sheinbergon.aac.util;
+package org.sheinbergon.aac.encoder.util;
 
 public class AACAudioEncoderException extends RuntimeException {
     public AACAudioEncoderException(String message, Throwable cause) {

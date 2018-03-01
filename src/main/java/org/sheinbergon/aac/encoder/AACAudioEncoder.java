@@ -1,4 +1,4 @@
-package org.sheinbergon.aac;
+package org.sheinbergon.aac.encoder;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -10,10 +10,10 @@ import org.sheinbergon.aac.jna.FdkAACLibFacade;
 import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
 import org.sheinbergon.aac.jna.util.AACEncParam;
-import org.sheinbergon.aac.util.AACAudioEncoderException;
-import org.sheinbergon.aac.util.AACEncodingChannelMode;
-import org.sheinbergon.aac.util.AACEncodingProfile;
-import org.sheinbergon.aac.util.WAVAudioSupport;
+import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
+import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
+import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
+import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;

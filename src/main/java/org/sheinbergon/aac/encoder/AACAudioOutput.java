@@ -1,11 +1,11 @@
-package org.sheinbergon.aac;
+package org.sheinbergon.aac.encoder;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
-import org.sheinbergon.aac.util.AACAudioOutputException;
+import org.sheinbergon.aac.encoder.util.AACAudioOutputException;
 
 @Getter
 @Accessors(chain = true, fluent = true)

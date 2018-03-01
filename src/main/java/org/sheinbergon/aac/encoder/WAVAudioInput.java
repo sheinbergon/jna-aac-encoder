@@ -1,12 +1,11 @@
-package org.sheinbergon.aac;
+package org.sheinbergon.aac.encoder;
 
 import lombok.*;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.Range;
-import org.sheinbergon.aac.util.WAVAudioInputException;
-import org.sheinbergon.aac.util.WAVAudioFormat;
-import org.sheinbergon.aac.util.WAVAudioSupport;
+import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
+import org.sheinbergon.aac.encoder.util.WAVAudioFormat;
+import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
 import java.nio.ByteOrder;
 import java.util.Arrays;
@@ -58,7 +57,7 @@ public class WAVAudioInput {
                 throw new WAVAudioInputException("channels", String.valueOf(channels));
             } else if (!Objects.equals(audioFormat, WAVAudioFormat.PCM)) {
                 throw new WAVAudioInputException("audioFormat", String.valueOf(audioFormat));
-            } else if (Objects.equals(endianness, ByteOrder.LITTLE_ENDIAN)) {
+            } else if (!Objects.equals(endianness, ByteOrder.LITTLE_ENDIAN)) {
                 throw new WAVAudioInputException("endianness", String.valueOf(endianness));
             } else {
                 return new WAVAudioInput(Arrays.copyOf(data, length), channels);

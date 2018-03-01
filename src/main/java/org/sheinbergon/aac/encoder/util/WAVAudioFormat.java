@@ -1,12 +1,8 @@
-package org.sheinbergon.aac.util;
+package org.sheinbergon.aac.encoder.util;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-
-import java.util.Arrays;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

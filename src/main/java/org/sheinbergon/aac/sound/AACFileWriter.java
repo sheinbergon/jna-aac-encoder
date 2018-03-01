@@ -1,14 +1,15 @@
 package org.sheinbergon.aac.sound;
 
-import org.sheinbergon.aac.AACAudioEncoder;
-import org.sheinbergon.aac.WAVAudioInput;
-import org.sheinbergon.aac.AACAudioOutput;
-import org.sheinbergon.aac.util.AACEncodingProfile;
-import org.sheinbergon.aac.util.WAVAudioSupport;
+import org.sheinbergon.aac.encoder.AACAudioEncoder;
+import org.sheinbergon.aac.encoder.WAVAudioInput;
+import org.sheinbergon.aac.encoder.AACAudioOutput;
+import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
+import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.spi.AudioFileWriter;
 import java.io.*;
 import java.util.Map;
@@ -105,5 +106,10 @@ public final class AACFileWriter extends AudioFileWriter {
             }
         }
         return encoded;
+    }
+
+    public final static void main (String [] args) throws  Exception{
+        AudioInputStream ais = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
+        AudioSystem.write(ais,AACFileTypes.AAC_LC,new File("/tmp/out.aac"));
     }
 }

@@ -1,4 +1,4 @@
-package org.sheinbergon.aac.util;
+package org.sheinbergon.aac.encoder.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

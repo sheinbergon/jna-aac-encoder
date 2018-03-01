@@ -1,4 +1,4 @@
-package org.sheinbergon.aac.util;
+package org.sheinbergon.aac.encoder.util;
 
 import org.apache.commons.lang3.Range;
 
