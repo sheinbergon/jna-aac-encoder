@@ -6,8 +6,8 @@ RUN sed -i -r 1s/"^(.+)$"/"\1 non-free"/g /etc/apt/sources.list
 # Update ubuntu sources
 RUN apt-get update
 
-# On Debian "sid", This maps to fdk-aac 0.1.5.
-RUN apt-get install libfdk-aac1
+# On Debian "sid", libfdk-aac1 maps to fdk-aac 0.1.5.
+RUN apt-get install libfdk-aac1 libmediainfo0v5
 
 # Add local repository content
 ADD . /app
