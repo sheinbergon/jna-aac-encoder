@@ -9,5 +9,7 @@ RUN apt-get update
 # On Debian "sid", This maps to fdk-aac 0.1.5.
 RUN apt-get install libfdk-aac1
 
+ADD . /app
+
 # Set the Gradle wrapper as the entry point
-ENTRYPOINT ["./gradlew"]
+ENTRYPOINT ["/app/gradlew"]
