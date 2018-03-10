@@ -62,14 +62,6 @@ public class FdkAACLibFacade {
                 .getByteArray(0, outArgs.numOutBytes);
     }
 
-    public static LibInfo[] getLibInfo() {
-        LibInfo[] infos = LibInfo.allocate();
-        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncGetLibInfo(infos[0]));
-        Stream.of(infos).forEach(Structure::read);
-        verifyResult(result, FdkAACLib.Methods.GET_LIB_INFO);
-        return infos;
-    }
-
     public static AACEncInfo getEncoderInfo(AACEncoder encoder) {
         AACEncInfo info = new AACEncInfo();
         AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));

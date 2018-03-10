@@ -21,7 +21,8 @@ ext.depVersions = [
 
 ext.testDepVersions = [
         junitPlatform: '1.1.0',
-        junit: '5.1.0',
+        junit        : '5.1.0',
+        mediaInfo    : '1.0.0.RELEASE'
 ]
 
 task wrapper(type: Wrapper) {
@@ -41,7 +42,10 @@ dependencies {
     // Junit 5
     testCompile "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
-    testRuntime("org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}")
+    testRuntime "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
+
+    // MediaInfo
+    testCompile "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
 }
 
 junitPlatform {

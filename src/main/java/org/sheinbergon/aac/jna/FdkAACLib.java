@@ -9,13 +9,13 @@ public class FdkAACLib {
 
     @RequiredArgsConstructor
     enum Methods {
-        INFO("aacEncInfo"),
-        GET_LIB_INFO("aacEncGetLibInfo"),
-        GET_PARAM("aacEncoder_GetParam"),
-        SET_PARAM("aacEncoder_SetParam"),
-        OPEN("accEncOpen"),
-        CLOSE("accEncClose"),
-        ENCODE("aacEncEncode");
+        INFO("aacEncInfo" ),
+        GET_LIB_INFO("aacEncGetLibInfo" ),
+        GET_PARAM("aacEncoder_GetParam" ),
+        SET_PARAM("aacEncoder_SetParam" ),
+        OPEN("accEncOpen" ),
+        CLOSE("accEncClose" ),
+        ENCODE("aacEncEncode" );
 
         final String method;
     }
@@ -31,8 +31,6 @@ public class FdkAACLib {
     static native int aacEncClose(PointerByReference handle);
 
     static native int aacEncEncode(AACEncoder hAacEncoder, AACEncBufDesc inBufDesc, AACEncBufDesc outBufDesc, AACEncInArgs inargs, AACEncOutArgs outargs);
-
-    static native int aacEncGetLibInfo(LibInfo libInfo);
 
     static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
 

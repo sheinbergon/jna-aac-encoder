@@ -10,7 +10,6 @@ import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
-@ToString
 /**
  * Maps to AACENCODER struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */

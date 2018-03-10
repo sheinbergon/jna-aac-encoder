@@ -48,7 +48,7 @@ public final class AACFileWriter extends AudioFileWriter {
 
     private static AACEncodingProfile profileByType(AudioFileFormat.Type type) {
         return Optional.ofNullable(FILE_TYPES_TO_ENCODING_PROFILES.get(type))
-                .orElseThrow(() -> new IllegalArgumentException("File type " + type + " is not yet supported"));
+                .orElseThrow(() -> new IllegalArgumentException("File type " + type + " is not yet supported" ));
     }
 
     // Note that the bitRate is adapted automatically based on the input specification
@@ -68,7 +68,7 @@ public final class AACFileWriter extends AudioFileWriter {
         Objects.requireNonNull(out);
 
         if (!isFileTypeSupported(fileType, stream)) {
-            throw new IllegalArgumentException("File type " + fileType + " is not supported.");
+            throw new IllegalArgumentException("File type " + fileType + " is not supported." );
         }
         return encodeAndWrite(stream, fileType, out);
     }
@@ -78,7 +78,6 @@ public final class AACFileWriter extends AudioFileWriter {
         Objects.requireNonNull(stream);
         Objects.requireNonNull(fileType);
         Objects.requireNonNull(out);
-
 
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(out), OUTPUT_BUFFER_SIZE);
         try (bufferedOutputStream) {

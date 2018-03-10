@@ -6,7 +6,6 @@ import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
-@ToString
 /**
  * Maps to AACENC_CONFIG struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
