@@ -6,5 +6,8 @@ services:
 before_install:
   - docker build -t jna-aac-encoder .
 
+jdk:
+  - oraclejdk9
+
 script:
   - docker run jna-aac-encoder clean test
