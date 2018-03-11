@@ -11,6 +11,8 @@ import java.util.List;
  */
 public class AACEncInfo extends Structure {
 
+    private final static int CONF_BUF_SIZE = 64;
+
     private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncInfo.class);
 
     public int maxOutBufBytes;
@@ -19,7 +21,7 @@ public class AACEncInfo extends Structure {
     public int inputChannels;
     public int frameLength;
     public int encoderDelay;
-    public byte[] confBuf = new byte[64];
+    public byte[] confBuf = new byte[CONF_BUF_SIZE];
     public int confSize;
 
     @Override

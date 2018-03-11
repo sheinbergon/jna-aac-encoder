@@ -6,15 +6,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sheinbergon.aac.encoder.util.AACAudioOutputException;
 
-@DisplayName("WAV audio input composition")
+@DisplayName("AAC audio output accumulation")
 public class AACAudioOutputTest {
 
     private final static byte[] VALID_DATA = new byte[4];
-    private final static int VALID_LENGTH = 4;
-
-
-    private final static int INVALID_LENGTH = 100;
-
+    
     private AACAudioOutput.Accumulator accumulator;
 
     @BeforeEach

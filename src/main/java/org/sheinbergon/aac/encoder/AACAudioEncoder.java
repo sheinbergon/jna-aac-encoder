@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.Range;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.sheinbergon.aac.jna.FdkAACLibFacade;
 import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
@@ -24,9 +25,10 @@ import java.util.Set;
 public class AACAudioEncoder implements AutoCloseable {
 
     /**
-     * Safe boundaries according to @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+     * Safe, reasonable boundaries according to @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
      */
     private final static Range<Integer> BITRATE_RANGE = Range.between(64000, 640000);
+
     private final static Set<Integer> SAMPLE_RATES = Set.of(8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000);
 
     private final static int WAV_INPUT_CHANNEL_ORDER = 1;
@@ -35,8 +37,6 @@ public class AACAudioEncoder implements AutoCloseable {
 
     private final AACEncoder encoder;
     private final AACEncInfo info;
-
-    public final static AACAudioEncoder DEFAULT = builder().build();
 
     public static Builder builder() {
         return new Builder();
@@ -71,6 +71,7 @@ public class AACAudioEncoder implements AutoCloseable {
             bitRate = minimalBitRate > bitRate ? (int) minimalBitRate : bitRate;
         }
 
+        // TODO - add AAC profile verification
         public AACAudioEncoder build() {
             adaptBitRate();
             if (!SAMPLE_RATES.contains(sampleRate)) {
@@ -84,11 +85,7 @@ public class AACAudioEncoder implements AutoCloseable {
                 setEncoderParams(encoder);
                 FdkAACLibFacade.initEncoder(encoder);
                 AACEncInfo info = FdkAACLibFacade.getEncoderInfo(encoder);
-                if (info != null) {
-                    return new AACAudioEncoder(encoder, info);
-                } else {
-                    throw new AACAudioEncoderException("Could obtain encoder info");
-                }
+                return new AACAudioEncoder(encoder, info);
             }
         }
     }

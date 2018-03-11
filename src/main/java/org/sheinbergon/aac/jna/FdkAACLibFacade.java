@@ -2,7 +2,6 @@ package org.sheinbergon.aac.jna;
 
 import com.sun.jna.Memory;
 import com.sun.jna.Pointer;
-import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.jna.structure.*;
@@ -11,7 +10,6 @@ import org.sheinbergon.aac.jna.util.AACEncParam;
 import org.sheinbergon.aac.jna.util.FdkAACLibException;
 
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public class FdkAACLibFacade {
 
@@ -24,7 +22,6 @@ public class FdkAACLibFacade {
     private final static int OUT_BUFFER_COUNT = 1;
     private final static int OUT_BUFFER_IDENTIFIER = 3;
     private final static int OUT_BUFFER_ELEMENT_SIZE = 1;
-
 
     public static AACEncoder openEncoder(int modules, int maxChannels) {
         PointerByReference pointerRef = new PointerByReference();
@@ -73,10 +70,6 @@ public class FdkAACLibFacade {
     public static void setEncoderParam(AACEncoder encoder, AACEncParam param, int value) {
         AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
         verifyResult(result, FdkAACLib.Methods.SET_PARAM);
-    }
-
-    public static int getEncoderParam(AACEncoder encoder, AACEncParam param) {
-        return FdkAACLib.aacEncoder_GetParam(encoder, param.getValue());
     }
 
     private static void verifyResult(AACEncError result, FdkAACLib.Methods method) {
