@@ -24,7 +24,7 @@ public class AACAudioOutput {
         private int length = 0;
 
         void accumulate(byte[] data) {
-            this.data = ArrayUtils.addAll(this.data,data);
+            this.data = ArrayUtils.addAll(this.data, data);
             this.length += data.length;
         }
 
@@ -35,11 +35,7 @@ public class AACAudioOutput {
             } else {
                 throw new AACAudioOutputException("data", "Empty/Null array");
             }
-            if (length >= 0 && length <= data.length) {
-                output.length = length;
-            } else {
-                throw new AACAudioOutputException("length", String.valueOf(length));
-            }
+            output.length = length;
             return output;
         }
     }

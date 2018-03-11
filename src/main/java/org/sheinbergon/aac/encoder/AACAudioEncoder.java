@@ -131,20 +131,4 @@ public class AACAudioEncoder implements AutoCloseable {
     public void close() {
         FdkAACLibFacade.closeEncoder(encoder);
     }
-
-    public static void main(String[] args) throws Exception {
-        AACAudioEncoder encoder = AACAudioEncoder.builder().build();
-        AudioInputStream ais = AudioSystem.getAudioInputStream(new File("/home/idans/Downloads/sample.wav"));
-        FileOutputStream fos = new FileOutputStream(new File("/tmp/file.aac"));
-        int base = encoder.inputBufferSize(ais.getFormat().getChannels());
-        try (fos; ais) {
-            int read = -1;
-            byte[] data = new byte[base * 3];
-            while ((read = ais.read(data)) != -1) {
-                WAVAudioInput input = WAVAudioInput.pcms16le(data, read, ais.getFormat().getChannels());
-                boolean conclude = read < base * 3;
-                fos.write(encoder.encode(input, conclude).data());
-            }
-        }
-    }
 }
