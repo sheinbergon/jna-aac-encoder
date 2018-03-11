@@ -6,6 +6,9 @@ services:
 before_install:
   - docker build --cache-from openjdk:9-jdk-slim-sid -t jna-aac-encoder .
 
+install:
+  - git checkout ${TRAVIS_BRANCH}
+
 jdk:
   - oraclejdk9
 
