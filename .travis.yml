@@ -4,10 +4,15 @@ services:
   - docker
 
 before_install:
-  - docker build -t jna-aac-encoder .
+  - docker build --cache-from -t jna-aac-encoder .
 
 jdk:
   - oraclejdk9
 
-after_success:
+cache:
+  directories:
+  - $HOME/.m2
+
+script:
   - docker run -e "COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}" jna-aac-encoder clean junitPlatformTest jacocoTestReport coveralls
+
