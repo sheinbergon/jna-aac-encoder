@@ -28,7 +28,7 @@ ext.testDepVersions = [
 ]
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '4.5.1'
+    gradleVersion = '4.4.1'
 }
 
 dependencies {
@@ -52,14 +52,28 @@ dependencies {
 
 junitPlatform {
     details 'tree'
+
     filters {
         includeClassNamePattern '.*Test'
     }
 }
 
+
+jacoco {
+    toolVersion = '0.8.0'
+    applyTo junitPlatformTest
+}
+
 jacocoTestReport {
     reports {
-        xml.enabled = true // coveralls plugin depends on xml format report
-        html.enabled = true
+        html.enabled = false
+        xml.enabled = true
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+    }
+}
+
+junitPlatformTest {
+    jacoco {
+        destinationFile = file("$buildDir/jacoco/test.exec")
     }
 }
