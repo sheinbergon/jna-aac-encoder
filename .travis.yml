@@ -9,5 +9,5 @@ before_install:
 jdk:
   - oraclejdk9
 
-script:
+after_success:
   - docker run -e "COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}" jna-aac-encoder clean junitPlatformTest jacocoTestReport coveralls
