@@ -10,4 +10,4 @@ jdk:
   - oraclejdk9
 
 script:
-  - docker run jna-aac-encoder clean test jacocoTestReport coveralls
+  - docker run jna-aac-encoder clean junitPlatformTest jacocoTestReport coveralls
