@@ -2,9 +2,12 @@ package org.sheinbergon.aac.encoder;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 
+
+@DisplayName("AAC audio encoder")
 public class AACAudioEncoderTest {
 
     private final static int INVALID_SAMPLE_RATE = 4000;
