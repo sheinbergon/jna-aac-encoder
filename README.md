@@ -5,22 +5,21 @@
 This library provides AAC encoding capabilities for the JVM.
 It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA in order to do so.
 
-##License
-While this library uses LGPL-3, please see
+## License
+**Important!** While this library uses LGPL-3, please see
 the [FDK AAC license](NOTICE) for additional information
-regarding the re/distribution and licensing limitations
+regarding re/distribution and licensing limitations
 
+## Usage
 
-##Usage
-
-####Java AudioSystem
+#### Java AudioSystem
 ```java
 AudioInputStream input = AudioSystem.getAudioInputStream(...);
 File output = new File(...);
 AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
-####Limitations
+#### Limitations
 Currently, only pcm_s16le WAV input is supported. That means:
 * Sample size - 16 bit(signed)
 * WAV format - PCM
@@ -35,7 +34,7 @@ Additional limitations:
 * Only AAC-LC(**L**ow **C**omplaxity) encoding profile is suuported  
 
 
-##Roadmap
+## Roadmap
 * Maven central artifacts.
 * Windows & Mac cross building.
 * Support for AAC HE & HEv2.
