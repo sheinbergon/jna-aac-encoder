@@ -20,16 +20,16 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
 #### Limitations
-Currently, only pcm_s16le WAV input is supported. That means:
+Currently, only pcm_s16le WAV input is supported, meaning:
 * Sample size - 16 bit(signed)
 * WAV format - PCM
 * Byte order - Little Endian
 
-While this also seems to the common raw-audio formatting,
-providing input audio with different formatting will cause the
-encoding process to fail. 
+While this seems to the common raw-audio formatting, it's important
+to note that providing input audio with different formatting will cause
+the encoding process to fail. 
 
-Additional limitations:
+Additional restrictions:
 * A maximum of 6 audio input/output channels
 * Only AAC-LC(**L**ow **C**omplaxity) encoding profile is suuported  
 
