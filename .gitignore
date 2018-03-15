@@ -168,7 +168,15 @@ gradle-app.setting
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
 
+.vscode
+.history
+
 core
 hs_err_pid*log
+
+jni/**/*.o
+jni/**/org_sheinbergon_aac_*.h
+jni/**/*.dll
+jni/**/*.so
 
 # End of https://www.gitignore.io/api/java,gradle,eclipse,netbeans,intellij+all
