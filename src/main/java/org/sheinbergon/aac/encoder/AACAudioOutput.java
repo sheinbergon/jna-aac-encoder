@@ -24,8 +24,10 @@ public class AACAudioOutput {
         private int length = 0;
 
         void accumulate(byte[] data) {
-            this.data = ArrayUtils.addAll(this.data, data);
-            this.length += data.length;
+            if (data.length != 0) {
+                this.data = ArrayUtils.addAll(this.data, data);
+                this.length += data.length;
+            }
         }
 
         AACAudioOutput done() {

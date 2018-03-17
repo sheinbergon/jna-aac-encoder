@@ -16,12 +16,10 @@ public class WAVAudioInputTest {
     private final static byte[] VALID_DATA = new byte[4];
     private final static int VALID_LENGTH = 4;
     private final static int VALID_SAMPLE_SIZE = WAVAudioSupport.SUPPORTED_SAMPLE_SIZE;
-    private final static int VALID_CHANNEL_COUNT = 2;
     private final static ByteOrder VALID_ENDIANNESS = ByteOrder.LITTLE_ENDIAN;
 
     private final static int INVALID_LENGTH = 100;
     private final static int INVALID_SAMPLE_SIZE = 24;
-    private final static int INVALID_CHANNEL_COUNT = 12;
     private final static ByteOrder INVALID_ENDIANNESS = ByteOrder.BIG_ENDIAN;
 
     private WAVAudioInput.Builder builder;
@@ -63,7 +61,6 @@ public class WAVAudioInputTest {
                 builder.data(VALID_DATA)
                         .length(VALID_LENGTH)
                         .sampleSize(VALID_SAMPLE_SIZE)
-                        .channels(INVALID_CHANNEL_COUNT)
                         .build());
     }
 
@@ -75,7 +72,6 @@ public class WAVAudioInputTest {
                 builder.data(VALID_DATA)
                         .length(VALID_LENGTH)
                         .sampleSize(VALID_SAMPLE_SIZE)
-                        .channels(VALID_CHANNEL_COUNT)
                         .endianness(VALID_ENDIANNESS)
                         .build());
     }
@@ -87,7 +83,6 @@ public class WAVAudioInputTest {
                 builder.data(VALID_DATA)
                         .length(VALID_LENGTH)
                         .sampleSize(VALID_SAMPLE_SIZE)
-                        .channels(VALID_CHANNEL_COUNT)
                         .audioFormat(WAVAudioFormat.PCM)
                         .endianness(INVALID_ENDIANNESS)
                         .build());
