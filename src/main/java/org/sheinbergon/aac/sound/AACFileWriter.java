@@ -1,15 +1,14 @@
 package org.sheinbergon.aac.sound;
 
 import org.sheinbergon.aac.encoder.AACAudioEncoder;
-import org.sheinbergon.aac.encoder.WAVAudioInput;
 import org.sheinbergon.aac.encoder.AACAudioOutput;
+import org.sheinbergon.aac.encoder.WAVAudioInput;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.spi.AudioFileWriter;
 import java.io.*;
 import java.util.Map;
@@ -21,7 +20,7 @@ public final class AACFileWriter extends AudioFileWriter {
 
     private final static int OUTPUT_BUFFER_SIZE = 16384;
 
-    private final static int INPUT_BUFFER_MULTIPLIER = 4;
+    private final static int INPUT_BUFFER_MULTIPLIER = 16;
 
 
     private final static Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
@@ -86,7 +85,7 @@ public final class AACFileWriter extends AudioFileWriter {
     }
 
     private int readBufferSize(AudioFormat format, AACAudioEncoder encoder) {
-        return encoder.inputBufferSize(format.getChannels()) * INPUT_BUFFER_MULTIPLIER;
+        return encoder.inputBufferSize() * INPUT_BUFFER_MULTIPLIER;
     }
 
     private int encodeAndWrite(AudioInputStream input, AudioFileFormat.Type type, OutputStream output) throws IOException {
@@ -97,7 +96,7 @@ public final class AACFileWriter extends AudioFileWriter {
             int readBufferSize = readBufferSize(format, encoder);
             byte[] readBuffer = new byte[readBufferSize];
             while ((read = input.read(readBuffer)) != WAVAudioSupport.EOS) {
-                WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read, format.getChannels());
+                WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read);
                 boolean conclude = read < readBufferSize;
                 AACAudioOutput audioOutput = encoder.encode(audioInput, conclude);
                 encoded += audioOutput.length();
