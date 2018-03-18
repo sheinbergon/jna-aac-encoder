@@ -46,20 +46,14 @@ public class FdkAACLibFacade {
     public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor, AACEncBufDesc outBufferDescriptor, int size) {
         AACEncInArgs inArgs = new AACEncInArgs();
         AACEncOutArgs outArgs = new AACEncOutArgs();
-        if (size == WAVAudioSupport.EOS) {
-            inArgs.numInSamples = size;
-        } else {
-            inArgs.numInSamples = size / IN_SAMPLES_DIVISOR;
-        }
-        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs));
-        if (result == AACEncError.AACENC_ENCODE_EOF) {
-            return Optional.empty();
-        } else {
-            outArgs.read();
-            verifyResult(result, FdkAACLib.Methods.GET_LIB_INFO);
-            return Optional.of(outBufferDescriptor.bufs
-                    .getValue().getByteArray(0, outArgs.numOutBytes));
-        }
+        inArgs.numInSamples = (size == WAVAudioSupport.EOS) ? size : size / IN_SAMPLES_DIVISOR;
+        return Optional.ofNullable(AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs)))
+                .filter(result -> result != AACEncError.AACENC_ENCODE_EOF)
+                .map(result -> {
+                    verifyResult(result, FdkAACLib.Methods.GET_LIB_INFO);
+                    return outBufferDescriptor.bufs
+                            .getValue().getByteArray(0, outArgs.numOutBytes);
+                });
     }
 
     public static AACEncInfo getEncoderInfo(AACEncoder encoder) {
