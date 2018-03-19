@@ -40,4 +40,4 @@ ADD . ${APPLICATION_DIRECTORY}
 WORKDIR ${APPLICATION_DIRECTORY}
 
 # Set the Gradle wrapper as the entry point
-ENTRYPOINT ['./gradlew']
+ENTRYPOINT ./gradlew $@
