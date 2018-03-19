@@ -5,50 +5,7 @@ plugins {
     id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
-group 'org.sheinbergon'
-version '0.1.0'
-
-
-sourceCompatibility = 1.9
-
-repositories {
-    mavenCentral()
-}
-
-ext.depVersions = [
-        jna         : '4.5.1',
-        commonsLang3: '3.7',
-        lombok      : '1.16.20'
-]
-
-ext.testDepVersions = [
-        junitPlatform: '1.1.0',
-        junit        : '5.1.0',
-        mediaInfo    : '1.0.0.RELEASE'
-]
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
-}
-
-dependencies {
-    // JNA
-    compile "net.java.dev.jna:jna:${depVersions.jna}"
-
-    // Utility
-    compile "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
-
-    // Lombok
-    compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
-
-    // Junit 5
-    testCompile "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
-    testRuntime "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
-    testRuntime "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
-
-    // MediaInfo
-    testCompile "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
-}
+apply from: 'common.gradle'
 
 junitPlatform {
     details 'tree'
@@ -79,6 +36,6 @@ junitPlatformTest {
 
 afterEvaluate {
     def task = tasks.getByName('junitPlatformTest')
-    def fdkAACLibraryPath = project.hasProperty('fdkAACLibraryPath') ? project.properties['fdkAACLibraryPath'] : System.properties['java.library.path']
-    task.systemProperty "jna.library.path", fdkAACLibraryPath
+    def libPath = project.hasProperty('libPath') ? project.properties['libPath'] : System.properties['java.library.path']
+    task.systemProperty "jna.library.path", libPath
 }

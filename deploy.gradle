@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+apply from: 'common.gradle'
+
+def libSrcDir = project.properties['librarySourceDirectory']
+if (libSrcDir == null) {
+    throw new GradleException("'librarySourceDirectory' system property must be set")
+}
+
+task win64(type: Jar) {
+    def target = 'win64'
+    doFirst { buildLibrary(libSrcDir, target) }
+    archiveName = "${archivesBaseName}-${version}-${target}.jar"
+    from sourceSets.main.output
+    from("${libSrcDir}/.libs") {
+        include '*.dll'
+    }
+    rename '.+(fdk-aac).+(\\.dll)', '$1$2'
+}
+
+task linux64(type: Jar) {
+    def target = 'linux64'
+    doFirst { buildLibrary(libSrcDir, target) }
+    archiveName = "${archivesBaseName}-${version}-${target}.jar"
+    from sourceSets.main.output
+    from("${libSrcDir}/.libs") {
+        include '*.so'
+    }
+}
+
+void buildLibrary(source, target) {
+    exec {
+        workingDir projectDir
+        commandLine "scripts/build_library.sh", "-s", source, "-t", target
+    }
+}
