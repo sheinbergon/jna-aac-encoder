@@ -1,6 +1,5 @@
 env:
-  - LIBRARY_SOURCE_DIRECTORY=/tmp/fdk-aac
-  - LIBRARY_INSTALL_DIRECTORY=/opt/fdk-aac
+  - LIBRARY_SOURCE_DIRECTORY=/tmp/fdk-aac LIBRARY_INSTALL_DIRECTORY=/opt/fdk-aac
 
 language: java
 
