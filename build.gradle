@@ -76,3 +76,8 @@ junitPlatformTest {
         destinationFile = file("$buildDir/jacoco/test.exec")
     }
 }
+
+afterEvaluate {
+    def task = tasks.getByName('junitPlatformTest')
+    task.systemProperty "jna.library.path", (fdkAACLibraryPath ? fdkAACLibraryPath : System.properties['java.library.path'])
+}
