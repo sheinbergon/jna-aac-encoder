@@ -36,8 +36,7 @@ Additional restrictions:
 
 ## Roadmap
 * Maven central artifacts.
-* Windows & Mac cross building.
 * Support for AAC HE & HEv2.
 * Improved lower-level interface(with examples).
-* Performance tests/comparison.
+* Performance tests/comparison (JMH).
 * AAC Decoding ???
