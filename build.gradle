@@ -79,5 +79,6 @@ junitPlatformTest {
 
 afterEvaluate {
     def task = tasks.getByName('junitPlatformTest')
-    task.systemProperty "jna.library.path", (fdkAACLibraryPath ? fdkAACLibraryPath : System.properties['java.library.path'])
+    def fdkAACLibraryPath = project.hasProperty('fdkAACLibraryPath') ? project.properties['fdkAACLibraryPath'] : System.properties['java.library.path']
+    task.systemProperty "jna.library.path", fdkAACLibraryPath
 }
