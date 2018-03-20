@@ -1,7 +1,8 @@
 plugins {
     id 'java'
+    id 'maven'
+    id 'maven-publish'
 }
-
 apply from: 'common.gradle'
 
 def libSource = project.properties['libSource']
@@ -9,8 +10,9 @@ if (libSource == null) {
     throw new GradleException("'libSource' system property must be set")
 }
 
-task win64(type: Jar) {
+task win64Jar(type: Jar) {
     def target = 'win64'
+    classifier = target
     doFirst { buildLibrary(libSource, target) }
     archiveName = "${archivesBaseName}-${version}-${target}.jar"
     from sourceSets.main.output
@@ -20,8 +22,9 @@ task win64(type: Jar) {
     rename '.+(fdk-aac).+(\\.dll)', '$1$2'
 }
 
-task linux64(type: Jar) {
+task linux64Jar(type: Jar) {
     def target = 'linux64'
+    classifier = target
     doFirst { buildLibrary(libSource, target) }
     archiveName = "${archivesBaseName}-${version}-${target}.jar"
     from sourceSets.main.output
@@ -35,4 +38,27 @@ void buildLibrary(source, target) {
         workingDir projectDir
         commandLine "scripts/build_library.sh", "-s", source, "-t", target
     }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives sourcesJar
+    archives linux64Jar
+    archives win64Jar
+}
+
+publishing.publications {
+    maven(MavenPublication) {
+        from components.java
+        artifact tasks.sourcesJar
+        artifact tasks.linux64Jar
+        artifact tasks.win64Jar
+    }
+}
+publishing.repositories {
+    mavenLocal()
 }
