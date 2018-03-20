@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven'
+    id 'signing'
     id 'maven-publish'
 }
 apply from: 'common.gradle'
@@ -47,15 +48,27 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 artifacts {
     archives sourcesJar
+    archives javadocJar
     archives linux64Jar
     archives win64Jar
+}
+
+
+signing {
+    sign configurations.archives
 }
 
 publishing.publications {
     maven(MavenPublication) {
         from components.java
+        artifact tasks.javadocJar
         artifact tasks.sourcesJar
         artifact tasks.linux64Jar
         artifact tasks.win64Jar
@@ -63,4 +76,49 @@ publishing.publications {
 }
 publishing.repositories {
     mavenLocal()
+}
+
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'jna-aac-encoder'
+                packaging 'jar'
+                description 'Fdk-AAC encoder JNA bridge'
+                url 'https://github.com/sheinbergon/jna-aac-encoder'
+
+                scm {
+                    connection 'scm:git:https://github.com/sheinbergon/jna-aac-encoder.git'
+                    developerConnection 'scm:git:https://github.com/sheinbergon/jna-aac-encoder.git'
+                    url 'https://github.com/sheinbergon/jna-aac-encoder/tree/master'
+                }
+
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License, Version 3.0'
+                        url 'https://www.gnu.org/licenses/lgpl-3.0.en.html'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'sheinbergon'
+                        name 'Idan Sheinberg'
+                        email 'ishinberg0@gmail.com'
+                    }
+                }
+            }
+        }
+    }
 }
