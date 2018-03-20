@@ -11,25 +11,27 @@ if (libSource == null) {
 }
 
 task win64Jar(type: Jar) {
-    def target = 'win64'
+    def target = 'win32-x86-64'
     classifier = target
     doFirst { buildLibrary(libSource, target) }
     archiveName = "${archivesBaseName}-${version}-${target}.jar"
     from sourceSets.main.output
     from("${libSource}/.libs") {
         include '*.dll'
+        into target
     }
     rename '.+(fdk-aac).+(\\.dll)', '$1$2'
 }
 
 task linux64Jar(type: Jar) {
-    def target = 'linux64'
+    def target = 'linux-x86-64'
     classifier = target
     doFirst { buildLibrary(libSource, target) }
     archiveName = "${archivesBaseName}-${version}-${target}.jar"
     from sourceSets.main.output
     from("${libSource}/.libs") {
         include '*.so'
+        into target
     }
 }
 

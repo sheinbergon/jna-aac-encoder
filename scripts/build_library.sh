@@ -27,10 +27,10 @@ do
                 "")
                     exit_with_error "A valid build target must be passed via '-t'"
                     ;;
-                "win64")
+                "win32-x86-64")
                     TARGET="x86_64-w64-mingw32"
                 ;;
-                "linux64")
+                "linux-x86-64")
                     TARGET="x86_64-linux-gnu"
                 ;;
                 *)
