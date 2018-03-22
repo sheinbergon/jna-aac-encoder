@@ -18,11 +18,13 @@ import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
+@NotThreadSafe
 @Accessors(fluent = true)
 public class AACAudioEncoder implements AutoCloseable {
 
@@ -33,6 +35,8 @@ public class AACAudioEncoder implements AutoCloseable {
 
     private final static Set<Integer> SAMPLE_RATES = Set.of(8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000);
 
+    // Some fdk-aac internal constants
+    private final static int ADTS_TRANSMUX = 2;
     private final static int WAV_INPUT_CHANNEL_ORDER = 1;
     private final static int MAX_ENCODER_CHANNELS = 0;
     private final static int ENCODER_MODULES_MASK = 0;
@@ -43,11 +47,16 @@ public class AACAudioEncoder implements AutoCloseable {
     private final AACEncoder encoder;
     @Getter
     private final int inputBufferSize;
+
+    // These are all created upon construciton/build in order to utilize memory allocations efficiently
+    // ----------------------------------------------
     // Hard references are advised for memory buffers
     private final Memory inBuffer;
     private final Memory outBuffer;
     private final AACEncBufDesc inBufferDescriptor;
     private final AACEncBufDesc outBufferDescriptor;
+
+    private boolean closed = false;
 
     private AACAudioEncoder(AACEncoder encoder, AACEncInfo info) {
         this.encoder = encoder;
@@ -82,7 +91,7 @@ public class AACAudioEncoder implements AutoCloseable {
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AFTERBURNER, afterBurner ? 1 : 0);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, sampleRate);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, bitRate);
-            FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_TRANSMUX, 2);
+            FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_TRANSMUX, ADTS_TRANSMUX);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AOT, profile.getAot());
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELORDER, WAV_INPUT_CHANNEL_ORDER);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE, AACEncodingChannelMode.valueOf(channels).getMode());
@@ -112,10 +121,11 @@ public class AACAudioEncoder implements AutoCloseable {
         }
     }
 
-    public final AACAudioOutput encode(WAVAudioInput input, boolean conclude) throws AACAudioEncoderException {
+    public final AACAudioOutput encode(WAVAudioInput input) throws AACAudioEncoderException {
         int read;
-        AACAudioOutput.Accumulator accumlator = AACAudioOutput.accumulator();
+        verifyState();
         try {
+            AACAudioOutput.Accumulator accumlator = AACAudioOutput.accumulator();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(input.data());
             byte[] buffer = new byte[inputBufferSize()];
             while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
@@ -124,17 +134,15 @@ public class AACAudioEncoder implements AutoCloseable {
                         .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
                 accumlator.accumulate(encoded);
             }
-            if (conclude) {
-                accumlator.accumulate(conclude().data());
-            }
             return accumlator.done();
         } catch (IOException | RuntimeException x) {
             throw new AACAudioEncoderException("Could not encode WAV audio to AAC audio", x);
         }
     }
 
-    public AACAudioOutput conclude() throws AACAudioEncoderException {
+    public final AACAudioOutput conclude() throws AACAudioEncoderException {
         Optional<byte[]> optional;
+        verifyState();
         try {
             inBufferDescriptor.clear();
             AACAudioOutput.Accumulator accumlator = AACAudioOutput.accumulator();
@@ -144,6 +152,8 @@ public class AACAudioEncoder implements AutoCloseable {
             return accumlator.done();
         } catch (RuntimeException x) {
             throw new AACAudioEncoderException("Could not conclude WAV audio to AAC audio", x);
+        } finally {
+            close(); // Once conclusion has taken place, this encoder instance should be discarded
         }
     }
 
@@ -157,7 +167,7 @@ public class AACAudioEncoder implements AutoCloseable {
 
     /*
      * This disables non-crucial synchronization for irrelevant structs.
-     * In order to dramatically boost performance and solve JNA memory pressure issues
+     * In order to dramatically(!!!) boost performance and solve JNA memory pressure issues
      */
     private void disableStructureSynchronization() {
         encoder.write();
@@ -168,8 +178,17 @@ public class AACAudioEncoder implements AutoCloseable {
         outBufferDescriptor.setAutoSynch(false);
     }
 
+    private void verifyState() {
+        if (closed) {
+            throw new AACAudioEncoderException("Encoder instance already closed");
+        }
+    }
+
     @Override
     public void close() {
-        FdkAACLibFacade.closeEncoder(encoder);
+        if (!closed) {
+            FdkAACLibFacade.closeEncoder(encoder);
+            closed = true;
+        }
     }
 }

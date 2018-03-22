@@ -72,7 +72,7 @@ public class AACFileWriterTest {
             MediaInfoSupport.assertAACOutput(aac, input.getFormat(), AACEncodingProfile.AAC_LC);
         } finally {
             if (aac.exists()) {
-                Files.delete(aac.toPath());
+        //        Files.delete(aac.toPath());
             }
         }
     }

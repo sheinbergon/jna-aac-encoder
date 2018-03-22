@@ -1,10 +1,9 @@
 package org.sheinbergon.aac.encoder;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
+
+import java.util.Optional;
 
 
 @DisplayName("AAC audio encoder")
@@ -18,10 +17,16 @@ public class AACAudioEncoderTest {
     private final static int VALID_BITRATE = 64000;
 
     private AACAudioEncoder.Builder builder;
+    private AACAudioEncoder encoder;
 
     @BeforeEach
     public void setup() {
         builder = AACAudioEncoder.builder();
+    }
+
+    @AfterEach
+    public void teardown() {
+        Optional.ofNullable(encoder).ifPresent(AACAudioEncoder::close);
     }
 
     @Test
@@ -46,5 +51,14 @@ public class AACAudioEncoderTest {
                         .bitRate(VALID_BITRATE)
                         .channels(INVALID_CHANNEL_COUNT)
                         .build());
+    }
+
+    @Test
+    public void closedEncoderEncoding() {
+        Assertions.assertThrows(AACAudioEncoderException.class, () -> {
+            encoder = builder.build();
+            encoder.close();
+            encoder.conclude();
+        });
     }
 }

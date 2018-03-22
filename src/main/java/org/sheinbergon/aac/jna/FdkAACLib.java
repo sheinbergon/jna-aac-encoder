@@ -10,7 +10,6 @@ public class FdkAACLib {
     @RequiredArgsConstructor
     enum Methods {
         INFO("aacEncInfo"),
-        GET_LIB_INFO("aacEncGetLibInfo"),
         SET_PARAM("aacEncoder_SetParam"),
         OPEN("accEncOpen"),
         CLOSE("accEncClose"),

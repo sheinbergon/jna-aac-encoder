@@ -89,16 +89,23 @@ public final class AACFileWriter extends AudioFileWriter {
     }
 
     private int encodeAndWrite(AudioInputStream input, AudioFileFormat.Type type, OutputStream output) throws IOException {
+        boolean concluded = false;
         int read, encoded = 0;
         AudioFormat format = input.getFormat();
         AACAudioEncoder encoder = encoder(format, type);
         try (encoder) {
             int readBufferSize = readBufferSize(format, encoder);
             byte[] readBuffer = new byte[readBufferSize];
-            while ((read = input.read(readBuffer)) != WAVAudioSupport.EOS) {
-                WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read);
-                boolean conclude = read < readBufferSize;
-                AACAudioOutput audioOutput = encoder.encode(audioInput, conclude);
+            AACAudioOutput audioOutput;
+            while (!concluded) {
+                read = input.read(readBuffer);
+                if (read == WAVAudioSupport.EOS) {
+                    audioOutput = encoder.conclude();
+                    concluded = true;
+                } else {
+                    WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read);
+                    audioOutput = encoder.encode(audioInput);
+                }
                 encoded += audioOutput.length();
                 output.write(audioOutput.data());
             }

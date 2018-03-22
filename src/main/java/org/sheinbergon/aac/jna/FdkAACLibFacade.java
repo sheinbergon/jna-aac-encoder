@@ -43,6 +43,7 @@ public class FdkAACLibFacade {
         verifyResult(result, FdkAACLib.Methods.ENCODE);
     }
 
+    // TODO - There's really no reason why in/out args structs would be reallocated over and over again. They should be allocated once per encoder externally
     public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor, AACEncBufDesc outBufferDescriptor, int size) {
         AACEncInArgs inArgs = new AACEncInArgs();
         AACEncOutArgs outArgs = new AACEncOutArgs();
@@ -50,7 +51,7 @@ public class FdkAACLibFacade {
         return Optional.ofNullable(AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs)))
                 .filter(result -> result != AACEncError.AACENC_ENCODE_EOF)
                 .map(result -> {
-                    verifyResult(result, FdkAACLib.Methods.GET_LIB_INFO);
+                    verifyResult(result, FdkAACLib.Methods.ENCODE);
                     return outBufferDescriptor.bufs
                             .getValue().getByteArray(0, outArgs.numOutBytes);
                 });
