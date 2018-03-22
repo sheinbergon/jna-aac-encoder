@@ -1,5 +1,5 @@
 group 'org.sheinbergon'
-version '0.1.0'
+version '0.1.1'
 
 sourceCompatibility = 1.9
 
@@ -10,6 +10,7 @@ repositories {
 ext.depVersions = [
         jna         : '4.5.1',
         commonsLang3: '3.7',
+        jsr305      : '3.0.2',
         lombok      : '1.16.20'
 ]
 
@@ -29,6 +30,7 @@ dependencies {
 
     // Utility
     compile "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
+    compile "com.google.code.findbugs:jsr305:${depVersions.jsr305}"
 
     // Lombok
     compileOnly "org.projectlombok:lombok:${depVersions.lombok}"

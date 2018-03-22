@@ -23,6 +23,7 @@ public class AACAudioOutput {
         private byte[] data = null;
         private int length = 0;
 
+        // It is guaranteed the encoded bytes array is properly sized to exactly match its actual content
         void accumulate(byte[] data) {
             if (data.length != 0) {
                 this.data = ArrayUtils.addAll(this.data, data);
