@@ -13,8 +13,7 @@ regarding re/distribution and licensing limitations.
 
 ## Usage
 
-#### Dependencies
-
+### Dependencies
 Artifacts are available on maven central:
 
 **_Gradle_**
@@ -31,16 +30,15 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.1'
 ```
 
 #### Notice!!!
-
 The **_libfdk-aac_** shared library so/dll/dylib file is required to be accessible
 for dynamic loading upon execution. If using the above depdencey, you
 need to make sure the shared library is installed as part of the runtime OS enviroment
 and accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
-To make things easier, cross compilations artifacts (containing the shared library)
-for both Windows (64bit) and Linux(64bit) are provided through maven _classifiers_ :
+To make things easier, cross-compiled artifacts (containing the shared library)
+for both Windows (64bit) and Linux(64bit) are provided through the use of maven _classifiers_:
 
-##### Windows 64
+#### Windows (64 bit)
 **_Gradle_**
 ```groovy
 compile 'org.sheinbergon:jna-aac-encoder:0.1.1:win32-x86-64'
@@ -54,7 +52,7 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.1:win32-x86-64'
     <classifier>win32-x86-64</classifier>
 </dependency>
 ```
-##### Linux 64
+#### Linux (64 bit)
 **_Gradle_**
 ```groovy
 compile 'org.sheinbergon:jna-aac-encoder:0.1.1:linux-x86-64'
@@ -73,14 +71,14 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.1:linux-x86-64'
 OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
 
 
-#### Java AudioSystem
+### Encoding using the JVM AudioSystem
 ```java
 AudioInputStream input = AudioSystem.getAudioInputStream(...);
 File output = new File(...);
 AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
-#### Limitations
+## Limitations
 Currently, only pcm_s16le WAV input is supported, meaning:
 * Sample size - 16 bit(signed)
 * WAV format - PCM
@@ -99,6 +97,7 @@ Additional restrictions:
 * Improved lower-level interface (with examples).
 * Performance tests/comparison (JMH).
 * Support for AAC HE & HEv2.
+* Support additiona WAV audio formats.
 * Meta-data insertion.
 * MacOS cross-compiling?
 * AAC Decoding???
