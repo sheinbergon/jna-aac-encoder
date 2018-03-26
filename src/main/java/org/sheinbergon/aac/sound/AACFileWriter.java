@@ -24,12 +24,14 @@ public final class AACFileWriter extends AudioFileWriter {
 
 
     private final static Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
-            AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC);
-
+            AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC,
+            AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC,
+            AACFileTypes.AAC_HE_V2, AACEncodingProfile.HE_AAC_V2);
 
     @Override
     public AudioFileFormat.Type[] getAudioFileTypes() {
-        return Stream.of(AACFileTypes.AAC_LC).toArray(AudioFileFormat.Type[]::new);
+        return Stream.of(AACFileTypes.AAC_LC, AACFileTypes.AAC_HE, AACFileTypes.AAC_HE_V2)
+                .toArray(AudioFileFormat.Type[]::new);
     }
 
     @Override
@@ -45,7 +47,7 @@ public final class AACFileWriter extends AudioFileWriter {
         }
     }
 
-    private static AACEncodingProfile profileByType(AudioFileFormat.Type type) {
+    static AACEncodingProfile profileByType(AudioFileFormat.Type type) {
         return Optional.ofNullable(FILE_TYPES_TO_ENCODING_PROFILES.get(type))
                 .orElseThrow(() -> new IllegalArgumentException("File type " + type + " is not yet supported"));
     }
