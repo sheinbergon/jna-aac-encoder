@@ -21,6 +21,9 @@ task win64Jar(type: Jar) {
         include '*.dll'
         into target
     }
+    from("${projectDir}") {
+        include 'NOTICE'
+    }
     rename '.+(fdk-aac).+(\\.dll)', '$1$2'
 }
 
@@ -33,6 +36,9 @@ task linux64Jar(type: Jar) {
     from("${libSource}/.libs") {
         include '*.so'
         into target
+    }
+    from("${projectDir}") {
+        include 'NOTICE'
     }
 }
 

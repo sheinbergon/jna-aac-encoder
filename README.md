@@ -1,10 +1,10 @@
 # jna-aac-encoder
 
-[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder)
+[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
+![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/org/sheinbergon/jna-aac-encoder/maven-metadata.xml.svg)
                                                                                                                                                                                                                                                                                                  
 This library provides AAC encoding capabilities for the JVM. 
 It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA in order to do so.
-
 
 ## License
 **Important!** While this library uses LGPL-3, please see
@@ -18,14 +18,14 @@ Artifacts are available on maven central:
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.1'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.2'
 ```
 **_Maven_**
 ```xml
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 
@@ -36,37 +36,16 @@ need to make sure the shared library is installed as part of the runtime OS envi
 and accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
 To make things easier, cross-compiled artifacts (containing the shared library)
-for both Windows (64bit) and Linux(64bit) are provided through the use of maven _classifiers_:
+for both Windows(64bit) and Linux(64bit) are provided through the use of *_classifiers_*:
 
-#### Windows (64 bit)
-**_Gradle_**
+##### Windows(64 bit)
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.1:win32-x86-64'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.2:win32-x86-64'
 ```
-**_Maven_**
-```xml
-<dependency>
-    <groupId>org.sheinbergon</groupId>
-    <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.1</version>
-    <classifier>win32-x86-64</classifier>
-</dependency>
-```
-#### Linux (64 bit)
-**_Gradle_**
+##### Linux(64 bit)
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.1:linux-x86-64'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.2:linux-x86-64'
 ```
-**_Maven_**
-```xml
-<dependency>
-    <groupId>org.sheinbergon</groupId>
-    <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.1</version>
-    <classifier>linux-x86-64</classifier>
-</dependency>
-```
-
 32bit platform won't be supported for now.
 OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
 
@@ -90,13 +69,11 @@ the encoding process to fail.
 
 Additional restrictions:
 * A maximum of 6 audio input/output channels
-* Only the AAC-LC(**L**ow **C**omplaxity) encoding profile is suuported  
-
+* Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are suuported  
 
 ## Roadmap
 * Improved lower-level interface (with examples).
 * Performance tests/comparison (JMH).
-* Support for AAC HE & HEv2.
 * Support additiona WAV audio formats.
 * Meta-data insertion.
 * MacOS cross-compiling?
