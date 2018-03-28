@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
-import org.sheinbergon.aac.encoder.util.AACAudioOutputException;
 
 @Getter
 @Accessors(chain = true, fluent = true)
@@ -33,11 +32,7 @@ public class AACAudioOutput {
 
         AACAudioOutput done() {
             AACAudioOutput output = new AACAudioOutput();
-            if (ArrayUtils.isNotEmpty(data)) {
-                output.data = data;
-            } else {
-                throw new AACAudioOutputException("data", "Empty/Null array");
-            }
+            output.data = data;
             output.length = length;
             return output;
         }

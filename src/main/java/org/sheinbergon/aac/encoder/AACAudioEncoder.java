@@ -31,7 +31,7 @@ public class AACAudioEncoder implements AutoCloseable {
     /**
      * Safe, reasonable boundaries according to @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
      */
-    private final static Range<Integer> BITRATE_RANGE = Range.between(64000, 640000);
+    private final static Range<Integer> BITRATE_RANGE = Range.between(32000, 640000);
 
     private final static Set<Integer> SAMPLE_RATES = Set.of(8000, 11025, 12000, 16000, 22050, 24000, 32000, 44100, 48000);
 
@@ -125,16 +125,17 @@ public class AACAudioEncoder implements AutoCloseable {
         int read;
         verifyState();
         try {
-            AACAudioOutput.Accumulator accumlator = AACAudioOutput.accumulator();
+            AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
             ByteArrayInputStream inputStream = new ByteArrayInputStream(input.data());
             byte[] buffer = new byte[inputBufferSize()];
             while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
                 populateInputBuffer(buffer, read);
                 byte[] encoded = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, read)
                         .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
-                accumlator.accumulate(encoded);
+                accumulator.accumulate(encoded);
             }
-            return accumlator.done();
+
+            return accumulator.done();
         } catch (IOException | RuntimeException x) {
             throw new AACAudioEncoderException("Could not encode WAV audio to AAC audio", x);
         }
@@ -145,11 +146,11 @@ public class AACAudioEncoder implements AutoCloseable {
         verifyState();
         try {
             inBufferDescriptor.clear();
-            AACAudioOutput.Accumulator accumlator = AACAudioOutput.accumulator();
+            AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
             while ((optional = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, WAVAudioSupport.EOS)).isPresent()) {
-                accumlator.accumulate(optional.get());
+                accumulator.accumulate(optional.get());
             }
-            return accumlator.done();
+            return accumulator.done();
         } catch (RuntimeException x) {
             throw new AACAudioEncoderException("Could not conclude WAV audio to AAC audio", x);
         } finally {

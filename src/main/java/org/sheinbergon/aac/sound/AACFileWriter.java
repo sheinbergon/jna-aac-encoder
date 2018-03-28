@@ -108,8 +108,10 @@ public final class AACFileWriter extends AudioFileWriter {
                     WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read);
                     audioOutput = encoder.encode(audioInput);
                 }
-                encoded += audioOutput.length();
-                output.write(audioOutput.data());
+                if (audioOutput.length() > 0) {
+                    encoded += audioOutput.length();
+                    output.write(audioOutput.data());
+                }
             }
         }
         return encoded;
