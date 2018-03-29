@@ -1,10 +1,6 @@
 package org.sheinbergon.aac.sound;
 
 import org.openjdk.jmh.annotations.*;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 
 import javax.sound.sampled.AudioFileFormat;
@@ -29,7 +25,7 @@ public class AACFileWriterBenchmark {
     private final static String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
     private final static String PREFIX = "perf";
 
-    private final static int FORKS = 5;
+    private final static int FORKS = 3;
     private final static int ITERATIONS = 15;
     private final static int WARMUPS = 5;
 
@@ -40,11 +36,11 @@ public class AACFileWriterBenchmark {
             AACEncodingProfile.HE_AAC, AACFileTypes.AAC_HE,
             AACEncodingProfile.HE_AAC_V2, AACFileTypes.AAC_HE_V2);
 
-    @Param({"1000000", "2000000", "5000000", "10000000"})
-    private int inputBytes;
-
     @Param({"AAC_LC", "HE_AAC"})
     private AACEncodingProfile encodingProfile;
+
+    @Param({"1000000", "2000000", "5000000", "10000000"})
+    private int inputBytes;
 
     private File tmpAudioInputFile;
     private URL audioInput;
@@ -84,10 +80,5 @@ public class AACFileWriterBenchmark {
     public void aacFileWriter() throws IOException, UnsupportedAudioFileException {
         AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioInput);
         AudioSystem.write(audioInputStream, ENCODING_PROFILES_TO_FILE_TYPES.get(encodingProfile), audioOutput);
-    }
-
-    public static void main(String[] args) throws RunnerException {
-        Options options = new OptionsBuilder().build();
-        new Runner(options).run();
     }
 }

@@ -22,7 +22,6 @@ public final class AACFileWriter extends AudioFileWriter {
 
     private final static int INPUT_BUFFER_MULTIPLIER = 16;
 
-
     private final static Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
             AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC,
             AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC,

@@ -27,7 +27,6 @@ public class WAVAudioInput {
                 .build();
     }
 
-
     public static Builder builder() {
         return new Builder();
     }

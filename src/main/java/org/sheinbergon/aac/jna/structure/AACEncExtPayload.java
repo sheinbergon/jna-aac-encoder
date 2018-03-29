@@ -8,7 +8,7 @@ import org.sheinbergon.aac.jna.util.JNAUtil;
 import java.util.List;
 
 /**
- * Maps to AACENC_EXT_PAYLOAD struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * Maps to AACENC_EXT_PAYLOAD struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 public class AACEncExtPayload extends Structure {
 

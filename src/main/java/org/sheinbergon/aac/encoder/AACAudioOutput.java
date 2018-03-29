@@ -3,12 +3,13 @@ package org.sheinbergon.aac.encoder;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 
 @Getter
 @Accessors(chain = true, fluent = true)
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class AACAudioOutput {
 
     public static Accumulator accumulator() {
@@ -31,13 +32,10 @@ public class AACAudioOutput {
         }
 
         AACAudioOutput done() {
-            AACAudioOutput output = new AACAudioOutput();
-            output.data = data;
-            output.length = length;
-            return output;
+            return new AACAudioOutput(data, length);
         }
     }
 
-    private byte[] data;
-    private int length;
+    private final byte[] data;
+    private final int length;
 }
