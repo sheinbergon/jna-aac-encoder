@@ -74,7 +74,7 @@ Additional restrictions:
 ## Roadmap
 * Improved lower-level interface (with examples).
 * Performance tests/comparison (JMH).
-* Support additiona WAV audio formats.
+* Support additional WAV audio formats.
 * Meta-data insertion.
 * MacOS cross-compiling?
 * AAC Decoding???
