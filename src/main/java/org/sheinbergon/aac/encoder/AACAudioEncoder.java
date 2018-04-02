@@ -52,7 +52,7 @@ public class AACAudioEncoder implements AutoCloseable {
     private final AACEncBufDesc inBufferDescriptor;
     private final AACEncBufDesc outBufferDescriptor;
 
-    private boolean closed = false;
+    private volatile boolean closed = false;
 
     private AACAudioEncoder(AACEncoder encoder, AACEncInfo info) {
         this.encoder = encoder;
