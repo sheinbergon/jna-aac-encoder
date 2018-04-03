@@ -104,10 +104,13 @@ uploadArchives {
                 description 'Fdk-AAC encoder JNA bridge'
                 url 'https://github.com/sheinbergon/jna-aac-encoder'
 
+                organization {
+                    name 'sheinbergon'
+                }
                 scm {
-                    connection 'scm:git:https://github.com/sheinbergon/jna-aac-encoder.git'
-                    developerConnection 'scm:git:https://github.com/sheinbergon/jna-aac-encoder.git'
-                    url 'https://github.com/sheinbergon/jna-aac-encoder/tree/master'
+                    url 'https://github.com/sheinbergon/jna-aac-encoder'
+                    connection 'scm:git:git://github.com/sheinbergon/jna-aac-encoder.git'
+                    developerConnection 'scm:git:git@github.com:sheinbergon/jna-aac-encoder.git'
                 }
 
                 licenses {
