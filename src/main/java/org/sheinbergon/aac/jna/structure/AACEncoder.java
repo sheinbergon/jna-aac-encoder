@@ -5,13 +5,12 @@ import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.ptr.ShortByReference;
-import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
 /**
- * Maps to AACENCODER struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * Maps to AACENCODER struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 public class AACEncoder extends Structure {
 
@@ -22,13 +21,13 @@ public class AACEncoder extends Structure {
 
     // TODO - Protect against null values
     public static AACEncoder of(PointerByReference pointerReference) {
-        AACEncoder encoder = new AACEncoder(pointerReference.getValue());
-        encoder.read();
-        return encoder;
+        return new AACEncoder(pointerReference.getValue());
     }
 
     private AACEncoder(Pointer pointer) {
         super(pointer);
+        setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
+        read(); // Read once after initialize from provided pointer
     }
 
     public UserParam extParam;

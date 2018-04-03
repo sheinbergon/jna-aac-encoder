@@ -9,10 +9,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class JNAUtil {
-    public final static List<String> structureFieldOrder(Class<? extends Structure> structure) {
+    public static List<String> structureFieldOrder(Class<? extends Structure> structure) {
         return Stream.of(structure.getDeclaredFields())
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .map(Field::getName)
                 .collect(Collectors.toList());
+    }
+
+    public static void clearStructureMemory(Structure... structures) {
+        Stream.of(structures).forEach(Structure::clear);
     }
 }

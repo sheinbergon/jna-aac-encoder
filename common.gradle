@@ -1,5 +1,5 @@
 group 'org.sheinbergon'
-version '0.1.2'
+version '0.1.3'
 
 sourceCompatibility = 1.9
 
@@ -20,9 +20,19 @@ ext.testDepVersions = [
         mediaInfo    : '1.0.0.RELEASE'
 ]
 
+ext.perfDepVersions = [
+        commonsIO: '2.6',
+        jmh      : '1.20'
+]
+
 task wrapper(type: Wrapper) {
     gradleVersion = '4.4.1'
 }
+
+sourceSets {
+    perf
+}
+
 
 dependencies {
     // JNA
@@ -42,4 +52,11 @@ dependencies {
 
     // MediaInfo
     testCompile "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
+
+    // JMH Benchmarking
+    perfCompile project
+    perfCompile "org.openjdk.jmh:jmh-core:${perfDepVersions.jmh}"
+    perfCompile "org.openjdk.jmh:jmh-generator-annprocess:${perfDepVersions.jmh}"
+    perfCompile "commons-io:commons-io:${perfDepVersions.commonsIO}"
+
 }

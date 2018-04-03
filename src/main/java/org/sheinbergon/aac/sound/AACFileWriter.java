@@ -22,7 +22,6 @@ public final class AACFileWriter extends AudioFileWriter {
 
     private final static int INPUT_BUFFER_MULTIPLIER = 16;
 
-
     private final static Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
             AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC,
             AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC,
@@ -108,8 +107,10 @@ public final class AACFileWriter extends AudioFileWriter {
                     WAVAudioInput audioInput = WAVAudioInput.pcms16le(readBuffer, read);
                     audioOutput = encoder.encode(audioInput);
                 }
-                encoded += audioOutput.length();
-                output.write(audioOutput.data());
+                if (audioOutput.length() > 0) {
+                    encoded += audioOutput.length();
+                    output.write(audioOutput.data());
+                }
             }
         }
         return encoded;

@@ -18,14 +18,14 @@ Artifacts are available on maven central:
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.2'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.3'
 ```
 **_Maven_**
 ```xml
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.2</version>
+    <version>0.1.3</version>
 </dependency>
 ```
 
@@ -40,15 +40,17 @@ for both Windows(64bit) and Linux(64bit) are provided through the use of *_class
 
 ##### Windows(64 bit)
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.2:win32-x86-64'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.3:win32-x86-64'
 ```
 ##### Linux(64 bit)
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.2:linux-x86-64'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.3:linux-x86-64'
 ```
-32bit platform won't be supported for now.
-OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
-
+#### Additional information
+* Provided fdk-aac version is 0.1.6
+* This library was tested against 0.1.5/6
+* 32bit platform won't be supported for now.
+* OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
 
 ### Encoding using the JVM AudioSystem
 ```java
@@ -57,13 +59,32 @@ File output = new File(...);
 AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
+## Performance
+Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
+
+![alt text](perf/jmh-results-04042018.png)
+
+To run the benchmarks locally:
+* Clone this repository to a Linux host
+* Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled) loadable
+* Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
+* To execute the benchmark, run the following gradle command
+```groovy
+./gradlew -b perf.gradle jmh jmhReport
+```
+* If the aac-enc binary is not installed in /usr/bin/aac-enc, you can a custom path path by adding this gradle property:
+```groovy
+-PaacEncBin=/CUSTOM/PATH/TO/AAC-ENC 
+```
+* The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
+
 ## Limitations
 Currently, only pcm_s16le WAV input is supported, meaning:
 * Sample size - 16 bit(signed)
 * WAV format - PCM
 * Byte order - Little Endian
 
-While this seems to the common raw-audio formatting, it's important
+While this seems to be the common raw-audio formatting, it's important
 to note that providing input audio with different formatting will cause
 the encoding process to fail. 
 
@@ -71,10 +92,11 @@ Additional restrictions:
 * A maximum of 6 audio input/output channels
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are suuported  
 
+
 ## Roadmap
 * Improved lower-level interface (with examples).
 * Performance tests/comparison (JMH).
-* Support additiona WAV audio formats.
+* Support additional WAV audio formats.
 * Meta-data insertion.
 * MacOS cross-compiling?
 * AAC Decoding???

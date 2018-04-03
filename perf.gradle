@@ -1,0 +1,36 @@
+import org.gradle.internal.os.OperatingSystem;
+
+plugins {
+    id "java"
+    id "io.morethan.jmhreport" version "0.7.0"
+}
+
+apply from: 'common.gradle'
+
+jmhReport {
+    jmhResultPath = project.file('build/reports/perf/result.json')
+    jmhReportOutput = project.file('build/reports/perf')
+}
+
+task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
+
+    classpath = sourceSets.perf.runtimeClasspath
+    main = 'org.openjdk.jmh.Main'
+
+    assert OperatingSystem.current().isLinux()
+
+    def aacEncBin = project.properties.get('aacEncBin', "/usr/bin/aac-enc")
+    assert file(aacEncBin).exists()
+
+    def format = project.properties.get('format', 'json');
+    def resultFile = file("build/reports/perf/result.${format}")
+    resultFile.parentFile.mkdirs()
+
+    systemProperties = [
+            'perf.aac.enc.bin': aacEncBin
+    ]
+
+    args 'Benchmark.*'
+    args '-rf', format
+    args '-rff', resultFile
+}

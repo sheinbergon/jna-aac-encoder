@@ -1,13 +1,12 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
 
 /**
- * Maps to USER_PARAM struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.5/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * Maps to USER_PARAM struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 public class UserParam extends Structure {
 

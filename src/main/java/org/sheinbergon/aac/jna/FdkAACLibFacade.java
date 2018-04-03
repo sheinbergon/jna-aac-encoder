@@ -1,7 +1,6 @@
 package org.sheinbergon.aac.jna;
 
 import com.sun.jna.Memory;
-import com.sun.jna.Pointer;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
@@ -9,6 +8,7 @@ import org.sheinbergon.aac.jna.structure.*;
 import org.sheinbergon.aac.jna.util.AACEncError;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 import org.sheinbergon.aac.jna.util.FdkAACLibException;
+import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.Optional;
 
@@ -33,8 +33,8 @@ public class FdkAACLibFacade {
     }
 
     public static void closeEncoder(AACEncoder encoder) {
-        Pointer pointer = encoder.getPointer();
-        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncClose(new PointerByReference(pointer)));
+        PointerByReference pointerRef = new PointerByReference(encoder.getPointer());
+        AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
         verifyResult(result, FdkAACLib.Methods.CLOSE);
     }
 
@@ -43,14 +43,14 @@ public class FdkAACLibFacade {
         verifyResult(result, FdkAACLib.Methods.ENCODE);
     }
 
-    // TODO - There's really no reason why in/out args structs would be reallocated over and over again. They should be allocated once per encoder externally
-    public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor, AACEncBufDesc outBufferDescriptor, int size) {
-        AACEncInArgs inArgs = new AACEncInArgs();
-        AACEncOutArgs outArgs = new AACEncOutArgs();
+    public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor, AACEncBufDesc outBufferDescriptor, AACEncInArgs inArgs, AACEncOutArgs outArgs, int size) {
+        JNAUtil.clearStructureMemory(inArgs, outArgs);
         inArgs.numInSamples = (size == WAVAudioSupport.EOS) ? size : size / IN_SAMPLES_DIVISOR;
+        inArgs.writeField("numInSamples");
         return Optional.ofNullable(AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs)))
                 .filter(result -> result != AACEncError.AACENC_ENCODE_EOF)
                 .map(result -> {
+                    outArgs.readField("numOutBytes");
                     verifyResult(result, FdkAACLib.Methods.ENCODE);
                     return outBufferDescriptor.bufs
                             .getValue().getByteArray(0, outArgs.numOutBytes);
