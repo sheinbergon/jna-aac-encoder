@@ -51,7 +51,7 @@ public class AACEncodingBenchmark {
         BINARY, JNA
     }
 
-    @Param({"JNA","BINARY"})
+    @Param({"BINARY", "JNA"})
     private Mode mode;
 
     @Param({"1000000", "2000000", "5000000", "10000000"})
