@@ -5,7 +5,6 @@ import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.ptr.ShortByReference;
-import lombok.ToString;
 import org.sheinbergon.aac.jna.util.JNAUtil;
 
 import java.util.List;
@@ -22,13 +21,13 @@ public class AACEncoder extends Structure {
 
     // TODO - Protect against null values
     public static AACEncoder of(PointerByReference pointerReference) {
-        AACEncoder encoder = new AACEncoder(pointerReference.getValue());
-        encoder.read();
-        return encoder;
+        return new AACEncoder(pointerReference.getValue());
     }
 
     private AACEncoder(Pointer pointer) {
         super(pointer);
+        setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
+        read(); // Read once after initialize from provided pointer
     }
 
     public UserParam extParam;

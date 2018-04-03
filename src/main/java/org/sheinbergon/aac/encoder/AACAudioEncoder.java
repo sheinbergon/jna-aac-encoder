@@ -12,9 +12,7 @@ import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.FdkAACLibFacade;
-import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
-import org.sheinbergon.aac.jna.structure.AACEncInfo;
-import org.sheinbergon.aac.jna.structure.AACEncoder;
+import org.sheinbergon.aac.jna.structure.*;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 
 import javax.annotation.concurrent.NotThreadSafe;
@@ -49,6 +47,8 @@ public class AACAudioEncoder implements AutoCloseable {
     // Hard references are advised for memory buffers
     private final Memory inBuffer;
     private final Memory outBuffer;
+    private final AACEncInArgs inArgs;
+    private final AACEncOutArgs outArgs;
     private final AACEncBufDesc inBufferDescriptor;
     private final AACEncBufDesc outBufferDescriptor;
 
@@ -59,6 +59,8 @@ public class AACAudioEncoder implements AutoCloseable {
         this.inputBufferSize = info.inputChannels * info.frameLength * 2;
         this.inBuffer = new Memory(inputBufferSize);
         this.outBuffer = new Memory(OUT_BUFFER_SIZE);
+        this.inArgs = new AACEncInArgs();
+        this.outArgs = new AACEncOutArgs();
         this.inBufferDescriptor = FdkAACLibFacade.inBufferDescriptor(inBuffer);
         this.outBufferDescriptor = FdkAACLibFacade.outBufferDescriptor(outBuffer);
         disableStructureSynchronization();
@@ -128,7 +130,7 @@ public class AACAudioEncoder implements AutoCloseable {
             byte[] buffer = new byte[inputBufferSize()];
             while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
                 populateInputBuffer(buffer, read);
-                byte[] encoded = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, read)
+                byte[] encoded = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
                         .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
                 accumulator.accumulate(encoded);
             }
@@ -145,7 +147,7 @@ public class AACAudioEncoder implements AutoCloseable {
         try {
             inBufferDescriptor.clear();
             AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
-            while ((optional = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, WAVAudioSupport.EOS)).isPresent()) {
+            while ((optional = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, WAVAudioSupport.EOS)).isPresent()) {
                 accumulator.accumulate(optional.get());
             }
             return accumulator.done();
@@ -169,12 +171,17 @@ public class AACAudioEncoder implements AutoCloseable {
      * In order to dramatically(!!!) boost performance and solve JNA memory pressure issues
      */
     private void disableStructureSynchronization() {
+        // These require writing them initialy prior to disable automatic synchronization
         encoder.write();
         encoder.setAutoSynch(false);
         inBufferDescriptor.write();
         inBufferDescriptor.setAutoSynch(false);
         outBufferDescriptor.write();
         outBufferDescriptor.setAutoSynch(false);
+
+        // In/Out args do not contain anything worth writing initially
+        inArgs.setAutoSynch(false);
+        outArgs.setAutoSynch(false);
     }
 
     private void verifyState() {

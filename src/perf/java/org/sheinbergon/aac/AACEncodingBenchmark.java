@@ -1,6 +1,6 @@
 package org.sheinbergon.aac;
 
-import org.apache.commons.lang3.SystemUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openjdk.jmh.annotations.*;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.sound.AACFileTypes;
@@ -9,7 +9,6 @@ import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.URL;
 import java.util.Map;
 import java.util.Objects;
@@ -21,9 +20,7 @@ import java.util.stream.Stream;
 @State(Scope.Benchmark)
 public class AACEncodingBenchmark {
 
-    private final static Runtime RUNTIME = Runtime.getRuntime();
-
-    private final static String AAC_ENC_BIN = System.getProperty("aacEncBin", "/usr/bin/aac-enc");
+    private final static String AAC_ENC_BIN = System.getProperty("perf.aac.enc.bin");
     private final static String AAC_ENC_COMMAND_TEMPLATE = AAC_ENC_BIN + " -r %d -t %d -a 1 %s %s";
 
     private final static Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = Map.of(
@@ -45,22 +42,16 @@ public class AACEncodingBenchmark {
             AACEncodingProfile.HE_AAC, AACFileTypes.AAC_HE,
             AACEncodingProfile.HE_AAC_V2, AACFileTypes.AAC_HE_V2);
 
-    // Verify Benchmark execution environment
-    static {
-        if (!SystemUtils.IS_OS_LINUX) {
-            throw new IllegalStateException("Benchmark execution is currently only supportted on Linux OSs");
-        }
-        File binary = new File(AAC_ENC_BIN);
-        if (!(binary.exists() && binary.canExecute())) {
-            throw new UncheckedIOException(new IOException("File '" + AAC_ENC_BIN + "' is not a valid executable"));
-        }
-    }
+    /* This is manually set by each benchmark iteration. @Param annotations are not used
+     * in order to allow better visualization via JMH visualizer.
+     */
+    private volatile static AACEncodingProfile encodingProfile;
 
     public enum Mode {
-        NATIVE, JNA
+        BINARY, JNA
     }
 
-    @Param({"NATIVE", "JNA"})
+    @Param({"JNA","BINARY"})
     private Mode mode;
 
     @Param({"1000000", "2000000", "5000000", "10000000"})
@@ -70,11 +61,6 @@ public class AACEncodingBenchmark {
     private AudioFormat tmpAudioInputFormat;
     private URL audioInput;
     private File audioOutput;
-
-    /* This is manually set by each benchmark iteration. @Param annotations are not used
-     * in order to allow better visualization via JMH visualizer.
-     */
-    private volatile AACEncodingProfile encodingProfile;
 
     @Setup
     public void setup() throws IOException, UnsupportedAudioFileException {
@@ -108,22 +94,25 @@ public class AACEncodingBenchmark {
         return (int) (tmpAudioInputFormat.getChannels() * tmpAudioInputFormat.getSampleRate() * AAC_ENCODING_PROFILE_BITRATE_FACTOR.get(encodingProfile));
     }
 
-    private String composeAACEncCommand() {
+    private String[] composeAACEncCommand() {
         return String.format(AAC_ENC_COMMAND_TEMPLATE,
                 bitRate(),
                 encodingProfile.getAot(),
                 tmpAudioInputFile.getAbsolutePath(),
-                audioOutput.getAbsolutePath());
+                audioOutput.getAbsolutePath()
+        ).split(StringUtils.SPACE);
     }
 
     /* Grouping by 'mode' @Param and then switching upon the mode gives visually comparable results,
-     * where results NATIVE(aac-enc binary) and JNA(this library) benchmarks are displayed side-by-side.
+     * where results BINARY(aac-enc binary) and JNA(this library) benchmarks are displayed side-by-side.
      */
     private void handleEncoding() throws IOException, UnsupportedAudioFileException, InterruptedException {
         switch (mode) {
-            case NATIVE: {
-                String aacEncodingCommand = composeAACEncCommand();
-                RUNTIME.exec(aacEncodingCommand).waitFor();
+            case BINARY: {
+                new ProcessBuilder(composeAACEncCommand())
+                        .inheritIO() // Redirect stdout/err to those of the JVM
+                        .start()
+                        .waitFor();
                 break;
             }
             case JNA: {
