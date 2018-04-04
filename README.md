@@ -1,7 +1,9 @@
 # jna-aac-encoder
 
 [![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
-![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/org/sheinbergon/jna-aac-encoder/maven-metadata.xml.svg)
+![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/org/sheinbergon/jna-aac-encoder/maven-metadata.xml.svg) 
+![GitHub release](https://img.shields.io/github/release/sheinbergon/jna-aac-encoder.svg)
+
                                                                                                                                                                                                                                                                                                  
 This library provides AAC encoding capabilities for the JVM. 
 It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA in order to do so.
@@ -48,9 +50,10 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.3:linux-x86-64'
 ```
 #### Additional information
 * Provided fdk-aac version is 0.1.6
-* This library was tested against 0.1.5/6
-* 32bit platform won't be supported for now.
-* OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
+* Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
+* In regards to cross-compilation artifacts:
+  * 32bit platform won't be supported for now
+  * OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
 
 ### Encoding using the JVM AudioSystem
 ```java
@@ -68,7 +71,7 @@ To run the benchmarks locally:
 * Clone this repository to a Linux host
 * Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled) loadable
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
-* To execute the benchmark, run the following gradle command
+* Run the following command (from within the cloned repository)
 ```groovy
 ./gradlew -b perf.gradle jmh jmhReport
 ```
@@ -84,7 +87,7 @@ Currently, only pcm_s16le WAV input is supported, meaning:
 * WAV format - PCM
 * Byte order - Little Endian
 
-While this seems to be the common raw-audio formatting, it's important
+While this form of input formatting seems to be the common raw-audio formatting, it's important
 to note that providing input audio with different formatting will cause
 the encoding process to fail. 
 
@@ -92,10 +95,9 @@ Additional restrictions:
 * A maximum of 6 audio input/output channels
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are suuported  
 
-
 ## Roadmap
 * Improved lower-level interface (with examples).
-* Support additional WAV audio formats.
+* Support additional WAV input formats.
 * Meta-data insertion.
 * MacOS cross-compiling?
 * AAC Decoding???
