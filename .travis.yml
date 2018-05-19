@@ -7,7 +7,7 @@ services:
   - docker
 
 before_install:
-  - git checkout ${TRAVIS_BRANCH} # This deals with detached head issue for proper coveralls.io integration
+  - git checkout ${TRAVIS_PULL_REQUEST_BRANCH} ; fi # This deals with detached head issue for proper coveralls.io integration 
   - docker build --cache-from openjdk:9-jdk-slim-sid --build-arg LIBRARY_INSTALL_DIRECTORY=${LIBRARY_INSTALL_DIRECTORY} --build-arg LIBRARY_SOURCE_DIRECTORY=${LIBRARY_SOURCE_DIRECTORY} -t jna-aac-encoder .
 
 jdk:
