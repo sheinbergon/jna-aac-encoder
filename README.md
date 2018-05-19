@@ -84,7 +84,7 @@ To run the benchmarks locally:
 ## Limitations
 Currently, only pcm_s16le WAV input is supported, meaning:
 * Sample size - 16 bit(signed)
-* WAV format - PCM
+* WAV format - (L)PCM
 * Byte order - Little Endian
 
 While this form of input formatting seems to be the common raw-audio formatting, it's important
@@ -98,6 +98,6 @@ Additional restrictions:
 ## Roadmap
 * Improved lower-level interface (with examples).
 * Support additional WAV input formats.
-* Meta-data insertion.
+* M4A encoding.
 * MacOS cross-compiling?
 * AAC Decoding???
