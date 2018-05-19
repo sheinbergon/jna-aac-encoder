@@ -7,11 +7,12 @@ services:
   - docker
 
 before_install:
-  - git checkout ${TRAVIS_PULL_REQUEST_BRANCH} # This deals with detached head issue for proper coveralls.io integration 
+  - if [ ${TRAVIS_PULL_REQUEST} == 'false' ] ; then git checkout ${TRAVIS_BRANCH} ; fi # This deals with detached head issue for proper coveralls.io integration 
   - docker build --cache-from openjdk:9-jdk-slim-sid --build-arg LIBRARY_INSTALL_DIRECTORY=${LIBRARY_INSTALL_DIRECTORY} --build-arg LIBRARY_SOURCE_DIRECTORY=${LIBRARY_SOURCE_DIRECTORY} -t jna-aac-encoder .
 
 jdk:
   - oraclejdk9
 
 script:
-  - docker run -e "COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}" jna-aac-encoder clean junitPlatformTest jacocoTestReport coveralls -PlibPath=${LIBRARY_INSTALL_DIRECTORY}/lib
+  - if [ ${TRAVIS_PULL_REQUEST} != 'false' ] ; then docker run -e "COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}" jna-aac-encoder clean junitPlatformTest -PlibPath=${LIBRARY_INSTALL_DIRECTORY}/lib ; fi
+  - if [ ${TRAVIS_PULL_REQUEST} == 'false' ] ; then docker run -e "COVERALLS_REPO_TOKEN=${COVERALLS_REPO_TOKEN}" jna-aac-encoder clean junitPlatformTest jacocoTestReport coveralls -PlibPath=${LIBRARY_INSTALL_DIRECTORY}/lib ; fi
