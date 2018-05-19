@@ -98,6 +98,6 @@ Additional restrictions:
 ## Roadmap
 * Improved lower-level interface (with examples).
 * Support additional WAV input formats.
-* Meta-data insertion.
+* M4A encoding.
 * MacOS cross-compiling?
 * AAC Decoding???
