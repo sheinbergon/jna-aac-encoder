@@ -68,7 +68,7 @@ Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are avai
 ![alt text](perf/jmh-results-04042018.png)
 
 To run the benchmarks locally:
-* On a Linux host, clone this repository
+* Clone this repository onto a Linux host
 * Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled)
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
 * Run the following command (from within the cloned repository)
