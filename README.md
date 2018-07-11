@@ -34,8 +34,8 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.3'
 #### Notice!!!
 The **_libfdk-aac_** shared library so/dll/dylib file is required to be accessible
 for dynamic loading upon execution. If using the above depdencey, you
-need to make sure the shared library is installed as part of the runtime OS enviroment
-and accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
+need to make sure the library is installed as part of the runtime OS enviroment
+and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
 To make things easier, cross-compiled artifacts (containing the shared library)
 for both Windows(64bit) and Linux(64bit) are provided through the use of *_classifiers_*:
@@ -53,7 +53,7 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.3:linux-x86-64'
 * Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
 * In regards to cross-compilation artifacts:
   * 32bit platform won't be supported for now
-  * OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib in advance.
+  * OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib.
 
 ### Encoding using the JVM AudioSystem
 ```java
@@ -68,8 +68,8 @@ Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are avai
 ![alt text](perf/jmh-results-04042018.png)
 
 To run the benchmarks locally:
-* Clone this repository to a Linux host
-* Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled) loadable
+* On a Linux host, clone this repository
+* Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled)
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
 * Run the following command (from within the cloned repository)
 ```groovy
@@ -82,7 +82,7 @@ To run the benchmarks locally:
 * The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
 
 ## Limitations
-Currently, only pcm_s16le WAV input is supported, meaning:
+Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format, meaning:
 * Sample size - 16 bit(signed)
 * WAV format - (L)PCM
 * Byte order - Little Endian
@@ -93,11 +93,11 @@ the encoding process to fail.
 
 Additional restrictions:
 * A maximum of 6 audio input/output channels
-* Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are suuported  
+* Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
 ## Roadmap
 * Improved lower-level interface (with examples).
-* Support additional WAV input formats.
+* Additional input formats (via conversion).
 * M4A encoding.
-* MacOS cross-compiling?
-* AAC Decoding???
+* MacOS cross-compiling ?
+* AAC Decoding ???
