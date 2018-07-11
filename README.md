@@ -1,7 +1,7 @@
 # jna-aac-encoder
 
-[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License: LGPL v3](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
-![Maven metadata URI](https://img.shields.io/maven-metadata/v/http/central.maven.org/maven2/org/sheinbergon/jna-aac-encoder/maven-metadata.xml.svg) 
+[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder)
 ![GitHub release](https://img.shields.io/github/release/sheinbergon/jna-aac-encoder.svg)
 
                                                                                                                                                                                                                                                                                                  
