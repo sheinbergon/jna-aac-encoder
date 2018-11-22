@@ -27,7 +27,7 @@ do
                 "")
                     exit_with_error "A valid build target must be passed via '-t'"
                     ;;
-                "win32-i686")
+                "win32-i386")
                     TARGET="i686-w64-mingw32"
                     ;;
                 "win32-x86-64")
@@ -35,6 +35,10 @@ do
                     ;;
                 "linux-x86-64")
                     TARGET="x86_64-linux-gnu"
+                    ;;
+                "osx-x86-64")
+                    TARGET="x86_64-apple-darwinXX"
+                    CXX_FLAGS=-fPIC
                     ;;
                 *)
                     exit_with_error "Invalid build target $OPT"
@@ -51,4 +55,5 @@ done
 ([[ -n $TARGET ]] && [[ -n $SOURCE ]]) || exit_with_error "Both '-s' and '-t' are mandatory"
 
 # Build
+[[ -n CXX_FLAGS ]] && export CXXFLAGS=${CXX_FLAGS}
 cd $SOURCE && ./autogen.sh && ./configure --host=$TARGET && make clean && make -j 8

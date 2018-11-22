@@ -28,14 +28,14 @@ task win64Jar(type: Jar) {
 }
 
 task win32Jar(type: Jar) {
-    def target = 'win32-i686'
+    def target = 'win32-i386'
     classifier = target
     doFirst { buildLibrary(libSource, target) }
     archiveName = "${archivesBaseName}-${version}-${target}.jar"
     from sourceSets.main.output
     from("${libSource}/.libs") {
         include '*.dll'
-        into target
+        into 'win32-x86'
     }
     from("${projectDir}") {
         include 'NOTICE'
@@ -56,6 +56,22 @@ task linux64Jar(type: Jar) {
     from("${projectDir}") {
         include 'NOTICE'
     }
+}
+
+task osx64Jar(type: Jar) {
+    def target = 'osx-x86-64'
+    classifier = target
+    doFirst { buildLibrary(libSource, target) }
+    archiveName = "${archivesBaseName}-${version}-${target}.jar"
+    from sourceSets.main.output
+    from("${libSource}/.libs") {
+        include '*aac.dylib'
+        into 'darwin-x86-64'
+    }
+    from("${projectDir}") {
+        include 'NOTICE'
+    }
+    rename '^(fdk-aac).+(\\.dylib)', '$1$2'
 }
 
 void buildLibrary(source, target) {
@@ -79,6 +95,7 @@ artifacts {
     archives sourcesJar
     archives javadocJar
     archives linux64Jar
+    archives osx64Jar
     archives win64Jar
     archives win32Jar
 }
@@ -94,6 +111,7 @@ publishing.publications {
         artifact tasks.javadocJar
         artifact tasks.sourcesJar
         artifact tasks.linux64Jar
+        artifact tasks.osx64Jar
         artifact tasks.win64Jar
         artifact tasks.win32Jar
     }
