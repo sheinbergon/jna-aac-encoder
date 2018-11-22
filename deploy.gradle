@@ -27,6 +27,22 @@ task win64Jar(type: Jar) {
     rename '.+(fdk-aac).+(\\.dll)', '$1$2'
 }
 
+task win32Jar(type: Jar) {
+    def target = 'win32-i686'
+    classifier = target
+    doFirst { buildLibrary(libSource, target) }
+    archiveName = "${archivesBaseName}-${version}-${target}.jar"
+    from sourceSets.main.output
+    from("${libSource}/.libs") {
+        include '*.dll'
+        into target
+    }
+    from("${projectDir}") {
+        include 'NOTICE'
+    }
+    rename '.+(fdk-aac).+(\\.dll)', '$1$2'
+}
+
 task linux64Jar(type: Jar) {
     def target = 'linux-x86-64'
     classifier = target
@@ -64,6 +80,7 @@ artifacts {
     archives javadocJar
     archives linux64Jar
     archives win64Jar
+    archives win32Jar
 }
 
 
@@ -78,6 +95,7 @@ publishing.publications {
         artifact tasks.sourcesJar
         artifact tasks.linux64Jar
         artifact tasks.win64Jar
+        artifact tasks.win32Jar
     }
 }
 publishing.repositories {

@@ -1,12 +1,6 @@
 pluginManagement {
-    resolutionStrategy {
-        eachPlugin {
-            if ("org.junit.platform.gradle.plugin" == requested.id.id) {
-                useModule('org.junit.platform:junit-platform-gradle-plugin:' + requested.version)
-            }
-        }
-    }
     repositories {
+        jcenter()
         mavenCentral()
         gradlePluginPortal()
     }

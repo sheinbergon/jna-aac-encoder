@@ -1,23 +1,38 @@
 plugins {
     id 'java'
     id 'jacoco'
-    id 'org.junit.platform.gradle.plugin' version '1.1.0'
     id 'com.github.kt3k.coveralls' version '2.8.2'
 }
 
 apply from: 'common.gradle'
 
-junitPlatform {
-    details 'tree'
+test {
 
-    filters {
-        includeClassNamePattern '.*Test'
+    jacoco {
+        append = false
+    }
+
+    useJUnitPlatform()
+
+    testLogging {
+        events 'PASSED', 'FAILED', 'SKIPPED'
+        showStandardStreams = false
+    }
+
+    afterSuite { desc, result ->
+        if (!desc.parent) {
+            println ""
+            println "Test result: ${result.resultType}"
+            println "Test summary: ${result.testCount} tests, " +
+                    "${result.successfulTestCount} succeeded, " +
+                    "${result.failedTestCount} failed, " +
+                    "${result.skippedTestCount} skipped"
+        }
     }
 }
 
 jacoco {
-    toolVersion = '0.8.0'
-    applyTo junitPlatformTest
+    toolVersion = '0.8.2'
 }
 
 jacocoTestReport {
@@ -28,14 +43,8 @@ jacocoTestReport {
     }
 }
 
-junitPlatformTest {
-    jacoco {
-        destinationFile = file("$buildDir/jacoco/test.exec")
-    }
-}
-
 afterEvaluate {
-    def task = tasks.getByName('junitPlatformTest')
+    def task = tasks.getByName('test')
     def libPath = project.hasProperty('libPath') ? project.properties['libPath'] : System.properties['java.library.path']
     task.systemProperty "jna.library.path", libPath
 }

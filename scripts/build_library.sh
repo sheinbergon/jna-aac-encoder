@@ -27,12 +27,15 @@ do
                 "")
                     exit_with_error "A valid build target must be passed via '-t'"
                     ;;
+                "win32-i686")
+                    TARGET="i686-w64-mingw32"
+                    ;;
                 "win32-x86-64")
                     TARGET="x86_64-w64-mingw32"
-                ;;
+                    ;;
                 "linux-x86-64")
                     TARGET="x86_64-linux-gnu"
-                ;;
+                    ;;
                 *)
                     exit_with_error "Invalid build target $OPT"
                     ;;

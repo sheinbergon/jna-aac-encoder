@@ -1,33 +1,35 @@
 group 'org.sheinbergon'
-version '0.1.3'
+version '0.1.4'
 
 sourceCompatibility = 1.9
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
-ext.depVersions = [
-        jna         : '4.5.1',
-        commonsLang3: '3.7',
-        jsr305      : '3.0.2',
-        lombok      : '1.16.20'
-]
-
-ext.testDepVersions = [
-        junitPlatform: '1.1.0',
-        junit        : '5.1.0',
-        mediaInfo    : '1.0.0.RELEASE'
-]
-
-ext.perfDepVersions = [
-        commonsIO: '2.6',
-        jmh      : '1.20'
-]
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '4.4.1'
+ext {
+    depVersions = [
+            lombok      : '1.18.4',
+            jna         : '5.1.0',
+            commonsLang3: '3.8.1',
+            jsr305      : '3.0.2'
+    ]
+    testDepVersions = [
+            junitPlatform: '1.3.1',
+            junit        : '5.3.1',
+            mediaInfo    : '1.0.0.RELEASE'
+    ]
+    perfDepVersions = [
+            commonsIO: '2.6',
+            jmh      : '1.21'
+    ]
 }
+
+wrapper {
+    gradleVersion = '4.10'
+}
+
 
 sourceSets {
     perf
@@ -46,6 +48,7 @@ dependencies {
     compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
 
     // Junit 5
+    testCompileOnly "org.projectlombok:lombok:${depVersions.lombok}"
     testCompile "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
     testRuntime "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
