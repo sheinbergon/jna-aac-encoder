@@ -2,7 +2,7 @@ import org.gradle.internal.os.OperatingSystem;
 
 plugins {
     id "java"
-    id "io.morethan.jmhreport" version "0.7.0"
+    id "io.morethan.jmhreport" version "0.9.0"
 }
 
 apply from: 'common.gradle'

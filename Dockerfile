@@ -1,4 +1,4 @@
-FROM openjdk:9-jdk-slim-sid
+FROM azul/zulu-openjdk:11
 
 # Constants
 ENV FDK_AAC_VERSION=0.1.6 \
