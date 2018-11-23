@@ -31,9 +31,10 @@ public class AACEncodingBenchmark {
     private final static String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
     private final static String PREFIX = "perf";
 
+    private final static int DURATION = 500;
     private final static int FORKS = 3;
-    private final static int ITERATIONS = 15;
-    private final static int WARMUPS = 5;
+    private final static int ITERATIONS = 12;
+    private final static int WARMUPS = 3;
 
     private final static String INPUT_RESOURCE_NAME = "africa-toto.wav";
 
@@ -117,7 +118,7 @@ public class AACEncodingBenchmark {
             }
             case JNA: {
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioInput);
-                AudioSystem.write(audioInputStream, ENCODING_PROFILES_TO_FILE_TYPES.get(AACEncodingProfile.AAC_LC), audioOutput);
+                AudioSystem.write(audioInputStream, ENCODING_PROFILES_TO_FILE_TYPES.get(encodingProfile), audioOutput);
                 break;
             }
         }
@@ -130,8 +131,8 @@ public class AACEncodingBenchmark {
 
     @Benchmark
     @Fork(FORKS)
-    @Warmup(iterations = WARMUPS)
-    @Measurement(iterations = ITERATIONS)
+    @Warmup(iterations = WARMUPS, time = DURATION, timeUnit = TimeUnit.MILLISECONDS)
+    @Measurement(iterations = ITERATIONS, time = DURATION, timeUnit = TimeUnit.MILLISECONDS)
     public void AAC_LC() throws IOException, UnsupportedAudioFileException, InterruptedException {
         encodingProfile = AACEncodingProfile.AAC_LC;
         handleEncoding();
@@ -139,8 +140,8 @@ public class AACEncodingBenchmark {
 
     @Benchmark
     @Fork(FORKS)
-    @Warmup(iterations = WARMUPS)
-    @Measurement(iterations = ITERATIONS)
+    @Warmup(iterations = WARMUPS, time = DURATION, timeUnit = TimeUnit.MILLISECONDS)
+    @Measurement(iterations = ITERATIONS, time = DURATION, timeUnit = TimeUnit.MILLISECONDS)
     public void HE_AAC() throws IOException, UnsupportedAudioFileException, InterruptedException {
         encodingProfile = AACEncodingProfile.HE_AAC;
         handleEncoding();
