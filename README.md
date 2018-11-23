@@ -20,14 +20,14 @@ Artifacts are available on maven central:
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.3'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
 ```
 **_Maven_**
 ```xml
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.3</version>
+    <version>0.1.4</version>
 </dependency>
 ```
 
@@ -37,24 +37,19 @@ for dynamic loading upon execution. If using the above depdencey, you
 need to make sure the library is installed as part of the runtime OS enviroment
 and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
-To make things easier, cross-compiled artifacts (containing the shared library)
-for both Windows(64bit) and Linux(64bit) are provided through the use of *_classifiers_*:
+To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_*:
 
-##### Windows(64 bit)
-```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.3:win32-x86-64'
-```
-##### Linux(64 bit)
-```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.3:linux-x86-64'
-```
+| Platform         | Gradle dependency                                    |
+|------------------|------------------------------------------------------|
+| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-x86-64` |
+| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-xi386`  |
+| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.4:linux-x86-64` |
+| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.4:osx-x86-64`   |
+
 #### Additional information
 * Provided fdk-aac version is 0.1.6
 * Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
-* In regards to cross-compilation artifacts:
-  * 32bit platform won't be supported for now
-  * OSX/Macos toolchain is a bit trickier, so you'll just have to pre-install the dylib.
-
+ 
 ### Encoding using the JVM AudioSystem
 ```java
 AudioInputStream input = AudioSystem.getAudioInputStream(...);
@@ -65,7 +60,7 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](perf/jmh-results-04042018.png)
+![alt text](perf/jmh-results-23112018.png)
 
 To run the benchmarks locally:
 * Clone this repository onto a Linux host
@@ -99,5 +94,4 @@ Additional restrictions:
 * Improved lower-level interface (with examples).
 * Additional input formats (via conversion).
 * M4A encoding.
-* MacOS cross-compiling ?
 * AAC Decoding ???

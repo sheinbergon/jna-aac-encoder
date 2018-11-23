@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.stream.Stream;
 
+// TODO - Consider adding actual byte-level comparison encoding tests
 @DisplayName("Java AudioSystem AAC encoding support")
 public class AACFileWriterTest {
 
