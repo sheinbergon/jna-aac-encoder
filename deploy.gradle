@@ -11,6 +11,13 @@ if (libSource == null) {
     throw new GradleException("'libSource' system property must be set")
 }
 
+task compileJavaJdk9(type: JavaCompile) {
+    classpath = tasks.compileJava.classpath
+    source = tasks.compileJava.source
+    destinationDir = file("$buildDir/classes/java9/main")
+    options.compilerArgs.addAll(['--release', '9'])
+}
+
 task win64Jar(type: Jar) {
     def target = 'win32-x86-64'
     classifier = target
@@ -74,6 +81,14 @@ task osx64Jar(type: Jar) {
     rename '^(fdk-aac).+(\\.dylib)', '$1$2'
 }
 
+// Create a code-only JDK 9 version of the DLL for backwards compatibility reasons
+// TODO - this should be reworked in the futures get written using more advanced JDK versions
+task jdk9Jar(dependsOn: compileJavaJdk9, type: Jar) {
+    classifier = 'jdk9'
+    from "$buildDir/classes/java9/main"
+    from sourceSets.main.resources
+}
+
 void buildLibrary(source, target) {
     exec {
         workingDir projectDir
@@ -98,8 +113,8 @@ artifacts {
     archives osx64Jar
     archives win64Jar
     archives win32Jar
+    archives jdk9Jar
 }
-
 
 signing {
     sign configurations.archives
@@ -114,6 +129,7 @@ publishing.publications {
         artifact tasks.osx64Jar
         artifact tasks.win64Jar
         artifact tasks.win32Jar
+        artifact tasks.jdk9Jar
     }
 }
 publishing.repositories {

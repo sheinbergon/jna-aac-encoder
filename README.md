@@ -18,10 +18,6 @@ regarding re/distribution and licensing limitations.
 ### Dependencies
 Artifacts are available on maven central:
 
-**_Gradle_**
-```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
-```
 **_Maven_**
 ```xml
 <dependency>
@@ -31,13 +27,24 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
 </dependency>
 ```
 
+**_Gradle_**
+```groovy
+compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
+```
+For backwards compatibility, a JDK 9 version is also provided (shared library not included):
+
+```groovy
+compile 'org.sheinbergon:jna-aac-encoder:0.1.4:jdk9'
+```
+
+
 #### Notice!!!
 The **_libfdk-aac_** shared library so/dll/dylib file is required to be accessible
 for dynamic loading upon execution. If using the above depdencey, you
 need to make sure the library is installed as part of the runtime OS enviroment
 and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
-To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_*:
+To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_* (JDK11 only):
 
 | Platform         | Gradle dependency                                    |
 |------------------|------------------------------------------------------|
@@ -92,6 +99,6 @@ Additional restrictions:
 
 ## Roadmap
 * Improved lower-level interface (with examples).
-* Additional input formats (via conversion).
+* Support for 24 bit WAV input (via conversion).
 * M4A encoding.
 * AAC Decoding ???

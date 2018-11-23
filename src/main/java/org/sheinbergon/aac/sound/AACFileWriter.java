@@ -1,5 +1,6 @@
 package org.sheinbergon.aac.sound;
 
+import lombok.val;
 import org.sheinbergon.aac.encoder.AACAudioEncoder;
 import org.sheinbergon.aac.encoder.AACAudioOutput;
 import org.sheinbergon.aac.encoder.WAVAudioInput;
@@ -79,7 +80,7 @@ public final class AACFileWriter extends AudioFileWriter {
         Objects.requireNonNull(fileType);
         Objects.requireNonNull(out);
 
-        BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(out), OUTPUT_BUFFER_SIZE);
+        val bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(out), OUTPUT_BUFFER_SIZE);
         try (bufferedOutputStream) {
             return write(stream, fileType, bufferedOutputStream);
         }
@@ -93,7 +94,7 @@ public final class AACFileWriter extends AudioFileWriter {
         boolean concluded = false;
         int read, encoded = 0;
         AudioFormat format = input.getFormat();
-        AACAudioEncoder encoder = encoder(format, type);
+        val encoder = encoder(format, type);
         try (encoder) {
             int readBufferSize = readBufferSize(format, encoder);
             byte[] readBuffer = new byte[readBufferSize];
