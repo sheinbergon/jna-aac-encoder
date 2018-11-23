@@ -98,6 +98,7 @@ Additional restrictions:
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
 ## Roadmap
+* Upgrade to fdk-aac 2.0.0
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
 * M4A encoding.
