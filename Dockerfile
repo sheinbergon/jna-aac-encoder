@@ -43,4 +43,5 @@ ADD . ${APPLICATION_DIRECTORY}
 WORKDIR ${APPLICATION_DIRECTORY}
 
 # Set the Gradle wrapper as the entry point
-ENTRYPOINT ./gradlew $@
+# TLSv1.3 is disabled due to https://github.com/kt3k/coveralls-gradle-plugin/issues/85
+ENTRYPOINT ./gradlew -Djdk.tls.client.protocols="TLSv1,TLSv1.1,TLSv1.2" $@
