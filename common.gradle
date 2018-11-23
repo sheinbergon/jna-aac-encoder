@@ -1,8 +1,8 @@
 group 'org.sheinbergon'
 version '0.1.4'
 
-sourceCompatibility = 1.9
-targetCompatibility = 1.9
+sourceCompatibility = 1.11
+targetCompatibility = 1.11
 
 repositories {
     jcenter()
