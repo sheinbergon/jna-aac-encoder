@@ -12,9 +12,12 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class WAVAudioSupport {
+
+    public final static Set<Float> SUPPORTED_SAMPLE_RATES = Set.of(16000.0f, 22050.0f, 24000.0f, 32000.0f, 44100.0f, 48000.0f);
 
     @Getter
     @Accessors(fluent = true)
@@ -54,12 +57,14 @@ public class WAVAudioSupport {
 
     public final static int EOS = -1;
 
-    /* Input is assumed to be comprised out of 24 bit samples, meaning each sample is 3 bytes long.
+    /* Input is assumed to be comprised out of 24 bit samples, meaning each samples is 3 bytes long.
      * This means the input array data length is expected to be a multiple of 3.
+     * Input is also always assumed to be have little-endian byte-order, because that's how WAV files are rolling
+     * these days.
      */
     public static byte[] downsample24To16Bits(@Nonnull byte[] data) {
         val buffer = ByteBuffer
-                .allocate(data.length * 2 / 3) // allocate only 2/3 of the given input size as 8 bits of each sample will be discarded
+                .allocate(data.length * 2 / 3) // allocate only 2/3 of the given input size as 8 bits of each samples will be discarded
                 .order(ByteOrder.LITTLE_ENDIAN); // Maintain WAV byte-order
         for (int index = 0; index < data.length; index += 3) {
             buffer.put(data, index + 1, 2);

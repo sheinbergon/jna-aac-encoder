@@ -43,7 +43,7 @@ public class WAVAudioInputTest {
     }
 
     @Test
-    @DisplayName("No sample size")
+    @DisplayName("No samples size")
     public void invalidSampleSize() {
         Assertions.assertThrows(WAVAudioInputException.class, () ->
                 builder.data(VALID_DATA)

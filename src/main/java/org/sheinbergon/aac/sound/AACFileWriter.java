@@ -9,9 +9,7 @@ import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
 import javax.annotation.Nonnull;
-import javax.sound.sampled.AudioFileFormat;
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.*;
 import javax.sound.sampled.spi.AudioFileWriter;
 import java.io.*;
 import java.util.Map;
@@ -40,6 +38,7 @@ public final class AACFileWriter extends AudioFileWriter {
         AudioFormat format = stream.getFormat();
         if (format.getEncoding().equals(AudioFormat.Encoding.PCM_SIGNED)
                 && WAVAudioSupport.SampleSize.valid(format.getSampleSizeInBits())
+                && WAVAudioSupport.SUPPORTED_SAMPLE_RATES.contains(format.getSampleRate())
                 && WAVAudioSupport.SUPPORTED_CHANNELS_RANGE.contains(format.getChannels())
                 && !format.isBigEndian()) {
             return getAudioFileTypes();
@@ -98,7 +97,7 @@ public final class AACFileWriter extends AudioFileWriter {
             case WAVAudioSupport.SampleSize._24_BITS:
                 return bufferSize * WAVAudioSupport.SampleSize._24_BITS / Byte.SIZE;
             default:
-                throw new WAVAudioInputException(String.format("Unsupported sample size - '%d'", sampleSize));
+                throw new WAVAudioInputException(String.format("Unsupported samples size - '%d'", sampleSize));
         }
     }
 
@@ -111,7 +110,7 @@ public final class AACFileWriter extends AudioFileWriter {
             case WAVAudioSupport.SampleSize._24_BITS:
                 return WAVAudioInput.pcms24le(data, length);
             default:
-                throw new WAVAudioInputException(String.format("Unsupported sample size - '%d'", sampleSize));
+                throw new WAVAudioInputException(String.format("Unsupported samples size - '%d'", sampleSize));
         }
     }
 

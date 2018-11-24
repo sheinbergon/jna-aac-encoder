@@ -19,12 +19,15 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NotThreadSafe
 @Accessors(fluent = true)
 public class AACAudioEncoder implements AutoCloseable {
 
-    private final static Set<Integer> SAMPLE_RATES = Set.of(16000, 22050, 24000, 32000, 44100, 48000);
+    private final static Set<Integer> SAMPLE_RATES = WAVAudioSupport.SUPPORTED_SAMPLE_RATES.stream()
+            .map(Number::intValue)
+            .collect(Collectors.toSet());
 
     // Some fdk-aac internal constants
     private final static int PARAMETRIC_STEREO_CHANNEL_COUNT = 2;
@@ -192,7 +195,7 @@ public class AACAudioEncoder implements AutoCloseable {
                 return WAVAudioSupport.downsample24To16Bits(input.data());
             default:
                 throw new AACAudioEncoderException(String.format(
-                        "Unsupported sample size - '%d'",
+                        "Unsupported samples size - '%d'",
                         input.sampleSize().bits()));
         }
     }

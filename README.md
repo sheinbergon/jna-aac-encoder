@@ -84,22 +84,27 @@ To run the benchmarks locally:
 * The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
 
 ## Limitations
-Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format, meaning:
-* Sample size - 16 bit(signed)
-* WAV format - (L)PCM
-* Byte order - Little Endian
+Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format:
 
-While this form of input formatting seems to be the common raw-audio formatting, it's important
-to note that providing input audio with different formatting will cause
-the encoding process to fail. 
-
+| Criteria          | Supported values  |                             Comments                               |
+|-------------------|-------------------|--------------------------------------------------------------------|
+| Sample size/depth | 16 or 24          | 24 bits samples are converted to 16 bit samples at runtime         | 
+| Wav format        | Signed L(PCM)     | The common standard for WAV input (including live audio recording) |
+| Byte order        | Little-Endian     | The common standard for WAV input (including live audio recording) |
+ 
 Additional restrictions:
-* A maximum of 6 audio input/output channels
-* Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
+| Criteria             | Supported values                         |               Comments                 |
+|----------------------|------------------------------------------|----------------------------------------|
+| Sample rate          | 16000, 22050, 24000, 32000, 44100, 48000 | Derived from source code documentation | 
+| Channel count        | 1-6                                      | Implementation limitation              |
+| AAC encoding profile | AAC-LC, HE-AAC, HE-AACv2                 | Implementation limitation              |
+  
+**Important!** Providing input audio with different formatting will causethe encoding process to fail. 
+ 
 ## Roadmap
 * Upgrade to fdk-aac 2.0.0
 * Improved lower-level interface (with examples).
-* Support for 24 bit WAV input (via conversion).
+* Automatic downsampling of unsupported sample-rates input
 * M4A encoding.
 * AAC decoding ???

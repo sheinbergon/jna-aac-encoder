@@ -30,7 +30,7 @@ public class AACAudioEncoderTest {
     }
 
     @Test
-    @DisplayName("Invalid sample-rate")
+    @DisplayName("Invalid samples-rate")
     public void invalidSampleRate() {
         Assertions.assertThrows(AACAudioEncoderException.class, () ->
                 builder.sampleRate(INVALID_SAMPLE_RATE)

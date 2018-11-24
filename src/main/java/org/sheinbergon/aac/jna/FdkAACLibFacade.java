@@ -19,7 +19,7 @@ public class FdkAACLibFacade {
     private final static int IN_BUFFER_IDENTIFIER = 0;
     private final static int IN_BUFFER_ELEMENT_SIZE = 2;
 
-    // In samples division is required due to input bytes sample bit-shifting
+    // In samples division is required due to input bytes samples bit-shifting
     private final static int IN_SAMPLES_DIVISOR = 2;
 
     private final static int OUT_BUFFER_COUNT = 1;
