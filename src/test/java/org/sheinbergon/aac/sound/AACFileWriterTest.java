@@ -1,5 +1,6 @@
 package org.sheinbergon.aac.sound;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -9,7 +10,6 @@ import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -27,29 +27,29 @@ public class AACFileWriterTest {
 
     @Test
     @DisplayName("Supported audio file types")
-    public void supportedTypes() {
+    void supportedTypes() {
         Assertions.assertArrayEquals(AAC_FILE_TYPES, writer.getAudioFileTypes());
     }
 
     @Test
     @DisplayName("Unsupported audio input")
-    public void unsupportedAudioInput() throws UnsupportedAudioFileException, IOException {
-        AudioInputStream input = TestSupport.unsupported24bitWAVAudioInputStream();
+    void unsupportedAudioInput() {
+        AudioInputStream input = TestSupport.unsupported32bitWAVAudioInputStream();
         Assertions.assertArrayEquals(NO_FILE_TYPES, writer.getAudioFileTypes(input));
     }
 
     @Test
-    @DisplayName("Supported audio input")
-    public void supportedAudioInput() throws UnsupportedAudioFileException, IOException {
-        AudioInputStream input = TestSupport.supportedWAVAudioInputStream();
-        Assertions.assertArrayEquals(AAC_FILE_TYPES, writer.getAudioFileTypes(input));
+    @DisplayName("Supported audio inputs")
+    void supportedAudioInput() {
+        Assertions.assertAll(TestSupport.supportedWAVAudioInputStreams()
+                .map(input -> () -> Assertions.assertArrayEquals(AAC_FILE_TYPES, writer.getAudioFileTypes(input))));
     }
 
     @Test
-    @DisplayName("Unsupported audio encoding")
-    public void unsupportedAudioEncoding() throws UnsupportedAudioFileException, IOException {
+    @DisplayName("Unsupported audio input encoding")
+    public void unsupportedAudioEncoding() {
         File aac = TestSupport.tempAACOutputFile();
-        AudioInputStream input = TestSupport.unsupported24bitWAVAudioInputStream();
+        AudioInputStream input = TestSupport.unsupported32bitWAVAudioInputStream();
         Assertions.assertThrows(IllegalArgumentException.class, () -> {
             try (input) {
                 writer.write(input, AACFileTypes.AAC_LC, aac);
@@ -62,30 +62,33 @@ public class AACFileWriterTest {
     }
 
     @Test
-    @DisplayName("Supported audio types encoding (LC/HE-AAC/HE-AACv2)")
-    public void supportedAudioOutputStreamEncoding() {
-        Assertions.assertAll(Stream.of(AAC_FILE_TYPES).map(audioType -> () -> {
-            File aac = TestSupport.tempAACOutputFile();
-            FileOutputStream output = new FileOutputStream(aac);
-            AudioInputStream input = TestSupport.supportedWAVAudioInputStream();
-            try (input; output) {
-                writer.write(input, audioType, output);
-                Assertions.assertTrue(aac.length() > 0);
-                output.flush();
-                MediaInfoSupport.assertAACOutput(aac, input.getFormat(), AACFileWriter.profileByType(audioType));
-            } finally {
-                if (aac.exists()) {
-                    Files.delete(aac.toPath());
-                }
-            }
-        }));
+    @DisplayName("Supported audio inputs encoding (LC/HE-AAC/HE-AACv2 types, 16/24 bits inputs)")
+    void supportedAudioEncoding() {
+        Assertions.assertAll(Stream.of(AAC_FILE_TYPES)
+                .flatMap(type -> TestSupport.supportedWAVAudioInputStreams().map(input -> Pair.of(type, input)))
+                .map(pair -> () -> {
+                    File aac = TestSupport.tempAACOutputFile();
+                    FileOutputStream output = new FileOutputStream(aac);
+                    AudioFileFormat.Type type = pair.getLeft();
+                    AudioInputStream input = pair.getRight();
+                    try (input; output) {
+                        writer.write(input, type, output);
+                        Assertions.assertTrue(aac.length() > 0);
+                        output.flush();
+                        MediaInfoSupport.assertAACOutput(aac, input.getFormat(), AACFileWriter.profileByType(type));
+                    } finally {
+                        if (aac.exists()) {
+                            Files.delete(aac.toPath());
+                        }
+                    }
+                }));
     }
 
     @Test
     @DisplayName("Supported audio file encoding")
-    public void supportedAudioFileEncoding() throws UnsupportedAudioFileException, IOException {
+    void supportedAudioFileEncoding() throws IOException {
         File aac = TestSupport.tempAACOutputFile();
-        AudioInputStream input = TestSupport.supportedWAVAudioInputStream();
+        AudioInputStream input = TestSupport.supported16bitWAVAudioInputStream();
         try (input) {
             writer.write(input, AACFileTypes.AAC_LC, aac);
             Assertions.assertTrue(aac.length() > 0);

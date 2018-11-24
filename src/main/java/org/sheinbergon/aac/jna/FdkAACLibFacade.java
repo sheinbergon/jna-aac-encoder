@@ -3,6 +3,7 @@ package org.sheinbergon.aac.jna;
 import com.sun.jna.Memory;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import lombok.val;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.structure.*;
 import org.sheinbergon.aac.jna.util.AACEncError;
@@ -18,7 +19,7 @@ public class FdkAACLibFacade {
     private final static int IN_BUFFER_IDENTIFIER = 0;
     private final static int IN_BUFFER_ELEMENT_SIZE = 2;
 
-    // In samples division is required due to input bytes sample bitshifting
+    // In samples division is required due to input bytes sample bit-shifting
     private final static int IN_SAMPLES_DIVISOR = 2;
 
     private final static int OUT_BUFFER_COUNT = 1;
@@ -43,17 +44,19 @@ public class FdkAACLibFacade {
         verifyResult(result, FdkAACLib.Methods.ENCODE);
     }
 
-    public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor, AACEncBufDesc outBufferDescriptor, AACEncInArgs inArgs, AACEncOutArgs outArgs, int size) {
+    public static Optional<byte[]> encode(AACEncoder encoder, AACEncBufDesc inBufferDescriptor,
+                                          AACEncBufDesc outBufferDescriptor, AACEncInArgs inArgs,
+                                          AACEncOutArgs outArgs, int size) {
         JNAUtil.clearStructureMemory(inArgs, outArgs);
         inArgs.numInSamples = (size == WAVAudioSupport.EOS) ? size : size / IN_SAMPLES_DIVISOR;
         inArgs.writeField("numInSamples");
-        return Optional.ofNullable(AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs)))
+        val code = FdkAACLib.aacEncEncode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs);
+        return Optional.ofNullable(AACEncError.valueOf(code))
                 .filter(result -> result != AACEncError.AACENC_ENCODE_EOF)
                 .map(result -> {
                     outArgs.readField("numOutBytes");
                     verifyResult(result, FdkAACLib.Methods.ENCODE);
-                    return outBufferDescriptor.bufs
-                            .getValue().getByteArray(0, outArgs.numOutBytes);
+                    return outBufferDescriptor.bufs.getValue().getByteArray(0, outArgs.numOutBytes);
                 });
     }
 

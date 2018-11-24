@@ -7,12 +7,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 
+import javax.annotation.Nonnull;
+
 @Getter
 @Accessors(chain = true, fluent = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class AACAudioOutput {
 
-    public static Accumulator accumulator() {
+    static Accumulator accumulator() {
         return new Accumulator();
     }
 
@@ -36,6 +38,7 @@ public class AACAudioOutput {
         }
     }
 
+    @Nonnull
     private final byte[] data;
     private final int length;
 }

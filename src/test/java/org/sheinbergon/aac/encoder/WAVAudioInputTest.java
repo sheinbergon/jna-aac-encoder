@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.sheinbergon.aac.encoder.util.WAVAudioFormat;
 import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
@@ -15,11 +14,10 @@ public class WAVAudioInputTest {
 
     private final static byte[] VALID_DATA = new byte[4];
     private final static int VALID_LENGTH = 4;
-    private final static int VALID_SAMPLE_SIZE = WAVAudioSupport.SUPPORTED_SAMPLE_SIZE;
+    private final static WAVAudioSupport.SampleSize VALID_SAMPLE_SIZE = WAVAudioSupport.SampleSize._16;
     private final static ByteOrder VALID_ENDIANNESS = ByteOrder.LITTLE_ENDIAN;
 
     private final static int INVALID_LENGTH = 100;
-    private final static int INVALID_SAMPLE_SIZE = 24;
     private final static ByteOrder INVALID_ENDIANNESS = ByteOrder.BIG_ENDIAN;
 
     private WAVAudioInput.Builder builder;
@@ -45,12 +43,11 @@ public class WAVAudioInputTest {
     }
 
     @Test
-    @DisplayName("Invalid input sample size")
+    @DisplayName("No sample size")
     public void invalidSampleSize() {
         Assertions.assertThrows(WAVAudioInputException.class, () ->
                 builder.data(VALID_DATA)
                         .length(VALID_LENGTH)
-                        .sampleSize(INVALID_SAMPLE_SIZE)
                         .build());
     }
 
@@ -66,7 +63,7 @@ public class WAVAudioInputTest {
 
 
     @Test
-    @DisplayName("Invalid WAV format")
+    @DisplayName("No WAV format")
     public void invalidWAVFormat() {
         Assertions.assertThrows(WAVAudioInputException.class, () ->
                 builder.data(VALID_DATA)
@@ -83,7 +80,7 @@ public class WAVAudioInputTest {
                 builder.data(VALID_DATA)
                         .length(VALID_LENGTH)
                         .sampleSize(VALID_SAMPLE_SIZE)
-                        .audioFormat(WAVAudioFormat.PCM)
+                        .audioFormat(WAVAudioSupport.Format.PCM)
                         .endianness(INVALID_ENDIANNESS)
                         .build());
     }

@@ -6,27 +6,54 @@ import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.stream.Stream;
 
 public class TestSupport {
 
     private final static String TEMP_FILE_PREFIX = "test";
     private final static String AAC_FILE_SUFFIX = ".aac";
 
-    private final static String SUPPORTED_WAV = "supported.wav";
+    private final static String SUPPORTED_16BIT_WAV = "supported-16bit.wav";
+    private final static String SUPPORTED_24BIT_WAV = "supported-24bit.wav";
+    private final static String UNSUPPORTED_32BIT_WAV = "unsupported-32bit.wav";
 
-    private final static String UNSUPPORTED_24BIT_WAV = "unsupported-24bit.wav";
-
-    public static AudioInputStream supportedWAVAudioInputStream() throws IOException, UnsupportedAudioFileException {
-        InputStream input = TestSupport.class.getClassLoader().getResourceAsStream(SUPPORTED_WAV);
-        return AudioSystem.getAudioInputStream(input);
+    public static AudioInputStream supported16bitWAVAudioInputStream() {
+        try {
+            InputStream input = TestSupport.class.getClassLoader().getResourceAsStream(SUPPORTED_16BIT_WAV);
+            return AudioSystem.getAudioInputStream(input);
+        } catch (IOException | UnsupportedAudioFileException x) {
+            throw new RuntimeException(x);
+        }
     }
 
-    public static AudioInputStream unsupported24bitWAVAudioInputStream() throws IOException, UnsupportedAudioFileException {
-        InputStream input = TestSupport.class.getClassLoader().getResourceAsStream(UNSUPPORTED_24BIT_WAV);
-        return AudioSystem.getAudioInputStream(input);
+    public static AudioInputStream supported24bitWAVAudioInputStream() {
+        try {
+            InputStream input = TestSupport.class.getClassLoader().getResourceAsStream(SUPPORTED_24BIT_WAV);
+            return AudioSystem.getAudioInputStream(input);
+        } catch (IOException | UnsupportedAudioFileException x) {
+            throw new RuntimeException(x);
+        }
     }
 
-    public static File tempAACOutputFile() throws IOException {
-        return File.createTempFile(TEMP_FILE_PREFIX, AAC_FILE_SUFFIX);
+    public static Stream<AudioInputStream> supportedWAVAudioInputStreams() {
+        return Stream.of(supported16bitWAVAudioInputStream(), supported24bitWAVAudioInputStream());
+    }
+
+
+    public static AudioInputStream unsupported32bitWAVAudioInputStream() {
+        try {
+            InputStream input = TestSupport.class.getClassLoader().getResourceAsStream(UNSUPPORTED_32BIT_WAV);
+            return AudioSystem.getAudioInputStream(input);
+        } catch (IOException | UnsupportedAudioFileException x) {
+            throw new RuntimeException(x);
+        }
+    }
+
+    public static File tempAACOutputFile() {
+        try {
+            return File.createTempFile(TEMP_FILE_PREFIX, AAC_FILE_SUFFIX);
+        } catch (IOException x) {
+            throw new RuntimeException(x);
+        }
     }
 }

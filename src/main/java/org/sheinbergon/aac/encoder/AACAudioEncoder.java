@@ -2,10 +2,7 @@ package org.sheinbergon.aac.encoder;
 
 import com.sun.jna.Memory;
 import com.sun.jna.ptr.IntByReference;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.Accessors;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
@@ -15,6 +12,7 @@ import org.sheinbergon.aac.jna.FdkAACLibFacade;
 import org.sheinbergon.aac.jna.structure.*;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 
+import javax.annotation.Nonnull;
 import javax.annotation.concurrent.NotThreadSafe;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -89,7 +87,7 @@ public class AACAudioEncoder implements AutoCloseable {
         private int channels = 2;
         private int sampleRate = 44100;
 
-        private void setEncoderParams(AACEncoder encoder) {
+        private void setEncoderParams(@Nonnull AACEncoder encoder) {
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AFTERBURNER, afterBurner ? 1 : 0);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, sampleRate);
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, deduceBitRate());
@@ -121,12 +119,14 @@ public class AACAudioEncoder implements AutoCloseable {
         }
     }
 
-    public final AACAudioOutput encode(WAVAudioInput input) throws AACAudioEncoderException {
+    @Nonnull
+    public final AACAudioOutput encode(@NonNull WAVAudioInput input) throws AACAudioEncoderException {
         int read;
         verifyState();
         try {
-            AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
-            ByteArrayInputStream inputStream = new ByteArrayInputStream(input.data());
+            val inputData = inputData(input);
+            val accumulator = AACAudioOutput.accumulator();
+            val inputStream = new ByteArrayInputStream(inputData);
             byte[] buffer = new byte[inputBufferSize()];
             while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
                 populateInputBuffer(buffer, read);
@@ -134,7 +134,6 @@ public class AACAudioEncoder implements AutoCloseable {
                         .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
                 accumulator.accumulate(encoded);
             }
-
             return accumulator.done();
         } catch (IOException | RuntimeException x) {
             throw new AACAudioEncoderException("Could not encode WAV audio to AAC audio", x);
@@ -146,7 +145,7 @@ public class AACAudioEncoder implements AutoCloseable {
         verifyState();
         try {
             inBufferDescriptor.clear();
-            AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
+            val accumulator = AACAudioOutput.accumulator();
             while ((optional = FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, WAVAudioSupport.EOS)).isPresent()) {
                 accumulator.accumulate(optional.get());
             }
@@ -158,7 +157,7 @@ public class AACAudioEncoder implements AutoCloseable {
         }
     }
 
-    private void populateInputBuffer(byte[] buffer, int size) {
+    private void populateInputBuffer(@Nonnull byte[] buffer, int size) {
         inBuffer.write(0, buffer, 0, size);
         if (size != inputBufferSize) {
             inBufferDescriptor.bufSizes = new IntByReference(size);
@@ -171,7 +170,7 @@ public class AACAudioEncoder implements AutoCloseable {
      * In order to dramatically(!!!) boost performance and solve JNA memory pressure issues
      */
     private void disableStructureSynchronization() {
-        // These require writing them initialy prior to disable automatic synchronization
+        // These require writing them initially prior to disabling automatic synchronization
         encoder.write();
         encoder.setAutoSynch(false);
         inBufferDescriptor.write();
@@ -182,6 +181,20 @@ public class AACAudioEncoder implements AutoCloseable {
         // In/Out args do not contain anything worth writing initially
         inArgs.setAutoSynch(false);
         outArgs.setAutoSynch(false);
+    }
+
+    @Nonnull
+    private byte[] inputData(WAVAudioInput input) {
+        switch (input.sampleSize()) {
+            case _16:
+                return input.data();
+            case _24:
+                return WAVAudioSupport.downsample24To16Bits(input.data());
+            default:
+                throw new AACAudioEncoderException(String.format(
+                        "Unsupported sample size - '%d'",
+                        input.sampleSize().bits()));
+        }
     }
 
     private void verifyState() {
