@@ -44,7 +44,7 @@ for dynamic loading upon execution. If using the above depdencey, you
 need to make sure the library is installed as part of the runtime OS enviroment
 and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
 
-To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_* (build for JDK 11):
+To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_* (built for JDK 11):
 
 | Platform         | Gradle dependency                                    |
 |------------------|------------------------------------------------------|
@@ -102,4 +102,4 @@ Additional restrictions:
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
 * M4A encoding.
-* AAC Decoding ???
+* AAC decoding ???
