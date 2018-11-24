@@ -23,18 +23,18 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.4</version>
+    <version>0.2.0</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
+compile 'org.sheinbergon:jna-aac-encoder:0.2.0'
 ```
 For backwards compatibility, a JDK 9 version is also provided (shared library not included):
 
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4:jdk9'
+compile 'org.sheinbergon:jna-aac-encoder:0.2.0:jdk9'
 ```
 
 
@@ -48,10 +48,10 @@ To make things easier, cross-compiled artifacts (containing the shared library) 
 
 | Platform         | Gradle dependency                                    |
 |------------------|------------------------------------------------------|
-| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-x86-64` |
-| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-xi386`  |
-| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.4:linux-x86-64` |
-| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.4:osx-x86-64`   |
+| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.2.0:win32-x86-64` |
+| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.2.0:win32-xi386`  |
+| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.2.0:linux-x86-64` |
+| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.2.0:osx-x86-64`   |
 
 #### Additional information
 * Provided fdk-aac version is 0.1.6
