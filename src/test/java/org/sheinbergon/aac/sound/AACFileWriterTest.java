@@ -83,20 +83,4 @@ public class AACFileWriterTest {
                     }
                 }));
     }
-
-    @Test
-    @DisplayName("Supported audio file encoding")
-    void supportedAudioFileEncoding() throws IOException {
-        File aac = TestSupport.tempAACOutputFile();
-        AudioInputStream input = TestSupport.supported16bitWAVAudioInputStream();
-        try (input) {
-            writer.write(input, AACFileTypes.AAC_LC, aac);
-            Assertions.assertTrue(aac.length() > 0);
-            MediaInfoSupport.assertAACOutput(aac, input.getFormat(), AACEncodingProfile.AAC_LC);
-        } finally {
-            if (aac.exists()) {
-                Files.delete(aac.toPath());
-            }
-        }
-    }
 }
