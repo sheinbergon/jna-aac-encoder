@@ -84,7 +84,7 @@ To run the benchmarks locally:
 * The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
 
 ## Limitations
-Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format:
+Currently, **_libfdk-aac_ itself** supports only pcm_s16le/pcm_s24le input:
 
 | Criteria          | Supported values  |                             Comments                               |
 |-------------------|-------------------|--------------------------------------------------------------------|
