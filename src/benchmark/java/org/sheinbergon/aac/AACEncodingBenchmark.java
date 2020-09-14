@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @State(Scope.Benchmark)
 public class AACEncodingBenchmark {
 
-    private final static String AAC_ENC_BIN = System.getProperty("perf.aac.enc.bin");
+    private final static String AAC_ENC_BIN = System.getProperty("benchmark.aac.enc.bin");
     private final static String AAC_ENC_COMMAND_TEMPLATE = AAC_ENC_BIN + " -r %d -t %d -a 1 %s %s";
 
     private final static Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = Map.of(
@@ -29,7 +29,7 @@ public class AACEncodingBenchmark {
 
     private final static String WAV_EXT = "." + AudioFileFormat.Type.WAVE.getExtension();
     private final static String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
-    private final static String PREFIX = "perf";
+    private final static String PREFIX = "benchmark";
 
     private final static int DURATION = 500;
     private final static int FORKS = 3;

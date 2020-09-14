@@ -1,23 +1,76 @@
+import org.gradle.internal.os.OperatingSystem;
+
 plugins {
     id 'java'
+    id 'maven'
     id 'jacoco'
-    id 'com.github.kt3k.coveralls' version '2.8.2'
+    id 'signing'
+    id 'java-library'
+    id 'maven-publish'
+    id "io.morethan.jmhreport" version "0.9.0"
+    id 'io.franzbecker.gradle-lombok' version '3.3.0'
 }
 
-apply from: 'common.gradle'
+ext {
+    depVersions = [
+            lombok      : '1.18.12',
+            jna         : '5.5.0',
+            commonsLang3: '3.11',
+            jsr305      : '3.0.2'
+    ]
+    testDepVersions = [
+            junitPlatform: '1.6.2',
+            junit        : '5.6.2',
+            mediaInfo    : '1.0.0.RELEASE'
+    ]
+    benchmarkDepVersions = [
+            commonsIO: '2.8.0',
+            jmh      : '1.25.2'
+    ]
+}
+
+group 'org.sheinbergon'
+version '0.1.5'
+
+sourceCompatibility = 11
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+sourceSets {
+    benchmark
+}
+
+dependencies {
+    // JNA
+    api "net.java.dev.jna:jna:${depVersions.jna}"
+
+    // Utility
+    api "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
+    api "com.google.code.findbugs:jsr305:${depVersions.jsr305}"
+
+    // Lombok
+    compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
+
+    // Junit 5
+    testCompileOnly "org.projectlombok:lombok:${depVersions.lombok}"
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
+    testImplementation "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
+    testImplementation "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
+
+    // MediaInfo
+    testImplementation "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
+
+    // JMH Benchmarking
+    benchmarkCompile project
+    benchmarkCompile "org.openjdk.jmh:jmh-core:${benchmarkDepVersions.jmh}"
+    benchmarkAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${benchmarkDepVersions.jmh}"
+    benchmarkCompile "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
+}
 
 test {
-
-    jacoco {
-        append = false
-    }
-
-    useJUnitPlatform()
-
-    testLogging {
-        events 'PASSED', 'FAILED', 'SKIPPED'
-        showStandardStreams = false
-    }
 
     afterSuite { desc, result ->
         if (!desc.parent) {
@@ -29,17 +82,206 @@ test {
                     "${result.skippedTestCount} skipped"
         }
     }
+
+    useJUnitPlatform()
+    testLogging {
+        exceptionFormat = 'full'
+        events "passed", "skipped", "failed"
+    }
+    finalizedBy jacocoTestReport
+
 }
 
 jacoco {
-    toolVersion = '0.8.2'
+    toolVersion = '0.8.5'
 }
 
 jacocoTestReport {
+    dependsOn test
     reports {
-        html.enabled = false
-        xml.enabled = true
-        xml.destination file("${buildDir}/reports/jacoco/test/jacocoTestReport.xml")
+        xml.enabled true
+        csv.enabled false
+        html.enabled true
+    }
+}
+
+jmhReport {
+    jmhResultPath = project.file('build/reports/benchmark/result.json')
+    jmhReportOutput = project.file('build/reports/benchmark')
+}
+
+task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
+
+    classpath = sourceSets.benchmark.runtimeClasspath
+    main = 'org.openjdk.jmh.Main'
+
+    assert OperatingSystem.current().isLinux()
+
+    def aacEncBin = project.properties.get('aacEncBin', "/usr/bin/aac-enc")
+    assert file(aacEncBin).exists()
+
+    def format = project.properties.get('format', 'json');
+    def resultFile = file("build/reports/benchmark/result.${format}")
+    resultFile.parentFile.mkdirs()
+
+    systemProperties = [
+            'benchmark.aac.enc.bin': aacEncBin
+    ]
+
+    args 'Benchmark.*'
+    args '-rf', format
+    args '-rff', resultFile
+}
+
+
+task win64Jar(type: Jar) {
+    def target = 'win32-x86-64'
+    archiveClassifier.set(target)
+    archiveFileName.set("$archivesBaseName-${project.version}-${target}.jar")
+    from sourceSets.main.output
+    from("$resources/$target") {
+        include '*.dll'
+        into target
+    }
+    from("$projectDir") {
+        include 'NOTICE'
+    }
+}
+
+task win32Jar(type: Jar) {
+    def target = 'win32-x86'
+    archiveClassifier.set(target)
+    archiveFileName.set("$archivesBaseName-${project.version}-${target}.jar")
+    from sourceSets.main.output
+    from("$resources/$target") {
+        include '*.dll'
+        into target
+    }
+    from("$projectDir") {
+        include 'NOTICE'
+    }
+}
+
+task linux64Jar(type: Jar) {
+    def target = 'linux-x86-64'
+    archiveClassifier.set(target)
+    doFirst { buildLibrary(libSource, target) }
+    archiveFileName.set("$archivesBaseName-${project.version}-${target}.jar")
+    from sourceSets.main.output
+    from("$resources/$target") {
+        include '*.so'
+        into target
+    }
+    from("$projectDir") {
+        include 'NOTICE'
+    }
+}
+
+task darwinJar(type: Jar) {
+    def target = 'darwin'
+    archiveClassifier.set(target)
+    doFirst { buildLibrary(libSource, target) }
+    archiveFileName.set("$archivesBaseName-${project.version}-${target}.jar")
+    from sourceSets.main.output
+    from("$resources/$target") {
+        include '*.dylib'
+        into target
+    }
+    from("$projectDir") {
+        include 'NOTICE'
+    }
+}
+
+void buildLibrary(source, target) {
+    exec {
+        workingDir projectDir
+        commandLine "scripts/build_library.sh", "-s", source, "-t", target
+    }
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    archiveClassifier.set('sources')
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    archiveClassifier.set('javadoc')
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
+    archives linux64Jar
+    archives win64Jar
+    archives win32Jar
+    archives darwinJar
+}
+
+signing {
+    sign configurations.archives
+}
+
+publishing.publications {
+    maven(MavenPublication) {
+        from components.java
+        artifact tasks.javadocJar
+        artifact tasks.sourcesJar
+        artifact tasks.linux64Jar
+        artifact tasks.darwinJar
+        artifact tasks.win64Jar
+        artifact tasks.win32Jar
+    }
+}
+
+publishing.repositories {
+    mavenLocal()
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+
+            repository(url: "https://oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: ossrhUsername, password: ossrhPassword)
+            }
+
+            pom.project {
+                name 'jna-aac-encoder'
+                packaging 'jar'
+                description 'Fdk-AAC encoder JNA bridge'
+                url 'https://github.com/sheinbergon/jna-aac-encoder'
+
+                organization {
+                    name 'sheinbergon'
+                }
+                scm {
+                    url 'https://github.com/sheinbergon/jna-aac-encoder'
+                    connection 'scm:git:git://github.com/sheinbergon/jna-aac-encoder.git'
+                    developerConnection 'scm:git:git@github.com:sheinbergon/jna-aac-encoder.git'
+                }
+
+                licenses {
+                    license {
+                        name 'GNU Lesser General Public License, Version 3.0'
+                        url 'https://www.gnu.org/licenses/lgpl-3.0.en.html'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'sheinbergon'
+                        name 'Idan Sheinberg'
+                        email 'ishinberg0@gmail.com'
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -47,4 +289,8 @@ afterEvaluate {
     def task = tasks.getByName('test')
     def libPath = project.hasProperty('libPath') ? project.properties['libPath'] : System.properties['java.library.path']
     task.systemProperty "jna.library.path", libPath
+}
+
+wrapper {
+    gradleVersion = '6.6.1'
 }
