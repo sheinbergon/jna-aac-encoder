@@ -48,10 +48,10 @@ To make things easier, cross-compiled artifacts (containing the shared library) 
 
 | Platform         | Gradle dependency                                    |
 |------------------|------------------------------------------------------|
-| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-x86-64` |
-| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-xi386`  |
-| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.4:linux-x86-64` |
-| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.4:osx-x86-64`   |
+| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.5:win32-x86-64` |
+| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.5:win32-x86`    |
+| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.5:linux-x86-64` |
+| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.5:darwin`       |
 
 #### Additional information
 * Provided fdk-aac version is 0.1.6
@@ -67,7 +67,7 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](perf/jmh-results-23112018.png)
+![alt text](benchmark/jmh-results-23112018.png)
 
 To run the benchmarks locally:
 * Clone this repository onto a Linux host
@@ -75,13 +75,13 @@ To run the benchmarks locally:
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
 * Run the following command (from within the cloned repository)
 ```groovy
-./gradlew -b perf.gradle jmh jmhReport
+./gradlew -b benchmark.gradle jmh jmhReport
 ```
 * If the aac-enc binary is not installed in /usr/bin/aac-enc, you can a custom path path by adding this gradle property:
 ```groovy
 -PaacEncBin=/CUSTOM/PATH/TO/AAC-ENC 
 ```
-* The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
+* The JMH reports can be viewed by opening `build/reports/benchmark/index.html` in your browser.
 
 ## Limitations
 Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format, meaning:
