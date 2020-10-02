@@ -153,13 +153,14 @@ jmhReport {
 
 task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
 
+    doFirst {
+        assert OperatingSystem.current().isLinux()
+        def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
+        assert file(aacEncBin).exists()
+    }
+
     classpath = sourceSets.benchmark.runtimeClasspath
     main = 'org.openjdk.jmh.Main'
-
-    assert OperatingSystem.current().isLinux()
-
-    def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
-    assert file(aacEncBin).exists()
 
     def format = project.properties.getOrDefault('format', 'json')
     def resultFile = file("build/reports/benchmark/result.${format}")
