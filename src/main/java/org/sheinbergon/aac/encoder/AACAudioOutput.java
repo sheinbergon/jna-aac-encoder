@@ -15,7 +15,10 @@ import javax.annotation.Nonnull;
 public class AACAudioOutput {
 
     /**
-     * @return returns.
+     * Return an {@link Accumulator} instance, used to retain encoded AAC audio bytes across various call to the
+     * library encode endpoint.
+     *
+     * @return the accumulator instance.
      */
     @Nonnull
     public static Accumulator accumulator() {

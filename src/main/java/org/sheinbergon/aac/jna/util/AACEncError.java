@@ -16,9 +16,6 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public enum AACEncError {
 
-    /**
-     *
-     */
     AACENC_UNKNOWN(-0x0001),
     AACENC_OK(0x0000),
     AACENC_INVALID_HANDLE(0x0020),
@@ -37,8 +34,10 @@ public enum AACEncError {
             .collect(Collectors.toMap(AACEncError::getValue, err -> err));
 
     /**
-     * @param value
-     * @return
+     * Match a {@link AACEncError} from a given numeric error code.
+     *
+     * @param value numeric library error code
+     * @return the matched library error descriptor
      */
     public static AACEncError valueOf(final int value) {
         return BY_CODE.getOrDefault(value, AACENC_UNKNOWN);

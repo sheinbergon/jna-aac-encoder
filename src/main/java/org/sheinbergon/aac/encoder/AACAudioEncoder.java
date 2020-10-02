@@ -35,6 +35,7 @@ public final class AACAudioEncoder implements AutoCloseable {
 
     // Some fdk-aac internal constants
     private static final int PARAMETRIC_STEREO_CHANNEL_COUNT = 2;
+    private static final int DEFAULT_SAMPLE_RATE = 44100;
     private static final int ADTS_TRANSMUX = 2;
     private static final int WAV_INPUT_CHANNEL_ORDER = 1;
     private static final int MAX_ENCODER_CHANNELS = 0;
@@ -74,7 +75,9 @@ public final class AACAudioEncoder implements AutoCloseable {
     }
 
     /**
-     * @return
+     * Create a new {@link AACAudioEncoder.Builder} instance.
+     *
+     * @return the builder instance
      */
     @Nonnull
     public static Builder builder() {
@@ -87,9 +90,7 @@ public final class AACAudioEncoder implements AutoCloseable {
     public static class Builder {
 
         /**
-         * dsa.
-         * <p>
-         * Reasonable minimal ratios according
+         * Reasonable minimal ratios according to documentation found in the source-code.
          *
          * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
          */
@@ -102,7 +103,7 @@ public final class AACAudioEncoder implements AutoCloseable {
         private boolean afterBurner = true;
         private AACEncodingProfile profile = AACEncodingProfile.AAC_LC;
         private int channels = 2;
-        private int sampleRate = 44100;
+        private int sampleRate = DEFAULT_SAMPLE_RATE;
 
         private void setEncoderParams(final @Nonnull AACEncoder encoder) {
             FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AFTERBURNER, afterBurner ? 1 : 0);
@@ -122,7 +123,9 @@ public final class AACAudioEncoder implements AutoCloseable {
         // TODO - add AAC profile verification
 
         /**
-         * @return
+         * Verify and build an {@link AACAudioEncoder} instance.
+         *
+         * @return the verified encoder instance
          */
         @Nonnull
         public AACAudioEncoder build() {
@@ -143,9 +146,11 @@ public final class AACAudioEncoder implements AutoCloseable {
     }
 
     /**
-     * @param input
-     * @return
-     * @throws AACAudioEncoderException
+     * Encode the given wav audio input to AAC audio output.
+     *
+     * @param input wav audio-input to encode
+     * @return the encoded audio output data
+     * @throws AACAudioEncoderException if any unexpected encoding error was encountered
      */
     public AACAudioOutput encode(final WAVAudioInput input) throws AACAudioEncoderException {
         int read;
@@ -156,12 +161,11 @@ public final class AACAudioEncoder implements AutoCloseable {
             byte[] buffer = new byte[inputBufferSize()];
             while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
                 populateInputBuffer(buffer, read);
-                byte[] encoded =
-                        FdkAACLibFacade.encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
-                                .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
+                byte[] encoded = FdkAACLibFacade
+                        .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
+                        .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
                 accumulator.accumulate(encoded);
             }
-
             return accumulator.done();
         } catch (IOException | RuntimeException x) {
             throw new AACAudioEncoderException("Could not encode WAV audio to AAC audio", x);
@@ -169,8 +173,10 @@ public final class AACAudioEncoder implements AutoCloseable {
     }
 
     /**
-     * @return
-     * @throws AACAudioEncoderException
+     * Conclude encoded audio. To be called when no more audio-input data is available.
+     *
+     * @return the concluded audio output data. No further encoding is expected to take place from here on out.
+     * @throws AACAudioEncoderException if any unexpected encoding error was encountered
      */
     public AACAudioOutput conclude() throws AACAudioEncoderException {
         Optional<byte[]> optional;

@@ -24,8 +24,10 @@ public enum AACEncodingChannelMode {
             .collect(Collectors.toMap(AACEncodingChannelMode::count, facm -> facm));
 
     /**
-     * @param count
-     * @return
+     * Match an {@link AACEncodingChannelMode} from a channel count.
+     *
+     * @param count the channel count to match
+     * @return the matching encoding channel-mode
      */
     public static AACEncodingChannelMode valueOf(final int count) {
         return BY_CHANNEL_COUNT.getOrDefault(count, MODE_INVALID);

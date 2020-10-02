@@ -24,9 +24,11 @@ public class WAVAudioInput {
     private static final WAVAudioFormat SUPPORTED_AUDIO_FORMATS = WAVAudioFormat.PCM;
 
     /**
-     * @param data
-     * @param length
-     * @return returns.
+     * WAV audio input descriptor factory method aligning to the pcm_s16le standard.
+     *
+     * @param data   raw audio data bytes
+     * @param length valid bytes count
+     * @return returns the audio-input descriptor
      */
     @Nonnull
     public static WAVAudioInput pcms16le(final byte[] data, final int length) {
@@ -39,7 +41,9 @@ public class WAVAudioInput {
     }
 
     /**
-     * @return returns.
+     * Create a {@link WAVAudioInput.Builder} instance.
+     *
+     * @return returns the builder instance
      */
     @Nonnull
     public static Builder builder() {
@@ -59,7 +63,9 @@ public class WAVAudioInput {
         private WAVAudioFormat audioFormat = null;
 
         /**
-         * @return returns.
+         * Build, verify and assert a {@link WAVAudioInput} instance.
+         *
+         * @return the valid audio-input instance
          */
         @Nonnull
         public WAVAudioInput build() {

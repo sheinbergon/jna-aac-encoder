@@ -16,14 +16,14 @@ public final class FdkAACLib {
     @Getter
     @Accessors(fluent = true)
     @RequiredArgsConstructor
-    enum Methods {
+    enum Functions {
         INFO("aacEncInfo"),
         SET_PARAM("aacEncoder_SetParam"),
         OPEN("accEncOpen"),
         CLOSE("accEncClose"),
         ENCODE("aacEncEncode");
 
-        private final String method;
+        private final String libraryFunctionName;
     }
 
     private static final String FDK_AAC = "fdk-aac";

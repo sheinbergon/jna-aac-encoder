@@ -26,7 +26,7 @@ jobs:
           architecture: x64
 
       - name: Run tests via gradle
-        run: ./gradlew clean build test
+        run: ./gradlew clean build check test
 
       # Publish to the staging repository only once, from the Linux Runner
       - name: Publish to Staging repository
