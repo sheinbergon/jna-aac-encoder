@@ -1,8 +1,9 @@
 # jna-aac-encoder
 
-[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder)
-![GitHub release](https://img.shields.io/github/release/sheinbergon/jna-aac-encoder.svg)
+[![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&logo=apache&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/multi-platform-ci?logo=github&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3Amulti-platform-ci)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&logo=github&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
+[![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&logo=Apache%20Maven&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
 
                                                                                                                                                                                                                                                                                                  
 This library provides AAC encoding capabilities for the JVM. 
@@ -23,18 +24,18 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.5'
 ```
 For backwards compatibility, a JDK 9 version is also provided (shared library not included):
 
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4:jdk9'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.5:jdk9'
 ```
 
 
