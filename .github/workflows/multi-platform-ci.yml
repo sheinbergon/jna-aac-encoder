@@ -26,10 +26,7 @@ jobs:
           architecture: x64
 
       - name: Run tests via gradle
-        run:
-          - apt-get update
-          - apt-get install libmediainfo0v5
-          - ./gradlew clean build check test
+        run: ./gradlew clean build check test
 
       # Publish to the staging repository only once, from the Linux Runner
       - name: Publish to Staging repository
