@@ -26,7 +26,10 @@ jobs:
           architecture: x64
 
       - name: Run tests via gradle
-        run: ./gradlew clean build check test
+        run:
+          - apt-get update
+          - apt-get install libmediainfo0v5
+          - ./gradlew clean build check test
 
       # Publish to the staging repository only once, from the Linux Runner
       - name: Publish to Staging repository
@@ -36,3 +39,9 @@ jobs:
           NEXUS_TARGET: SNAPSHOT
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
           NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          env_vars: OS
+          fail_ci_if_error: true
