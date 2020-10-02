@@ -248,3 +248,10 @@ publishing {
 wrapper {
     gradleVersion = '6.6.1'
 }
+
+nexusStaging {
+    username = nexus.username
+    password = nexus.password
+    numberOfRetries = 50
+    delayBetweenRetriesInMillis = 5000
+}
