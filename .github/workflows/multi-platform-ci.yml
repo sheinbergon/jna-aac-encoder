@@ -27,7 +27,7 @@ jobs:
 
       - name: Setup Ubuntu OS packages
         if: runner.os == 'Linux'
-        run: apt-get update && apt-get install -y libmediainfo0v5
+        run: sudo apt-get update && sudo apt-get install -y libmediainfo0v5
 
       - name: Run tests via gradle
         run: ./gradlew clean build check test
