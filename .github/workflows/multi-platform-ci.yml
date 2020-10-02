@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04]
+        os: [ ubuntu-20.04 ]
     env:
       OS: ${{ matrix.os }}
     steps:
@@ -24,6 +24,10 @@ jobs:
         with:
           java-version: 11
           architecture: x64
+
+      - name: Setup Ubuntu OS packages
+        if: runner.os == 'Linux'
+        run: apt-get update && apt-get install -y libmediainfo0v5
 
       - name: Run tests via gradle
         run: ./gradlew clean build check test
