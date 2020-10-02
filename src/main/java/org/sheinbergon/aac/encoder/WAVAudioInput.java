@@ -1,12 +1,17 @@
 package org.sheinbergon.aac.encoder;
 
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 import org.sheinbergon.aac.encoder.util.WAVAudioFormat;
 import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
+import javax.annotation.Nonnull;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Objects;
@@ -16,9 +21,17 @@ import java.util.Objects;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class WAVAudioInput {
 
-    private final static WAVAudioFormat SUPPORTED_AUDIO_FORMATS = WAVAudioFormat.PCM;
+    private static final WAVAudioFormat SUPPORTED_AUDIO_FORMATS = WAVAudioFormat.PCM;
 
-    public static WAVAudioInput pcms16le(byte[] data, int length) {
+    /**
+     * WAV audio input descriptor factory method aligning to the pcm_s16le standard.
+     *
+     * @param data   raw audio data bytes
+     * @param length valid bytes count
+     * @return returns the audio-input descriptor
+     */
+    @Nonnull
+    public static WAVAudioInput pcms16le(final byte[] data, final int length) {
         return builder().audioFormat(WAVAudioFormat.PCM)
                 .endianness(ByteOrder.LITTLE_ENDIAN)
                 .sampleSize(WAVAudioSupport.SUPPORTED_SAMPLE_SIZE)
@@ -27,6 +40,12 @@ public class WAVAudioInput {
                 .build();
     }
 
+    /**
+     * Create a {@link WAVAudioInput.Builder} instance.
+     *
+     * @return returns the builder instance
+     */
+    @Nonnull
     public static Builder builder() {
         return new Builder();
     }
@@ -43,6 +62,12 @@ public class WAVAudioInput {
         private ByteOrder endianness = null;
         private WAVAudioFormat audioFormat = null;
 
+        /**
+         * Build, verify and assert a {@link WAVAudioInput} instance.
+         *
+         * @return the valid audio-input instance
+         */
+        @Nonnull
         public WAVAudioInput build() {
             if (ArrayUtils.isEmpty(data)) {
                 throw new WAVAudioInputException("data", "Empty/Null array");

@@ -3,11 +3,13 @@ package org.sheinbergon.aac.jna.util;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Maps to AACENC_PARAM enum.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
 @Getter
 @RequiredArgsConstructor
-/**
- * Maps to AACENC_PARAM enum in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
- */
 public enum AACEncParam {
 
     AACENC_AOT(0x0100),

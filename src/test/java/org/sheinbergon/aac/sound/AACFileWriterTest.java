@@ -18,11 +18,17 @@ import java.util.stream.Stream;
 
 // TODO - Consider adding actual byte-level comparison encoding tests
 @DisplayName("Java AudioSystem AAC encoding support")
-public class AACFileWriterTest {
+public final class AACFileWriterTest {
 
-    private final static AudioFileFormat.Type[] NO_FILE_TYPES = new AudioFileFormat.Type[0];
-    private final static AudioFileFormat.Type[] AAC_FILE_TYPES = new AudioFileFormat.Type[]{AACFileTypes.AAC_LC, AACFileTypes.AAC_HE, AACFileTypes.AAC_HE_V2};
-    private final static AACEncodingProfile[] AAC_AUDIO_TYPES = new AACEncodingProfile[]{AACEncodingProfile.AAC_LC, AACEncodingProfile.HE_AAC, AACEncodingProfile.HE_AAC_V2};
+    private static final AudioFileFormat.Type[] NO_FILE_TYPES = new AudioFileFormat.Type[0];
+    private static final AudioFileFormat.Type[] AAC_FILE_TYPES = new AudioFileFormat.Type[] {
+            AACFileTypes.AAC_LC,
+            AACFileTypes.AAC_HE,
+            AACFileTypes.AAC_HE_V2};
+    private static final AACEncodingProfile[] AAC_AUDIO_TYPES = new AACEncodingProfile[] {
+            AACEncodingProfile.AAC_LC,
+            AACEncodingProfile.HE_AAC,
+            AACEncodingProfile.HE_AAC_V2};
     private final AACFileWriter writer = new AACFileWriter();
 
     @Test

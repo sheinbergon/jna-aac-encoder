@@ -1,8 +1,11 @@
 # jna-aac-encoder
 
-[![Build Status](https://travis-ci.org/sheinbergon/jna-aac-encoder.svg?branch=master)](https://travis-ci.org/sheinbergon/jna-aac-encoder) [![Coverage Status](https://coveralls.io/repos/github/sheinbergon/jna-aac-encoder/badge.svg)](https://coveralls.io/github/sheinbergon/jna-aac-encoder) [![License](https://img.shields.io/badge/License-LGPL%20v3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0) 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder/badge.svg)](https://maven-badges.herokuapp.com/maven-central/org.sheinbergon/jna-aac-encoder)
-![GitHub release](https://img.shields.io/github/release/sheinbergon/jna-aac-encoder.svg)
+[![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/multi-platform-ci?style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3Amulti-platform-ci)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
+[![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
+[![Codecov](https://img.shields.io/codecov/c/github/sheinbergon/jna-aac-encoder?style=for-the-badge)](https://codecov.io/gh/sheinbergon/jna-aac-encoder)
+[![Codacy grade](https://img.shields.io/codacy/grade/55e3f43eb0d24f1f93e0a4a66f9f5893?style=for-the-badge)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
 
                                                                                                                                                                                                                                                                                                  
 This library provides AAC encoding capabilities for the JVM. 
@@ -23,37 +26,18 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.5'
 ```
-For backwards compatibility, a JDK 9 version is also provided (shared library not included):
-
-```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.4:jdk9'
-```
-
-
-#### Notice!!!
-The **_libfdk-aac_** shared library so/dll/dylib file is required to be accessible
-for dynamic loading upon execution. If using the above depdencey, you
-need to make sure the library is installed as part of the runtime OS enviroment
-and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
-
-To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_* (built for JDK 11):
-
-| Platform         | Gradle dependency                                    |
-|------------------|------------------------------------------------------|
-| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-x86-64` |
-| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.4:win32-xi386`  |
-| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.4:linux-x86-64` |
-| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.4:osx-x86-64`   |
 
 #### Additional information
+* Unlike previous releases, there's now a single artifact containing _libfdk-aac_ shared libraries cross-compiled for
+both linux and windows (32-bit and 64-bit)
 * Provided fdk-aac version is 0.1.6
 * Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
  
@@ -67,7 +51,7 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](perf/jmh-results-23112018.png)
+![alt text](benchmark/jmh-results-23112018.png)
 
 To run the benchmarks locally:
 * Clone this repository onto a Linux host
@@ -75,13 +59,13 @@ To run the benchmarks locally:
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
 * Run the following command (from within the cloned repository)
 ```groovy
-./gradlew -b perf.gradle jmh jmhReport
+./gradlew -b benchmark.gradle jmh jmhReport
 ```
 * If the aac-enc binary is not installed in /usr/bin/aac-enc, you can a custom path path by adding this gradle property:
 ```groovy
 -PaacEncBin=/CUSTOM/PATH/TO/AAC-ENC 
 ```
-* The JMH reports can be viewed by opening `build/reports/perf/index.html` in your browser.
+* The JMH reports can be viewed by opening `build/reports/benchmark/index.html` in your browser.
 
 ## Limitations
 Currently, **_libfdk-aac_ itself** supports only the pcm_s16le WAV input format, meaning:
@@ -98,7 +82,8 @@ Additional restrictions:
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
 ## Roadmap
-* Upgrade to fdk-aac 2.0.0
+* Upgrade to fdk-aac 2.0.x
+* Re-add macos shared library to the build.
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
 * M4A encoding.

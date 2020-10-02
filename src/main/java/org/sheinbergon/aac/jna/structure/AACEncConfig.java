@@ -1,17 +1,18 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import lombok.ToString;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
 import java.util.List;
 
 /**
- * Maps to AACENC_CONFIG struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * Maps to AACENC_CONFIG struct.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 public class AACEncConfig extends Structure {
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncConfig.class);
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncConfig.class);
 
     public int sampleRate;
     public int bitRate;
@@ -40,7 +41,7 @@ public class AACEncConfig extends Structure {
     public byte useRequant;
 
     @Override
-    protected List<String> getFieldOrder() {
+    protected final List<String> getFieldOrder() {
         return FIELD_ORDER;
     }
 }

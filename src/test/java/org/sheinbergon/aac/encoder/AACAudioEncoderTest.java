@@ -1,6 +1,10 @@
 package org.sheinbergon.aac.encoder;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 
@@ -8,13 +12,13 @@ import java.util.Optional;
 
 
 @DisplayName("AAC audio encoder")
-public class AACAudioEncoderTest {
+public final class AACAudioEncoderTest {
 
-    private final static int INVALID_SAMPLE_RATE = 8000;
-    private final static int INVALID_CHANNEL_COUNT = 10;
-    private final static int INVALID_HE_AAC_V2_CHANNEL_COUNT = 1;
+    private static final int INVALID_SAMPLE_RATE = 8000;
+    private static final int INVALID_CHANNEL_COUNT = 10;
+    private static final int INVALID_HE_AAC_V2_CHANNEL_COUNT = 1;
 
-    private final static int VALID_SAMPLE_RATE = 16000;
+    private static final int VALID_SAMPLE_RATE = 16000;
 
     private AACAudioEncoder.Builder builder;
     private AACAudioEncoder encoder;
@@ -36,7 +40,7 @@ public class AACAudioEncoderTest {
                 builder.sampleRate(INVALID_SAMPLE_RATE)
                         .build());
     }
-    
+
     @Test
     @DisplayName("Invalid channel count")
     public void invalidChannelCount() {

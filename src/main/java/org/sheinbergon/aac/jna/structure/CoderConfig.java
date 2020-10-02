@@ -1,17 +1,18 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import lombok.ToString;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
 import java.util.List;
 
 /**
- * Maps to CODER_CONFIG struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
+ * Maps to CODER_CONFIG struct.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
  */
 public class CoderConfig extends Structure {
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(CoderConfig.class);
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(CoderConfig.class);
 
     /**
      * Audio Object Type (AOT).
@@ -59,7 +60,7 @@ public class CoderConfig extends Structure {
      */
     public int BSAClayerLength;
     /**
-     * flags
+     * Encoding flags.
      */
     public int flags;
     /**
@@ -72,22 +73,22 @@ public class CoderConfig extends Structure {
      */
     public byte headerPeriod;
     /**
-     * USAC MPS stereo mode
+     * USAC MPS stereo mode.
      */
     public byte stereoConfigIndex;
     /**
-     * USAC SBR mode
+     * USAC SBR mode.
      */
     public byte sbrMode;
     /**
-     * 0: implicit signaling, 1: backwards compatible explicit signaling, 2: hierarcical explicit signaling
+     * 0: implicit signaling, 1: backwards compatible explicit signaling, 2: hierarcical explicit signaling.
      */
     public int sbrSignaling;
     public byte sbrPresent;
     public byte psPresent;
 
     @Override
-    protected List<String> getFieldOrder() {
+    protected final List<String> getFieldOrder() {
         return FIELD_ORDER;
     }
 }

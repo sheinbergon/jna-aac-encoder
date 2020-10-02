@@ -1,0 +1,29 @@
+name: multi-platform-ci
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  ci:
+    name: publish to maven-central
+    runs-on: ubuntu-20.04
+    steps:
+
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Java JDK 11 setup
+        uses: actions/setup-java@v1.3.0
+        with:
+          java-version: 11
+          architecture: x64
+
+      - name: Publish To Release Repository
+        run: ./gradlew publish closeAndReleaseRepository
+        env:
+          NEXUS_TARGET: RELEASE
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
+          GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}

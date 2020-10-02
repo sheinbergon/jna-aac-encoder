@@ -2,8 +2,10 @@ package org.sheinbergon.aac.encoder.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Getter
+@Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum AACEncodingProfile {
     AAC_LC(2, "LC"),
@@ -13,5 +15,5 @@ public enum AACEncodingProfile {
     //AAC_ELD(39) - Not yet supported
 
     private final int aot;
-    private final String profile;
+    private final String code;
 }

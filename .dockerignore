@@ -1,7 +1,0 @@
-.gradle
-.idea
-build
-out
-gradlew.bat
-.travis.yml
-.gitignore

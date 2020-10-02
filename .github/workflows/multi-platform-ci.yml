@@ -1,0 +1,48 @@
+name: multi-platform-ci
+
+on:
+  push:
+    branches-ignore:
+      - master
+      - wip*
+jobs:
+  ci:
+    name: run tests, style verification, measure code coverage and publish to nexus staging repository
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ ubuntu-20.04, windows-2019 ]
+    env:
+      OS: ${{ matrix.os }}
+    steps:
+
+      - name: Git checkout
+        uses: actions/checkout@v2
+
+      - name: Java JDK 11 setup
+        uses: actions/setup-java@v1.3.0
+        with:
+          java-version: 11
+          architecture: x64
+
+      - name: Setup Ubuntu OS packages
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y libmediainfo0v5
+
+      - name: Run tests via gradle
+        run: ./gradlew clean build check test
+
+      # Publish to the staging repository only once, from the Linux Runner
+      - name: Publish to Staging repository
+        if: runner.os == 'Linux'
+        run: ./gradlew publish
+        env:
+          NEXUS_TARGET: SNAPSHOT
+          NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1
+        with:
+          env_vars: OS
+          fail_ci_if_error: true
