@@ -11,16 +11,16 @@ import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import java.nio.ByteOrder;
 
 @DisplayName("WAV audio input composition")
-public class WAVAudioInputTest {
+public final class WAVAudioInputTest {
 
-    private final static byte[] VALID_DATA = new byte[4];
-    private final static int VALID_LENGTH = 4;
-    private final static int VALID_SAMPLE_SIZE = WAVAudioSupport.SUPPORTED_SAMPLE_SIZE;
-    private final static ByteOrder VALID_ENDIANNESS = ByteOrder.LITTLE_ENDIAN;
+    private static final byte[] VALID_DATA = new byte[4];
+    private static final int VALID_LENGTH = 4;
+    private static final int VALID_SAMPLE_SIZE = WAVAudioSupport.SUPPORTED_SAMPLE_SIZE;
+    private static final ByteOrder VALID_ENDIANNESS = ByteOrder.LITTLE_ENDIAN;
 
-    private final static int INVALID_LENGTH = 100;
-    private final static int INVALID_SAMPLE_SIZE = 24;
-    private final static ByteOrder INVALID_ENDIANNESS = ByteOrder.BIG_ENDIAN;
+    private static final int INVALID_LENGTH = 100;
+    private static final int INVALID_SAMPLE_SIZE = 24;
+    private static final ByteOrder INVALID_ENDIANNESS = ByteOrder.BIG_ENDIAN;
 
     private WAVAudioInput.Builder builder;
 
@@ -31,14 +31,14 @@ public class WAVAudioInputTest {
 
     @Test
     @DisplayName("No/empty WAV data")
-    public void NoData() {
+    public void noData() {
         Assertions.assertThrows(WAVAudioInputException.class, () ->
                 builder.build());
     }
 
     @Test
     @DisplayName("Invalid WAV data length")
-    public void InvalidLength() {
+    public void invalidLength() {
         Assertions.assertThrows(WAVAudioInputException.class, () ->
                 builder.data(VALID_DATA)
                         .length(INVALID_LENGTH).build());

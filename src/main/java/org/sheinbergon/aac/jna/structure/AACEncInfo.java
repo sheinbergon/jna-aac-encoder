@@ -1,19 +1,21 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
 import java.util.List;
 
 
 /**
- * Maps to AACENC_InfoStruct struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ * Maps to AACENC_InfoStruct struct.
+ * <p>
+ * in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
  */
 public class AACEncInfo extends Structure {
 
-    private final static int CONF_BUF_SIZE = 64;
+    private static final int CONF_BUF_SIZE = 64;
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncInfo.class);
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncInfo.class);
 
     public int maxOutBufBytes;
     public int maxAncBytes;
@@ -25,7 +27,7 @@ public class AACEncInfo extends Structure {
     public int confSize;
 
     @Override
-    protected List<String> getFieldOrder() {
+    protected final List<String> getFieldOrder() {
         return FIELD_ORDER;
     }
 }

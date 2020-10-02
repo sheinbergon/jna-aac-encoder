@@ -7,11 +7,17 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 
+import javax.annotation.Nonnull;
+
 @Getter
 @Accessors(chain = true, fluent = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class AACAudioOutput {
 
+    /**
+     * @return returns.
+     */
+    @Nonnull
     public static Accumulator accumulator() {
         return new Accumulator();
     }
@@ -24,10 +30,10 @@ public class AACAudioOutput {
         private int length = 0;
 
         // It is guaranteed the encoded bytes array is properly sized to exactly match its actual content
-        void accumulate(byte[] data) {
-            if (data.length != 0) {
-                this.data = ArrayUtils.addAll(this.data, data);
-                this.length += data.length;
+        void accumulate(final @Nonnull byte[] bytes) {
+            if (bytes.length != 0) {
+                this.data = ArrayUtils.addAll(this.data, bytes);
+                this.length += bytes.length;
             }
         }
 

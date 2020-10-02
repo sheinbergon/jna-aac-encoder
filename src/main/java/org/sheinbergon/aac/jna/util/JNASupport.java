@@ -8,15 +8,26 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class JNAUtil {
-    public static List<String> structureFieldOrder(Class<? extends Structure> structure) {
+public final class JNASupport {
+
+    /**
+     * @param structure
+     * @return
+     */
+    public static List<String> structureFieldOrder(final Class<? extends Structure> structure) {
         return Stream.of(structure.getDeclaredFields())
                 .filter(field -> !Modifier.isStatic(field.getModifiers()))
                 .map(Field::getName)
                 .collect(Collectors.toList());
     }
 
-    public static void clearStructureMemory(Structure... structures) {
+    /**
+     * @param structures
+     */
+    public static void clearStructureMemory(final Structure... structures) {
         Stream.of(structures).forEach(Structure::clear);
+    }
+
+    private JNASupport() {
     }
 }

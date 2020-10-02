@@ -7,11 +7,16 @@ import org.sheinbergon.aac.encoder.WAVAudioInput;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
+import javax.annotation.Nonnull;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.spi.AudioFileWriter;
-import java.io.*;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -19,11 +24,11 @@ import java.util.stream.Stream;
 
 public final class AACFileWriter extends AudioFileWriter {
 
-    private final static int OUTPUT_BUFFER_SIZE = 16384;
+    private static final int OUTPUT_BUFFER_SIZE = 16384;
 
-    private final static int INPUT_BUFFER_MULTIPLIER = 16;
+    private static final int INPUT_BUFFER_MULTIPLIER = 16;
 
-    private final static Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
+    private static final Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
             AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC,
             AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC,
             AACFileTypes.AAC_HE_V2, AACEncodingProfile.HE_AAC_V2);
@@ -35,7 +40,7 @@ public final class AACFileWriter extends AudioFileWriter {
     }
 
     @Override
-    public AudioFileFormat.Type[] getAudioFileTypes(AudioInputStream stream) {
+    public AudioFileFormat.Type[] getAudioFileTypes(final @Nonnull AudioInputStream stream) {
         AudioFormat format = stream.getFormat();
         if (format.getEncoding().equals(AudioFormat.Encoding.PCM_SIGNED)
                 && format.getSampleSizeInBits() == WAVAudioSupport.SUPPORTED_SAMPLE_SIZE
@@ -47,13 +52,15 @@ public final class AACFileWriter extends AudioFileWriter {
         }
     }
 
-    static AACEncodingProfile profileByType(AudioFileFormat.Type type) {
+    static AACEncodingProfile profileByType(final @Nonnull AudioFileFormat.Type type) {
         return Optional.ofNullable(FILE_TYPES_TO_ENCODING_PROFILES.get(type))
                 .orElseThrow(() -> new IllegalArgumentException("File type " + type + " is not yet supported"));
     }
 
     // Note that the bitRate is adapted automatically based on the input specification
-    private static AACAudioEncoder encoder(AudioFormat format, AudioFileFormat.Type type) {
+    private static AACAudioEncoder encoder(
+            final @Nonnull AudioFormat format,
+            final @Nonnull AudioFileFormat.Type type) {
         return AACAudioEncoder.builder()
                 .afterBurner(true)
                 .channels(format.getChannels())
@@ -63,7 +70,10 @@ public final class AACFileWriter extends AudioFileWriter {
     }
 
     @Override
-    public int write(AudioInputStream stream, AudioFileFormat.Type fileType, OutputStream out) throws IOException {
+    public int write(
+            final @Nonnull AudioInputStream stream,
+            final @Nonnull AudioFileFormat.Type fileType,
+            final @Nonnull OutputStream out) throws IOException {
         Objects.requireNonNull(stream);
         Objects.requireNonNull(fileType);
         Objects.requireNonNull(out);
@@ -75,7 +85,10 @@ public final class AACFileWriter extends AudioFileWriter {
     }
 
     @Override
-    public int write(AudioInputStream stream, AudioFileFormat.Type fileType, File out) throws IOException {
+    public int write(
+            final @Nonnull AudioInputStream stream,
+            final @Nonnull AudioFileFormat.Type fileType,
+            final @Nonnull File out) throws IOException {
         Objects.requireNonNull(stream);
         Objects.requireNonNull(fileType);
         Objects.requireNonNull(out);
@@ -86,11 +99,16 @@ public final class AACFileWriter extends AudioFileWriter {
         }
     }
 
-    private int readBufferSize(AudioFormat format, AACAudioEncoder encoder) {
+    private int readBufferSize(
+            final @Nonnull AudioFormat format,
+            final @Nonnull AACAudioEncoder encoder) {
         return encoder.inputBufferSize() * INPUT_BUFFER_MULTIPLIER;
     }
 
-    private int encodeAndWrite(AudioInputStream input, AudioFileFormat.Type type, OutputStream output) throws IOException {
+    private int encodeAndWrite(
+            final @Nonnull AudioInputStream input,
+            final @Nonnull AudioFileFormat.Type type,
+            final @Nonnull OutputStream output) throws IOException {
         boolean concluded = false;
         int read, encoded = 0;
         AudioFormat format = input.getFormat();

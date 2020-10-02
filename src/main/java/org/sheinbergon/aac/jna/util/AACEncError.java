@@ -3,18 +3,22 @@ package org.sheinbergon.aac.jna.util;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Maps to AACENC_ERROR enum.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
 @Getter
 @RequiredArgsConstructor
-/**
- * Maps to AACENC_ERROR enum in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
- */
 public enum AACEncError {
 
+    /**
+     *
+     */
     AACENC_UNKNOWN(-0x0001),
     AACENC_OK(0x0000),
     AACENC_INVALID_HANDLE(0x0020),
@@ -29,11 +33,15 @@ public enum AACEncError {
     AACENC_ENCODE_ERROR(0x0060),
     AACENC_ENCODE_EOF(0x0080);
 
-    private final static Map<Integer, AACEncError> valueToEnumMap = Stream.of(values())
+    private static final Map<Integer, AACEncError> BY_CODE = Stream.of(values())
             .collect(Collectors.toMap(AACEncError::getValue, err -> err));
 
-    public static AACEncError valueOf(Integer value) {
-        return valueToEnumMap.getOrDefault(value, AACENC_UNKNOWN);
+    /**
+     * @param value
+     * @return
+     */
+    public static AACEncError valueOf(final int value) {
+        return BY_CODE.getOrDefault(value, AACENC_UNKNOWN);
     }
 
     private final int value;

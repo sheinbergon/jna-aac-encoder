@@ -2,7 +2,11 @@ package org.sheinbergon.aac.encoder.util;
 
 public class WAVAudioInputException extends RuntimeException {
 
-    public WAVAudioInputException(String paramter, String value) {
+    /**
+     * @param paramter
+     * @param value
+     */
+    public WAVAudioInputException(final String paramter, final String value) {
         super(String.format("Invalid WAV input: '%s' - %s", paramter, value));
     }
 }

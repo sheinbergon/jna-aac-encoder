@@ -3,15 +3,18 @@ package org.sheinbergon.aac.jna.structure;
 import com.sun.jna.Structure;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
 import java.util.List;
-/**
- * Maps to AACENC_BufDesc struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
- */
-public class AACEncBufDesc extends Structure {
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncBufDesc.class);
+/**
+ * Maps to AACENC_BufDesc struct.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ */
+public final class AACEncBufDesc extends Structure {
+
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncBufDesc.class);
 
     public int numBufs;
     public PointerByReference bufs;

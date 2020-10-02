@@ -113,7 +113,7 @@ jacoco {
 }
 
 checkstyle {
-    toolVersion '8.34'
+    toolVersion '8.36.1'
     configFile file("$rootDir/checkstyle.xml")
     configDir rootDir
 }
@@ -153,6 +153,12 @@ jmhReport {
 
 task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
 
+    doFirst {
+        def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
+        assert file(aacEncBin).exists()
+        assert OperatingSystem.current().isLinux()
+        systemProperties = ['benchmark.aac.enc.bin': aacEncBin]
+    }
 
     classpath = sourceSets.benchmark.runtimeClasspath
     main = 'org.openjdk.jmh.Main'
@@ -161,15 +167,9 @@ task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
     def resultFile = file("build/reports/benchmark/result.${format}")
     resultFile.parentFile.mkdirs()
 
-    doLast {
-        assert OperatingSystem.current().isLinux()
-        def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
-        assert file(aacEncBin).exists()
-        systemProperties = ['benchmark.aac.enc.bin': aacEncBin]
-        args 'Benchmark.*'
-        args '-rf', format
-        args '-rff', resultFile
-    }
+    args 'Benchmark.*'
+    args '-rf', format
+    args '-rff', resultFile
 }
 
 jar {

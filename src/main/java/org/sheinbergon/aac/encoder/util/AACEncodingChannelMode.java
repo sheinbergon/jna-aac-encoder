@@ -2,13 +2,14 @@ package org.sheinbergon.aac.encoder.util;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 
-import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Getter
+@Accessors(fluent = true)
 @RequiredArgsConstructor
 public enum AACEncodingChannelMode {
     MODE_INVALID(-1, -1),
@@ -19,11 +20,15 @@ public enum AACEncodingChannelMode {
     MODE_1_2_2(5, 5),
     MODE_1_2_2_1(6, 6);
 
-    private final static Map<Integer, AACEncodingChannelMode> countToEnumMap = Stream.of(values())
-            .collect(Collectors.toMap(AACEncodingChannelMode::getCount, facm -> facm));
+    private static final Map<Integer, AACEncodingChannelMode> BY_CHANNEL_COUNT = Stream.of(values())
+            .collect(Collectors.toMap(AACEncodingChannelMode::count, facm -> facm));
 
-    public static AACEncodingChannelMode valueOf(int count) {
-        return countToEnumMap.getOrDefault(count, MODE_INVALID);
+    /**
+     * @param count
+     * @return
+     */
+    public static AACEncodingChannelMode valueOf(final int count) {
+        return BY_CHANNEL_COUNT.getOrDefault(count, MODE_INVALID);
     }
 
     private final int count;

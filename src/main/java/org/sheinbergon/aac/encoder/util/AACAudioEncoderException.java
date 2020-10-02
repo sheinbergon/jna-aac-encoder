@@ -1,15 +1,27 @@
 package org.sheinbergon.aac.encoder.util;
 
 public class AACAudioEncoderException extends RuntimeException {
-    public AACAudioEncoderException(String message, Throwable cause) {
+    /**
+     * @param message
+     * @param cause
+     */
+    public AACAudioEncoderException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public AACAudioEncoderException(String message) {
+    /**
+     * @param message
+     */
+    public AACAudioEncoderException(final String message) {
         super(message);
     }
 
-    public AACAudioEncoderException(String paramter, int value) {
+    /**
+     * @param paramter
+     * @param value
+     */
+    public AACAudioEncoderException(final String paramter, final int value) {
         super(String.format("Invalid encoder parameter '%s' - %d", paramter, value));
     }
 }
+

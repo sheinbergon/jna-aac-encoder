@@ -1,11 +1,26 @@
 package org.sheinbergon.aac;
 
 import org.apache.commons.lang3.StringUtils;
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Param;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.annotations.Warmup;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.sound.AACFileTypes;
 
-import javax.sound.sampled.*;
+import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
@@ -20,25 +35,25 @@ import java.util.stream.Stream;
 @State(Scope.Benchmark)
 public class AACEncodingBenchmark {
 
-    private final static String AAC_ENC_BIN = System.getProperty("benchmark.aac.enc.bin");
-    private final static String AAC_ENC_COMMAND_TEMPLATE = AAC_ENC_BIN + " -r %d -t %d -a 1 %s %s";
+    private static final String AAC_ENC_BIN = System.getProperty("benchmark.aac.enc.bin");
+    private static final String AAC_ENC_COMMAND_TEMPLATE = AAC_ENC_BIN + " -r %d -t %d -a 1 %s %s";
 
-    private final static Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = Map.of(
+    private static final Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = Map.of(
             AACEncodingProfile.AAC_LC, 1.5f,
             AACEncodingProfile.HE_AAC, 0.625f);
 
-    private final static String WAV_EXT = "." + AudioFileFormat.Type.WAVE.getExtension();
-    private final static String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
-    private final static String PREFIX = "benchmark";
+    private static final String WAV_EXT = "." + AudioFileFormat.Type.WAVE.getExtension();
+    private static final String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
+    private static final String PREFIX = "benchmark";
 
-    private final static int DURATION = 500;
-    private final static int FORKS = 3;
-    private final static int ITERATIONS = 12;
-    private final static int WARMUPS = 3;
+    private static final int DURATION = 500;
+    private static final int FORKS = 1;
+    private static final int ITERATIONS = 12;
+    private static final int WARMUPS = 3;
 
-    private final static String INPUT_RESOURCE_NAME = "africa-toto.wav";
+    private static final String INPUT_RESOURCE_NAME = "africa-toto.wav";
 
-    private final static Map<AACEncodingProfile, AudioFileFormat.Type> ENCODING_PROFILES_TO_FILE_TYPES = Map.of(
+    private static final Map<AACEncodingProfile, AudioFileFormat.Type> ENCODING_PROFILES_TO_FILE_TYPES = Map.of(
             AACEncodingProfile.AAC_LC, AACFileTypes.AAC_LC,
             AACEncodingProfile.HE_AAC, AACFileTypes.AAC_HE,
             AACEncodingProfile.HE_AAC_V2, AACFileTypes.AAC_HE_V2);
@@ -46,7 +61,7 @@ public class AACEncodingBenchmark {
     /* This is manually set by each benchmark iteration. @Param annotations are not used
      * in order to allow better visualization via JMH visualizer.
      */
-    private volatile static AACEncodingProfile encodingProfile;
+    private static volatile AACEncodingProfile encodingProfile;
 
     public enum Mode {
         BINARY, JNA
@@ -85,20 +100,23 @@ public class AACEncodingBenchmark {
         byte[] bytes = new byte[inputBytes];
         fullAudioInputStream.read(bytes);
         ByteArrayInputStream bytesInputStream = new ByteArrayInputStream(bytes);
-        AudioInputStream truncatedAudioInputStream = new AudioInputStream(bytesInputStream, fullAudioInputStream.getFormat(), AudioSystem.NOT_SPECIFIED);
+        AudioInputStream truncatedAudioInputStream =
+                new AudioInputStream(bytesInputStream, fullAudioInputStream.getFormat(), AudioSystem.NOT_SPECIFIED);
         File tmpFile = File.createTempFile(PREFIX, WAV_EXT);
         AudioSystem.write(truncatedAudioInputStream, AudioFileFormat.Type.WAVE, tmpFile);
         return tmpFile;
     }
 
     private int bitRate() {
-        return (int) (tmpAudioInputFormat.getChannels() * tmpAudioInputFormat.getSampleRate() * AAC_ENCODING_PROFILE_BITRATE_FACTOR.get(encodingProfile));
+        return (int) (tmpAudioInputFormat.getChannels()
+                * tmpAudioInputFormat.getSampleRate()
+                * AAC_ENCODING_PROFILE_BITRATE_FACTOR.get(encodingProfile));
     }
 
     private String[] composeAACEncCommand() {
         return String.format(AAC_ENC_COMMAND_TEMPLATE,
                 bitRate(),
-                encodingProfile.getAot(),
+                encodingProfile.aot(),
                 tmpAudioInputFile.getAbsolutePath(),
                 audioOutput.getAbsolutePath()
         ).split(StringUtils.SPACE);
@@ -109,18 +127,15 @@ public class AACEncodingBenchmark {
      */
     private void handleEncoding() throws IOException, UnsupportedAudioFileException, InterruptedException {
         switch (mode) {
-            case BINARY: {
-                new ProcessBuilder(composeAACEncCommand())
-                        .inheritIO() // Redirect stdout/err to those of the JVM
-                        .start()
-                        .waitFor();
+            case BINARY:
+                new ProcessBuilder(composeAACEncCommand()).inheritIO().start().waitFor();
                 break;
-            }
-            case JNA: {
+            case JNA:
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(audioInput);
                 AudioSystem.write(audioInputStream, ENCODING_PROFILES_TO_FILE_TYPES.get(encodingProfile), audioOutput);
                 break;
-            }
+            default:
+                throw new IllegalArgumentException(String.format("Unsupported benchmark mode - %s", mode));
         }
     }
 

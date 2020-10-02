@@ -1,16 +1,18 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
 import java.util.List;
 
 /**
- * Maps to USER_PARAM struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * Maps to USER_PARAM struct.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 public class UserParam extends Structure {
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(UserParam.class);
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(UserParam.class);
 
     public int userAOT;
     public int userSamplerate;
@@ -39,7 +41,7 @@ public class UserParam extends Structure {
     public int userSbrRatio;
 
     @Override
-    protected List<String> getFieldOrder() {
+    protected final List<String> getFieldOrder() {
         return FIELD_ORDER;
     }
 }

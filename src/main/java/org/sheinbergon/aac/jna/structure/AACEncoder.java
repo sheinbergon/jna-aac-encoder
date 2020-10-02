@@ -5,26 +5,29 @@ import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.ptr.ShortByReference;
-import org.sheinbergon.aac.jna.util.JNAUtil;
+import org.sheinbergon.aac.jna.util.JNASupport;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 /**
- * Maps to AACENCODER struct in @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * Maps to AACENCODER struct.
+ *
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
-public class AACEncoder extends Structure {
+public final class AACEncoder extends Structure {
 
-    private final static int MAX_TOTAL_EXT_PAYLOADS = 12;
-    private final static int MAX_PAYLOAD_SIZE = 256;
+    private static final int MAX_TOTAL_EXT_PAYLOADS = 12;
+    private static final int MAX_PAYLOAD_SIZE = 256;
 
-    private final static List<String> FIELD_ORDER = JNAUtil.structureFieldOrder(AACEncoder.class);
+    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncoder.class);
 
     // TODO - Protect against null values
-    public static AACEncoder of(PointerByReference pointerReference) {
+    public static AACEncoder of(final PointerByReference pointerReference) {
         return new AACEncoder(pointerReference.getValue());
     }
 
-    private AACEncoder(Pointer pointer) {
+    private AACEncoder(final @Nonnull Pointer pointer) {
         super(pointer);
         setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
         read(); // Read once after initialize from provided pointer
