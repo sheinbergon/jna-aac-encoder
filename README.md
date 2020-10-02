@@ -1,9 +1,11 @@
 # jna-aac-encoder
 
-[![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&logo=apache&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/multi-platform-ci?logo=github&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3Amulti-platform-ci)
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&logo=github&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
-[![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&logo=Apache%20Maven&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
+[![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/multi-platform-ci?style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3Amulti-platform-ci)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
+[![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
+[![Codecov](https://img.shields.io/codecov/c/github/sheinbergon/jna-aac-encoder?style=for-the-badge)](https://codecov.io/gh/sheinbergon/jna-aac-encoder)
+[![Codacy grade](https://img.shields.io/codacy/grade/55e3f43eb0d24f1f93e0a4a66f9f5893?style=for-the-badge)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
 
                                                                                                                                                                                                                                                                                                  
 This library provides AAC encoding capabilities for the JVM. 
@@ -32,29 +34,10 @@ Artifacts are available on maven central:
 ```groovy
 compile 'org.sheinbergon:jna-aac-encoder:0.1.5'
 ```
-For backwards compatibility, a JDK 9 version is also provided (shared library not included):
-
-```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.5:jdk9'
-```
-
-
-#### Notice!!!
-The **_libfdk-aac_** shared library so/dll/dylib file is required to be accessible
-for dynamic loading upon execution. If using the above depdencey, you
-need to make sure the library is installed as part of the runtime OS enviroment
-and made accessible to JNA. See [this](https://github.com/java-native-access/jna/blob/master/www/FrequentlyAskedQuestions.md#calling-nativeloadlibrary-causes-an-unsatisfiedlinkerror) link for additional information
-
-To make things easier, cross-compiled artifacts (containing the shared library) are provided through the use of *_classifiers_* (built for JDK 11):
-
-| Platform         | Gradle dependency                                    |
-|------------------|------------------------------------------------------|
-| Windows (64 bit) | `org.sheinbergon:jna-aac-encoder:0.1.5:win32-x86-64` |
-| Windows (32 bit) | `org.sheinbergon:jna-aac-encoder:0.1.5:win32-x86`    |
-| Linux (64 bit)   | `org.sheinbergon:jna-aac-encoder:0.1.5:linux-x86-64` |
-| OSX 64 (bit)     | `org.sheinbergon:jna-aac-encoder:0.1.5:darwin`       |
 
 #### Additional information
+* Unlike previous releases, there's now a single artifact containing _libfdk-aac_ shared libraries cross-compiled for
+both linux and windows (32-bit and 64-bit)
 * Provided fdk-aac version is 0.1.6
 * Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
  
@@ -99,7 +82,8 @@ Additional restrictions:
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
 ## Roadmap
-* Upgrade to fdk-aac 2.0.0
+* Upgrade to fdk-aac 2.0.x
+* Re-add macos shared library to the build.
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
 * M4A encoding.
