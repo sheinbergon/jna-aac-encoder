@@ -199,7 +199,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            artifactId = "needle-knitter"
+            artifactId = "jna-aac-encoder"
             artifact tasks.javadocJar
             artifact tasks.sourcesJar
             pom {
