@@ -26,20 +26,22 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.5</version>
+    <version>0.1.6</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.5'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.6'
 ```
 
 #### Additional information
-* Unlike previous releases, there's now a single artifact containing _libfdk-aac_ shared libraries cross-compiled for
-both linux and windows (32-bit and 64-bit)
+* Single artifact containing _libfdk-aac_ shared libraries cross-compiled for:
+  * Linux (64-bit) 
+  * Windows (32-bit and 64-bit)
+  * OSX (64-bit, compiled with Xcode 9.4.1 SDK) 
 * Provided fdk-aac version is 0.1.6
-* Both versions 0.1.5 and 0.1.6 were tested and found to comply with this bridge.
+* Both versions 0.1.6 and 0.1.6 were tested and found to comply with this bridge.
  
 ### Encoding using the JVM AudioSystem
 ```java
@@ -83,7 +85,6 @@ Additional restrictions:
 
 ## Roadmap
 * Upgrade to fdk-aac 2.0.x
-* Re-add macos shared library to the build.
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
 * M4A encoding.
