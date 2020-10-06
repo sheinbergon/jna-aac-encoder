@@ -39,7 +39,7 @@ compile 'org.sheinbergon:jna-aac-encoder:0.1.6'
 * Single artifact containing _libfdk-aac_ shared libraries cross-compiled for:
   * Linux (64-bit) 
   * Windows (32-bit and 64-bit)
-  * OSX (64-bit, compiled with Xcode 12 SDK) 
+  * OSX (64-bit, compiled with Xcode 9.4.1 SDK) 
 * Provided fdk-aac version is 0.1.6
 * Both versions 0.1.6 and 0.1.6 were tested and found to comply with this bridge.
  
