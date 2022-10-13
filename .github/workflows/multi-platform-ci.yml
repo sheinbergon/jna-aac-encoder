@@ -1,9 +1,9 @@
-name: multi-platform-ci
+name: Multi Platform CI
 
 on:
   push:
     branches-ignore:
-      - master
+      - main
       - wip*
 jobs:
   ci:
@@ -11,7 +11,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ ubuntu-20.04, windows-2019, macos-10.15 ]
+        os: [ ubuntu-22.04, windows-2022, macos-11 ]
     env:
       OS: ${{ matrix.os }}
     steps:
@@ -20,17 +20,17 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Java JDK 11 setup
-        uses: actions/setup-java@v1.3.0
+        uses: actions/setup-java@v3
         with:
           java-version: 11
-          architecture: x64
+          distribution: "zulu"
 
       - name: Setup Ubuntu OS packages
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libmediainfo0v5
 
       - name: Run tests via gradle
-        run: ./gradlew clean build check test
+        run: ./gradlew clean build check test coveralls
 
       # Publish to the staging repository only once, from the Linux Runner
       - name: Publish to Staging repository
@@ -39,10 +39,4 @@ jobs:
         env:
           NEXUS_TARGET: SNAPSHOT
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
-          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }}
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v1
-        with:
-          env_vars: OS
-          fail_ci_if_error: true
+          NEXUS_PASSWORD: ${{ secrets.NEXUS_PASSWORD }

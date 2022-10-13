@@ -12,18 +12,19 @@ import java.util.List;
  *
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
  */
+@SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 public final class AACEncBufDesc extends Structure {
 
-    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncBufDesc.class);
+  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncBufDesc.class);
 
-    public int numBufs;
-    public PointerByReference bufs;
-    public IntByReference bufferIdentifiers;
-    public IntByReference bufSizes;
-    public IntByReference bufElSizes;
+  public int numBufs;
+  public PointerByReference bufs;
+  public IntByReference bufferIdentifiers;
+  public IntByReference bufSizes;
+  public IntByReference bufElSizes;
 
-    @Override
-    protected List<String> getFieldOrder() {
-        return FIELD_ORDER;
-    }
+  @Override
+  protected List<String> getFieldOrder() {
+    return FIELD_ORDER;
+  }
 }

@@ -11,17 +11,18 @@ import java.util.List;
  *
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
+@SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 public class AACEncExtPayload extends Structure {
 
-    private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncExtPayload.class);
+  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncExtPayload.class);
 
-    public ByteByReference pData;
-    public int dataSize;
-    public int dataType;
-    public int associatedChElement;
+  public ByteByReference pData;
+  public int dataSize;
+  public int dataType;
+  public int associatedChElement;
 
-    @Override
-    protected final List<String> getFieldOrder() {
-        return FIELD_ORDER;
-    }
+  @Override
+  protected final List<String> getFieldOrder() {
+    return FIELD_ORDER;
+  }
 }

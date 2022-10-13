@@ -16,6 +16,6 @@ import lombok.RequiredArgsConstructor;
  */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum WAVAudioFormat {
-    PCM((short) 1);
-    private final short value;
+  PCM((short) 1);
+  private final short value;
 }

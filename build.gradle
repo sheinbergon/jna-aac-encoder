@@ -2,35 +2,32 @@ import org.gradle.internal.os.OperatingSystem
 
 plugins {
     id 'java'
-    id 'maven'
     id 'jacoco'
     id 'signing'
     id 'checkstyle'
     id 'java-library'
     id 'maven-publish'
     id "io.morethan.jmhreport" version "0.9.0"
-    id 'io.codearte.nexus-staging' version '0.22.0'
-    id 'io.franzbecker.gradle-lombok' version '3.3.0'
+    id 'com.github.kt3k.coveralls' version '2.12.0'
+    id "io.github.gradle-nexus.publish-plugin" version "1.1.0"
+    id 'io.franzbecker.gradle-lombok' version '5.0.0'
 }
-
-def ossReleasesRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
-def ossSnapshotsRepositoryUrl = "https://oss.sonatype.org/content/repositories/snapshots"
 
 ext {
     depVersions = [
-            lombok      : '1.18.12',
-            jna         : '5.5.0',
-            commonsLang3: '3.11',
+            lombok      : '1.18.24',
+            jna         : '5.12.1',
+            commonsLang3: '3.12.0',
             jsr305      : '3.0.2'
     ]
     testDepVersions = [
-            junitPlatform: '1.6.2',
-            junit        : '5.6.2',
+            junitPlatform: '1.9.1',
+            junit        : '5.9.1',
             mediaInfo    : '1.0.0.RELEASE'
     ]
     benchmarkDepVersions = [
-            commonsIO: '2.8.0',
-            jmh      : '1.25.2'
+            commonsIO: '2.11.0',
+            jmh      : '1.35'
     ]
     nexus = [
             target  : project.findProperty("nexus.target") ?: System.getenv("NEXUS_TARGET") ?: 'SNAPSHOT',
@@ -43,15 +40,12 @@ ext {
     ]
 }
 
-ext.nexus.url = nexus.target.equals('SNAPSHOT') ? ossSnapshotsRepositoryUrl : ossReleasesRepositoryUrl
-
 group 'org.sheinbergon'
-version '0.1.6'
+version '0.1.7'
 
-sourceCompatibility = 11
+sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
-    jcenter()
     mavenCentral()
 }
 
@@ -80,10 +74,10 @@ dependencies {
     testImplementation "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
 
     // JMH Benchmarking
-    benchmarkCompile project
-    benchmarkCompile "org.openjdk.jmh:jmh-core:${benchmarkDepVersions.jmh}"
+    benchmarkImplementation project
+    benchmarkImplementation "org.openjdk.jmh:jmh-core:${benchmarkDepVersions.jmh}"
     benchmarkAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${benchmarkDepVersions.jmh}"
-    benchmarkCompile "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
+    benchmarkImplementation "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
 }
 
 test {
@@ -109,13 +103,12 @@ test {
 }
 
 jacoco {
-    toolVersion = '0.8.5'
+    toolVersion = '0.8.8'
 }
 
 checkstyle {
-    toolVersion '8.36.1'
+    toolVersion '10.3.4'
     configFile file("$rootDir/checkstyle.xml")
-    configDir rootDir
 }
 
 jacocoTestReport {
@@ -125,6 +118,11 @@ jacocoTestReport {
         csv.enabled false
         html.enabled true
     }
+}
+
+
+coveralls {
+    jacocoReportPath "$buildDir/reports/jacoco/jacocoTestReport/jacocoTestReport.xml"
 }
 
 afterEvaluate {
@@ -246,12 +244,19 @@ publishing {
 }
 
 wrapper {
-    gradleVersion = '6.6.1'
+    gradleVersion = '7.5.1'
 }
 
-nexusStaging {
-    username = nexus.username
-    password = nexus.password
-    numberOfRetries = 50
-    delayBetweenRetriesInMillis = 5000
+nexusPublishing {
+    transitionCheckOptions {
+        maxRetries.set(100)
+        delayBetween.set(Duration.ofSeconds(5))
+    }
+    useStaging = (provider { "${nexus.target}".toString() == "RELEASE" })
+    repositories {
+        sonatype {
+            username = nexus.username
+            password = nexus.password
+        }
+    }
 }

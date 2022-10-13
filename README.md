@@ -4,7 +4,7 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/multi-platform-ci?style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3Amulti-platform-ci)
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
-[![Codecov](https://img.shields.io/codecov/c/github/sheinbergon/jna-aac-encoder?style=for-the-badge)](https://codecov.io/gh/sheinbergon/jna-aac-encoder)
+[![Coveralls](https://img.shields.io/coveralls/github/sheinbergon/jna-aac-encoder?style=for-the-badge)](https://coveralls.io/github/sheinbergon/jna-aac-encoder)
 [![Codacy grade](https://img.shields.io/codacy/grade/55e3f43eb0d24f1f93e0a4a66f9f5893?style=for-the-badge)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
 
                                                                                                                                                                                                                                                                                                  
