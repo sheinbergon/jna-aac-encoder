@@ -35,7 +35,7 @@ jobs:
       # Publish to the staging repository only once, from the Linux Runner
       - name: Publish to Staging repository
         if: runner.os == 'Linux'
-        run: ./gradlew publish
+        run: ./gradlew publishToSonatype
         env:
           NEXUS_TARGET: SNAPSHOT
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
