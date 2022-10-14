@@ -31,9 +31,7 @@ jobs:
 
       - name: Run Tests (Windows)
         if: runner.os == 'Windows'
-        run: |
-          $ErrorView = 'NormalView'
-          ./gradlew clean build check test coveralls
+        run: ./gradlew clean build check test coveralls
         shell: cmd
 
       - name: Run Tests
