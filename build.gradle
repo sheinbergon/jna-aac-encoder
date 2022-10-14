@@ -81,7 +81,6 @@ dependencies {
 }
 
 test {
-    systemProperty "jna.debug_load", "true"
     afterSuite { desc, result ->
         if (!desc.parent) {
             println ""

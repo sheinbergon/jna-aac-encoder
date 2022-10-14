@@ -29,13 +29,7 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libmediainfo0v5
 
-      - name: Run Tests (Windows)
-        if: runner.os == 'Windows'
-        run: ./gradlew clean build check test coveralls
-        shell: cmd
-
       - name: Run Tests
-        if: runner.os != 'Windows'
         run: ./gradlew clean build check test coveralls
 
       # Publish to the staging repository only once, from the Linux Runner
