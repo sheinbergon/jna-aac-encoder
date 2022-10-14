@@ -31,10 +31,12 @@ jobs:
 
       - name: Show Windows STDERR
         if: runner.os == 'Windows'
-        run: |
+        pwsh: |
           $ErrorView = 'NormalView'
+          ./gradlew clean build check test coveralls
 
-      - name: Run tests via gradle
+      - name: Run Tests
+        if: runner.os != 'Windows'
         run: ./gradlew clean build check test coveralls
 
       # Publish to the staging repository only once, from the Linux Runner
