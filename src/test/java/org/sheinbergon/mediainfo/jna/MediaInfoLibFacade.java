@@ -6,6 +6,7 @@ import com.sun.jna.NativeLibrary;
 import com.sun.jna.Platform;
 import com.sun.jna.Pointer;
 import com.sun.jna.WString;
+import lombok.extern.java.Log;
 import lombok.val;
 import org.apache.commons.lang3.StringUtils;
 
@@ -16,25 +17,23 @@ import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 
+@Log
 @SuppressWarnings("MissingJavadocMethod")
 public final class MediaInfoLibFacade implements Closeable {
+
 
   private static final MediaInfoLib.SizeT RESERVED = new MediaInfoLib.SizeT(0);
 
   private static final String ZEN = "zen";
 
   static {
-    // libmediainfo for linux depends on libzen
     if (Platform.isLinux()) {
       try {
-        // We need to load dependencies first, because we know where our native libs are (e.g. Java Web Start Cache).
-        // If we do not, the system will look for dependencies, but only in the library path.
         NativeLibrary.getInstance(ZEN);
       } catch (LinkageError e) {
-        Logger.getLogger(MediaInfoLibFacade.class.getName()).warning("Failed to preload libzen");
+        log.throwing(NativeLibrary.class.getName(), "getInstance", e);
       }
     }
   }
