@@ -117,7 +117,7 @@ jacocoTestReport {
 
 
 coveralls {
-    jacocoReportPath "$buildDir/reports/jacoco/jacocoTestReport.xml"
+    jacocoReportPath "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
 }
 
 afterEvaluate {
