@@ -22,8 +22,7 @@ ext {
     ]
     testDepVersions = [
             junitPlatform: '1.9.1',
-            junit        : '5.9.1',
-            mediaInfo    : '1.0.0.RELEASE'
+            junit        : '5.9.1'
     ]
     benchmarkDepVersions = [
             commonsIO: '2.11.0',
@@ -69,9 +68,6 @@ dependencies {
     testImplementation "org.junit.jupiter:junit-jupiter-api:${testDepVersions.junit}"
     testImplementation "org.junit.jupiter:junit-jupiter-engine:${testDepVersions.junit}"
     testImplementation "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
-
-    // MediaInfo
-    testImplementation "com.abercap:mediainfo-java-api:${testDepVersions.mediaInfo}"
 
     // JMH Benchmarking
     benchmarkImplementation project
