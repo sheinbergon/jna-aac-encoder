@@ -11,42 +11,43 @@ import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
 
+@SuppressWarnings("MethodName")
 public final class FdkAACLib {
 
-    @Getter
-    @Accessors(fluent = true)
-    @RequiredArgsConstructor
-    enum Functions {
-        INFO("aacEncInfo"),
-        SET_PARAM("aacEncoder_SetParam"),
-        OPEN("accEncOpen"),
-        CLOSE("accEncClose"),
-        ENCODE("aacEncEncode");
+  @Getter
+  @Accessors(fluent = true)
+  @RequiredArgsConstructor
+  enum Functions {
+    INFO("aacEncInfo"),
+    SET_PARAM("aacEncoder_SetParam"),
+    OPEN("accEncOpen"),
+    CLOSE("accEncClose"),
+    ENCODE("aacEncEncode");
 
-        private final String libraryFunctionName;
-    }
+    private final String libraryFunctionName;
+  }
 
-    private static final String FDK_AAC = "fdk-aac";
+  private static final String FDK_AAC = "fdk-aac";
 
-    static {
-        Native.register(FDK_AAC);
-    }
+  static {
+    Native.register(FDK_AAC);
+  }
 
-    static native int aacEncOpen(PointerByReference handle, int encModules, int maxChannels);
+  static native int aacEncOpen(PointerByReference handle, int encModules, int maxChannels);
 
-    static native int aacEncClose(PointerByReference handle);
+  static native int aacEncClose(PointerByReference handle);
 
-    static native int aacEncEncode(
-            AACEncoder hAacEncoder,
-            AACEncBufDesc inBufDesc,
-            AACEncBufDesc outBufDesc,
-            AACEncInArgs inargs,
-            AACEncOutArgs outargs);
+  static native int aacEncEncode(
+      AACEncoder hAacEncoder,
+      AACEncBufDesc inBufDesc,
+      AACEncBufDesc outBufDesc,
+      AACEncInArgs inargs,
+      AACEncOutArgs outargs);
 
-    static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
+  static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
 
-    static native int aacEncoder_SetParam(AACEncoder encoder, int param, int value);
+  static native int aacEncoder_SetParam(AACEncoder encoder, int param, int value);
 
-    private FdkAACLib() {
-    }
+  private FdkAACLib() {
+  }
 }
