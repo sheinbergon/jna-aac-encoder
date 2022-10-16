@@ -20,7 +20,7 @@ jobs:
           distribution: "zulu"
 
       - name: Publish To Release Repository
-        run: ./gradlew publish closeAndReleaseRepository
+        run: ./gradlew publishToSonatype
         env:
           NEXUS_TARGET: RELEASE
           NEXUS_USERNAME: ${{ secrets.NEXUS_USERNAME }}
