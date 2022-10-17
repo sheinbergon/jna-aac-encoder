@@ -22,19 +22,19 @@ import java.util.List;
     "MagicNumber",
     "MemberName"
 })
-public final class AACEncoder extends Structure {
+public final class AACEncoderHandle extends Structure {
 
   private static final int MAX_TOTAL_EXT_PAYLOADS = 12;
   private static final int MAX_PAYLOAD_SIZE = 256;
 
-  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncoder.class);
+  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncoderHandle.class);
 
   // TODO - Protect against null values
-  public static AACEncoder of(final PointerByReference pointerReference) {
-    return new AACEncoder(pointerReference.getValue());
+  public static AACEncoderHandle of(final PointerByReference pointerReference) {
+    return new AACEncoderHandle(pointerReference.getValue());
   }
 
-  private AACEncoder(final @Nonnull Pointer pointer) {
+  private AACEncoderHandle(final @Nonnull Pointer pointer) {
     super(pointer);
     setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
     read(); // Read once after initialize from provided pointer

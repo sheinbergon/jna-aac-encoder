@@ -6,8 +6,11 @@ import org.junit.jupiter.api.Test;
 import org.sheinbergon.aac.MediaInfoSupport;
 import org.sheinbergon.aac.TestSupport;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
+import org.sheinbergon.aac.encoder.util.WAVInputException;
+import org.sheinbergon.aac.encoder.util.WAVSupport;
 
 import javax.sound.sampled.AudioFileFormat;
+import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.UnsupportedAudioFileException;
 import java.io.File;
@@ -21,15 +24,25 @@ import java.util.stream.Stream;
 @DisplayName("Java AudioSystem AAC encoding support")
 public final class AACFileWriterTest {
 
+  private static final int VALID_CHANNEL_COUNT = 2;
+  private static final int VALID_SAMPLE_RATE = 44100;
+  private static final int VALID_SAMPLE_SIZE = WAVSupport.SUPPORTED_SAMPLE_SIZE;
+
+  private static final int INVALID_CHANNEL_COUNT = 100;
+  private static final int INVALID_SAMPLE_SIZE = 24;
+
   private static final AudioFileFormat.Type[] NO_FILE_TYPES = new AudioFileFormat.Type[0];
+
   private static final AudioFileFormat.Type[] AAC_FILE_TYPES = new AudioFileFormat.Type[] {
       AACFileTypes.AAC_LC,
       AACFileTypes.AAC_HE,
       AACFileTypes.AAC_HE_V2};
+
   private static final AACEncodingProfile[] AAC_AUDIO_TYPES = new AACEncodingProfile[] {
       AACEncodingProfile.AAC_LC,
       AACEncodingProfile.HE_AAC,
       AACEncodingProfile.HE_AAC_V2};
+
   private final AACFileWriter writer = new AACFileWriter();
 
   @Test
@@ -102,5 +115,82 @@ public final class AACFileWriterTest {
         Files.delete(aac.toPath());
       }
     }
+  }
+
+  @Test
+  @DisplayName("Invalid sample size")
+  public void invalidSampleSize() {
+    Assertions.assertThrows(
+        WAVInputException.class,
+        () -> writer.extractAudioFormat(
+            new AudioInputStream(
+                AudioInputStream.nullInputStream(),
+                new AudioFormat(
+                    VALID_SAMPLE_RATE,
+                    INVALID_SAMPLE_SIZE,
+                    VALID_CHANNEL_COUNT,
+                    true,
+                    true
+                ),
+                0L
+            )));
+  }
+
+  @Test
+  @DisplayName("Invalid channel count")
+  public void invalidChannelCount() {
+    Assertions.assertThrows(
+        WAVInputException.class,
+        () -> writer.extractAudioFormat(
+            new AudioInputStream(
+                AudioInputStream.nullInputStream(),
+                new AudioFormat(
+                    VALID_SAMPLE_RATE,
+                    VALID_SAMPLE_SIZE,
+                    INVALID_CHANNEL_COUNT,
+                    true,
+                    true
+                ),
+                0L
+            )));
+  }
+
+
+  @Test
+  @DisplayName("Invalid WAV format")
+  public void invalidWAVFormat() {
+    Assertions.assertThrows(
+        WAVInputException.class,
+        () -> writer.extractAudioFormat(
+            new AudioInputStream(
+                AudioInputStream.nullInputStream(),
+                new AudioFormat(
+                    VALID_SAMPLE_RATE,
+                    VALID_SAMPLE_SIZE,
+                    VALID_CHANNEL_COUNT,
+                    false,
+                    false
+                ),
+                0L
+            )));
+  }
+
+  @Test
+  @DisplayName("Invalid byte order")
+  public void invalidEndianness() {
+    Assertions.assertThrows(
+        WAVInputException.class,
+        () -> writer.extractAudioFormat(
+            new AudioInputStream(
+                AudioInputStream.nullInputStream(),
+                new AudioFormat(
+                    VALID_SAMPLE_RATE,
+                    VALID_SAMPLE_SIZE,
+                    VALID_CHANNEL_COUNT,
+                    true,
+                    true
+                ),
+                0L
+            )));
   }
 }

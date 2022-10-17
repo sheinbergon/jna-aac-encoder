@@ -9,7 +9,7 @@ import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
 import org.sheinbergon.aac.jna.structure.AACEncInArgs;
 import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
-import org.sheinbergon.aac.jna.structure.AACEncoder;
+import org.sheinbergon.aac.jna.structure.AACEncoderHandle;
 
 @SuppressWarnings("MethodName")
 public final class FdkAACLib {
@@ -38,15 +38,15 @@ public final class FdkAACLib {
   static native int aacEncClose(PointerByReference handle);
 
   static native int aacEncEncode(
-      AACEncoder hAacEncoder,
+      AACEncoderHandle hAacEncoder,
       AACEncBufDesc inBufDesc,
       AACEncBufDesc outBufDesc,
       AACEncInArgs inargs,
       AACEncOutArgs outargs);
 
-  static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
+  static native int aacEncInfo(AACEncoderHandle hAacEncoder, AACEncInfo pInfo);
 
-  static native int aacEncoder_SetParam(AACEncoder encoder, int param, int value);
+  static native int aacEncoder_SetParam(AACEncoderHandle encoder, int param, int value);
 
   private FdkAACLib() {
   }

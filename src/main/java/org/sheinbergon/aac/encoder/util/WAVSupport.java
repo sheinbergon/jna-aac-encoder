@@ -2,7 +2,7 @@ package org.sheinbergon.aac.encoder.util;
 
 import org.apache.commons.lang3.Range;
 
-public final class WAVAudioSupport {
+public final class WAVSupport {
 
   /**
    * The only supported sample size for fdk-aac for wav audio input is 16 bits.
@@ -19,6 +19,6 @@ public final class WAVAudioSupport {
    */
   public static final int EOS = -1;
 
-  private WAVAudioSupport() {
+  private WAVSupport() {
   }
 }

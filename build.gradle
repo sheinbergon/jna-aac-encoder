@@ -40,7 +40,7 @@ ext {
 }
 
 group 'org.sheinbergon'
-version '0.1.7'
+version '0.1.8'
 
 sourceCompatibility = JavaVersion.VERSION_11
 
@@ -77,6 +77,7 @@ dependencies {
 }
 
 test {
+    systemProperty 'jna.debug_load', true
     afterSuite { desc, result ->
         if (!desc.parent) {
             println ""

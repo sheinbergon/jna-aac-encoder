@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 @Getter
 @Accessors(chain = true, fluent = true)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class AACAudioOutput {
+public class AACOutput {
 
   /**
    * Return an {@link Accumulator} instance, used to retain encoded AAC audio bytes across various call to the
@@ -40,8 +40,8 @@ public class AACAudioOutput {
       }
     }
 
-    AACAudioOutput done() {
-      return new AACAudioOutput(data, length);
+    AACOutput done() {
+      return new AACOutput(data, length);
     }
   }
 
