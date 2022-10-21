@@ -122,7 +122,7 @@ public final class AACFileWriterTest {
   public void invalidSampleSize() {
     Assertions.assertThrows(
         WAVInputException.class,
-        () -> writer.extractAudioFormat(
+        () -> writer.audioFormat(
             new AudioInputStream(
                 AudioInputStream.nullInputStream(),
                 new AudioFormat(
@@ -141,7 +141,7 @@ public final class AACFileWriterTest {
   public void invalidChannelCount() {
     Assertions.assertThrows(
         WAVInputException.class,
-        () -> writer.extractAudioFormat(
+        () -> writer.audioFormat(
             new AudioInputStream(
                 AudioInputStream.nullInputStream(),
                 new AudioFormat(
@@ -161,7 +161,7 @@ public final class AACFileWriterTest {
   public void invalidWAVFormat() {
     Assertions.assertThrows(
         WAVInputException.class,
-        () -> writer.extractAudioFormat(
+        () -> writer.audioFormat(
             new AudioInputStream(
                 AudioInputStream.nullInputStream(),
                 new AudioFormat(
@@ -180,7 +180,7 @@ public final class AACFileWriterTest {
   public void invalidEndianness() {
     Assertions.assertThrows(
         WAVInputException.class,
-        () -> writer.extractAudioFormat(
+        () -> writer.audioFormat(
             new AudioInputStream(
                 AudioInputStream.nullInputStream(),
                 new AudioFormat(

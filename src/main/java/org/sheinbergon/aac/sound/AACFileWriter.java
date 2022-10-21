@@ -79,7 +79,6 @@ public final class AACFileWriter extends AudioFileWriter {
     Objects.requireNonNull(stream);
     Objects.requireNonNull(fileType);
     Objects.requireNonNull(out);
-
     if (!isFileTypeSupported(fileType, stream)) {
       throw new IllegalArgumentException("File type " + fileType + " is not supported.");
     }
@@ -94,7 +93,6 @@ public final class AACFileWriter extends AudioFileWriter {
     Objects.requireNonNull(stream);
     Objects.requireNonNull(fileType);
     Objects.requireNonNull(out);
-
     val bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(out), OUTPUT_BUFFER_SIZE);
     try (bufferedOutputStream) {
       return write(stream, fileType, bufferedOutputStream);
@@ -113,7 +111,7 @@ public final class AACFileWriter extends AudioFileWriter {
    * @return the verified {@link AudioFormat}
    * @throws WAVInputException if any of the format restrictions are violated
    */
-  AudioFormat extractAudioFormat(final @Nonnull AudioInputStream input) {
+  AudioFormat audioFormat(final @Nonnull AudioInputStream input) {
     val format = input.getFormat();
     if (format.getSampleSizeInBits() != WAVSupport.SUPPORTED_SAMPLE_SIZE) {
       throw new WAVInputException("sampleSize", String.valueOf(format.getSampleSizeInBits()));
@@ -131,27 +129,27 @@ public final class AACFileWriter extends AudioFileWriter {
       final @Nonnull AudioFileFormat.Type type,
       final @Nonnull OutputStream output) throws IOException {
     boolean concluded = false;
-    int read, encoded = 0;
-    val format = extractAudioFormat(input);
+    int read, written = 0;
+    val format = audioFormat(input);
     try (val encoder = encoder(format, type)) {
       int size = bufferSize(encoder);
       byte[] buffer = new byte[size];
-      AACOutput aac;
+      AACOutput encoded;
       while (!concluded) {
         read = input.read(buffer);
         if (read == WAVSupport.EOS) {
           concluded = true;
-          aac = encoder.conclude();
+          encoded = encoder.conclude();
         } else {
           WAVInput audioInput = WAVInput.wrap(buffer, read);
-          aac = encoder.encode(audioInput);
+          encoded = encoder.encode(audioInput);
         }
-        if (aac.length() > 0) {
-          encoded += aac.length();
-          output.write(aac.data());
+        if (encoded.length() > 0) {
+          written += encoded.length();
+          output.write(encoded.data());
         }
       }
     }
-    return encoded;
+    return written;
   }
 }

@@ -152,7 +152,7 @@ public final class AACEncoder implements AutoCloseable {
    * @return the encoded audio output data
    * @throws AACEncoderException if any unexpected encoding error was encountered
    */
-  public AACOutput encode(final WAVInput input) throws AACEncoderException {
+  public AACOutput encode(final WAVInput input) {
     int read;
     verifyState();
     try {
@@ -178,7 +178,7 @@ public final class AACEncoder implements AutoCloseable {
    * @return the concluded audio output data. No further encoding is expected to take place from here on out.
    * @throws AACEncoderException if any unexpected encoding error was encountered
    */
-  public AACOutput conclude() throws AACEncoderException {
+  public AACOutput conclude() {
     Optional<byte[]> optional;
     verifyState();
     try {

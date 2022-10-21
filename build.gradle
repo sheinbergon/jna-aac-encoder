@@ -57,8 +57,9 @@ dependencies {
     api "net.java.dev.jna:jna:${depVersions.jna}"
 
     // Utility
-    api "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
-    api "com.google.code.findbugs:jsr305:${depVersions.jsr305}"
+    implementation "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
+    implementation "com.google.code.findbugs:jsr305:${depVersions.jsr305}"
+    implementation "commons-io:commons-io:2.11.0"
 
     // Lombok
     compileOnly "org.projectlombok:lombok:${depVersions.lombok}"
