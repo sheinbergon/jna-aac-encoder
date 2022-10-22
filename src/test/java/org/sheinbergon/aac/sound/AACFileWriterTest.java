@@ -38,13 +38,6 @@ public final class AACFileWriterTest {
   }
 
   @Test
-  @DisplayName("Unsupported audio input")
-  public void unsupportedAudioInput() throws UnsupportedAudioFileException, IOException {
-    val input = TestSupport.unsupported24bitWAVAudioInputStream();
-    Assertions.assertArrayEquals(NO_FILE_TYPES, writer.getAudioFileTypes(input));
-  }
-
-  @Test
   @DisplayName("Supported audio input")
   public void supportedAudioInput() throws UnsupportedAudioFileException, IOException {
     val input = TestSupport.supportedWAVAudioInputStream();
@@ -52,7 +45,7 @@ public final class AACFileWriterTest {
   }
 
   @Test
-  @DisplayName("Unsupported audio encoding")
+  @DisplayName("Unsupported audio input")
   public void unsupportedAudioEncoding() throws IOException {
     val aac = TestSupport.tempAACOutputFile();
     Assertions.assertThrows(UnsupportedAudioFileException.class, () -> {
