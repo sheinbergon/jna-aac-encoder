@@ -4,10 +4,11 @@
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/Multi%20Platform%20CI?style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3A"Multi+Platform+CI")
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
-[![Coveralls](https://img.shields.io/coveralls/github/sheinbergon/jna-aac-encoder?style=for-the-badge)](https://coveralls.io/github/sheinbergon/jna-aac-encoder)
-[![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/sheinbergon/jna-aac-encoder?color=432f95&style=for-the-badge)](https://app.snyk.io/org/sheinbergon/project/e56757ea-c9f2-45a1-8544-5083d087faf8)
-[![Codacy grade](https://img.shields.io/codacy/grade/8f822d4bfbfa48809d439d4e8e92d287?style=for-the-badge)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
-                                                                                                                                                                                                                                                                                                 
+[![Coveralls](https://img.shields.io/coveralls/github/sheinbergon/jna-aac-encoder?style=for-the-badge&logo=coveralls)](https://coveralls.io/github/sheinbergon/jna-aac-encoder)
+[![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/sheinbergon/jna-aac-encoder?color=432f95&logo=snyk&style=for-the-badge)](https://app.snyk.io/org/sheinbergon/project/e56757ea-c9f2-45a1-8544-5083d087faf8)
+[![Codacy grade](https://img.shields.io/codacy/grade/8f822d4bfbfa48809d439d4e8e92d287?style=for-the-badge&logo=codacy)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
+[![Liberapay](https://img.shields.io/liberapay/patrons/sheinbergon?logo=liberapay&style=for-the-badge)](https://liberapay.com/sheinbergon/donate)                
+                                                                                                                                                                                                                                                                                 
 This library provides AAC encoding capabilities for the JVM. 
 It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA in order to do so.
 
@@ -15,6 +16,17 @@ It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA i
 **Important!** While this library uses LGPL-3, please see
 the [FDK AAC license](NOTICE) for additional information
 regarding re/distribution and licensing limitations.
+
+## Funding
+Enjoying my work? A show of support would be much obliged :grin:
+
+<a href="https://liberapay.com/sheinbergon/donate">
+<img src="assets/liberapay-donate.svg" width="100" height="100" align="center" style="margin-top: -50px;margin-bottom: -75px;border-radius: 90px;">
+</a>&nbsp;&nbsp;&nbsp;
+<a href="https://www.buymeacoffee.com/sheinbergon">
+<img src="assets/buymeacoffee-donate.svg" width="160" height="160" align="center" style="margin-top: -50px;margin-bottom: -75px; border-radius: 90px;">
+</a>
+
 
 ## Usage
 
@@ -26,13 +38,13 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.7</version>
+    <version>0.1.9</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.7'
+compile 'org.sheinbergon:jna-aac-encoder:0.1.9'
 ```
 
 #### Additional information
@@ -54,7 +66,7 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](benchmark/jmh-results-22102022.png)
+![alt text](assets/jmh-results-22102022.png)
 
 To run the benchmarks locally:
   * Clone this repository onto a Linux host
