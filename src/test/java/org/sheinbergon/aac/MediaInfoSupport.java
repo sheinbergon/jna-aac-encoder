@@ -6,7 +6,8 @@ import org.sheinbergon.mediainfo.jna.MediaInfoLibFacade;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.File;
-import java.util.Set;
+import java.util.Arrays;
+import java.util.HashSet;
 
 @SuppressWarnings("MissingJavadocMethod")
 public final class MediaInfoSupport {
@@ -41,9 +42,10 @@ public final class MediaInfoSupport {
             Float.valueOf(getParam("SamplingRate")).floatValue());
         Assertions.assertEquals(inputFormat.getChannels(), Integer.valueOf(getParam("Channel(s)")).intValue());
         Assertions.assertEquals(AAC_MEDIAINFO_FORMAT, getParam("Format"));
-        Assertions.assertTrue(Set.of(
+        Assertions.assertTrue(new HashSet<>(Arrays.asList(
             getParam("Format_AdditionalFeatures"),
-            getParam("Format_Commercial")).contains(profile.code()));
+            getParam("Format_Commercial")
+        )).contains(profile.code()));
       } else {
         throw new IllegalStateException("Could not open AAC file " + aac + " via the mediainfo shared library");
       }
