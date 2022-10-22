@@ -54,11 +54,11 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](benchmark/jmh-results-23112018.png)
+![alt text](benchmark/jmh-results-22102022.png)
 
 To run the benchmarks locally:
   * Clone this repository onto a Linux host
-  * Ensure that you have `libfdk-aac.so` library installed (either from an external repository or manually compiled)
+  * Ensure that you have `libfdk-aac.so` __0.1.x__ library installed (either from an external repository or manually compiled)
   * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
   * Run the following command (from within the cloned repository)
 ```groovy
