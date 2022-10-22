@@ -103,7 +103,7 @@ jacoco {
 }
 
 checkstyle {
-    toolVersion '10.3.4'
+    toolVersion '9.3'
     configFile file("$rootDir/checkstyle.xml")
 }
 
