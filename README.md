@@ -18,15 +18,14 @@ the [FDK AAC license](NOTICE) for additional information
 regarding re/distribution and licensing limitations.
 
 ## Funding
+
 Enjoying my work? A show of support would be much obliged :grin:
 
 <a href="https://liberapay.com/sheinbergon/donate">
-<img src="assets/liberapay-donate.svg" width="100" height="100" align="center" style="margin-top: -50px;margin-bottom: -75px;border-radius: 90px;">
-</a>&nbsp;&nbsp;&nbsp;
-<a href="https://www.buymeacoffee.com/sheinbergon">
-<img src="assets/buymeacoffee-donate.svg" width="160" height="160" align="center" style="margin-top: -50px;margin-bottom: -75px; border-radius: 90px;">
+<img src="assets/liberapay-donate.png" height="70" align="center">
+</a>&nbsp;&nbsp;<a href="https://www.buymeacoffee.com/sheinbergon">
+<img src="assets/buymeacoffee-donate.png" height="70" align="center">
 </a>
-
 
 ## Usage
 
