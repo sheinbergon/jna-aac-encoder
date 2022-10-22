@@ -17,7 +17,7 @@ It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA i
 the [FDK AAC license](NOTICE) for additional information
 regarding re/distribution and licensing limitations.
 
-## Donations
+## Sponsorship
 
 Enjoying my work? A show of support would be much obliged :grin:
 
