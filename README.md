@@ -17,14 +17,14 @@ It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA i
 the [FDK AAC license](NOTICE) for additional information
 regarding re/distribution and licensing limitations.
 
-## Funding
+## Donations
 
 Enjoying my work? A show of support would be much obliged :grin:
 
 <a href="https://liberapay.com/sheinbergon/donate">
-<img src="assets/liberapay-donate.png" height="70" align="center">
+<img src="assets/liberapay-donate.png" height="66" align="center">
 </a>&nbsp;&nbsp;<a href="https://www.buymeacoffee.com/sheinbergon">
-<img src="assets/buymeacoffee-donate.png" height="70" align="center">
+<img src="assets/buymeacoffee-donate.png" height="66" align="center">
 </a>
 
 ## Usage
