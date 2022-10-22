@@ -40,9 +40,7 @@ ext {
 }
 
 group 'org.sheinbergon'
-version '0.1.7'
-
-sourceCompatibility = JavaVersion.VERSION_11
+version '0.1.9'
 
 repositories {
     mavenCentral()
@@ -76,7 +74,10 @@ dependencies {
     benchmarkImplementation "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
 }
 
+sourceCompatibility = JavaVersion.VERSION_1_8
+
 test {
+
     afterSuite { desc, result ->
         if (!desc.parent) {
             println ""
@@ -102,7 +103,7 @@ jacoco {
 }
 
 checkstyle {
-    toolVersion '10.3.4'
+    toolVersion '9.3'
     configFile file("$rootDir/checkstyle.xml")
 }
 
@@ -150,12 +151,11 @@ task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
         def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
         assert file(aacEncBin).exists()
         assert OperatingSystem.current().isLinux()
-        systemProperties = ['benchmark.aac.enc.bin': aacEncBin]
+        systemProperties = ['benchmark.aac.enc.bin': aacEncBin, 'jna.debug_load': true]
     }
 
     classpath = sourceSets.benchmark.runtimeClasspath
     main = 'org.openjdk.jmh.Main'
-
     def format = project.properties.getOrDefault('format', 'json')
     def resultFile = file("build/reports/benchmark/result.${format}")
     resultFile.parentFile.mkdirs()
