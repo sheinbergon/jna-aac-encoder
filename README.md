@@ -37,23 +37,24 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>0.1.9</version>
+    <version>2.0.0</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:0.1.9'
+compile 'org.sheinbergon:jna-aac-encoder:2.0.0'
 ```
 
 #### Additional information
   * Single artifact containing _libfdk-aac_ shared libraries cross-compiled for:
     * Linux (64-bit) 
-    * Windows (32-bit and 64-bit)
-    * OSX (64-bit, compiled with Xcode 9.4.1 SDK) 
+    * Windows (64-bit)
+    * OSX (Intel 64-bit, compiled with Xcode 9.4.1 SDK) 
 
-  * Provided fdk-aac version is 0.1.6
-  * Both 0.1.5 and 0.1.6 versions were tested and found to comply with this bridge.
+  * Provided fdk-aac version is 2.0.2
+  * Lower `2.0.x` of FDK-AAC might work, but haven't been tested.
+  * For `0.1.6`/`0.1.5` FDK-AAC support and Windows 32 bit support, please use version `0.1.9` of this library  
  
 ### Encoding using the JVM AudioSystem
 ```java
@@ -65,11 +66,11 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Performance
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available using [JMH](http://openjdk.java.net/projects/code-tools/jmh/) and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](assets/jmh-results-22102022.png)
+![alt text](assets/jmh-results-23112023.png)
 
 To run the benchmarks locally:
   * Clone this repository onto a Linux host
-  * Ensure that you have `libfdk-aac.so` __0.1.x__ library installed (either from an external repository or manually compiled)
+  * Ensure that you have `libfdk-aac.so` __2.0.2__ library installed (either from an external repository or manually compiled)
   * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
   * Run the following command (from within the cloned repository)
 ```groovy
@@ -96,7 +97,6 @@ Additional restrictions:
   * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
 
 ## Roadmap
-  * Upgrade to fdk-aac 2.0.x
   * Improved lower-level interface (with examples).
   * Support for 24 bit WAV input (via conversion).
   * M4A encoding.

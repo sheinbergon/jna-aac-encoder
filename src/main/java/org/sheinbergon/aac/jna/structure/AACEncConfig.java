@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Maps to AACENC_CONFIG struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
 public class AACEncConfig extends Structure {
@@ -33,13 +33,14 @@ public class AACEncConfig extends Structure {
   public int maxAncBytesPerAU;
   public int minBitsPerFrame;
   public int maxBitsPerFrame;
-  public int bitreservoir;
   public int audioMuxVersion;
   public int sbrRatio;
   public byte useTns;
   public byte usePns;
   public byte useIS;
+  public byte useMS;
   public byte useRequant;
+  public int downscaleFactor;
 
   @Override
   protected final List<String> getFieldOrder() {

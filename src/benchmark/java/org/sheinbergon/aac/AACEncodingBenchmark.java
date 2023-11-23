@@ -48,12 +48,13 @@ public class AACEncodingBenchmark {
     }
   };
 
-  private static final String WAV_EXT = "." + AudioFileFormat.Type.WAVE.getExtension();
+  private static final AudioFileFormat.Type WAV = AudioFileFormat.Type.WAVE;
+  private static final String WAV_EXT = "." + WAV.getExtension();
   private static final String AAC_EXT = "." + AACFileTypes.AAC_LC.getExtension();
   private static final String PREFIX = "benchmark";
 
   private static final int DURATION = 500;
-  private static final int FORKS = 1;
+  private static final int FORKS = 0;
   private static final int ITERATIONS = 12;
   private static final int WARMUPS = 3;
 
@@ -113,7 +114,7 @@ public class AACEncodingBenchmark {
     AudioInputStream truncatedAudioInputStream =
         new AudioInputStream(bytesInputStream, fullAudioInputStream.getFormat(), AudioSystem.NOT_SPECIFIED);
     File tmpFile = File.createTempFile(PREFIX, WAV_EXT);
-    AudioSystem.write(truncatedAudioInputStream, AudioFileFormat.Type.WAVE, tmpFile);
+    AudioSystem.write(truncatedAudioInputStream, WAV, tmpFile);
     return tmpFile;
   }
 
