@@ -10,6 +10,7 @@ import org.sheinbergon.aac.jna.structure.AACEncInArgs;
 import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
+import org.sheinbergon.aac.jna.structure.LibInfo;
 
 @SuppressWarnings("MethodName")
 public final class FdkAACLib {
@@ -45,6 +46,8 @@ public final class FdkAACLib {
       AACEncOutArgs outargs);
 
   static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
+
+  static native int aacEncGetLibInfo(LibInfo info);
 
   static native int aacEncoder_SetParam(AACEncoder encoder, int param, int value);
 
