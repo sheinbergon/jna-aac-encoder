@@ -115,7 +115,7 @@ public final class CoderConfig extends Structure {
   public byte psPresent;
 
   @Override
-  protected final List<String> getFieldOrder() {
+  protected List<String> getFieldOrder() {
     return FIELD_ORDER;
   }
 }
