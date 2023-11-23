@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Maps to AACENC_EXT_PAYLOAD struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 public class AACEncExtPayload extends Structure {

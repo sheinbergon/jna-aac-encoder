@@ -10,7 +10,7 @@ import java.util.List;
 /**
  * Maps to AACENC_BufDesc struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 public final class AACEncBufDesc extends Structure {

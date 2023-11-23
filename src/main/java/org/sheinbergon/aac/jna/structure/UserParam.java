@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Maps to USER_PARAM struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 public class UserParam extends Structure {
@@ -40,6 +40,7 @@ public class UserParam extends Structure {
   public byte userMetaDataMode;
   public byte userSbrEnabled;
   public int userSbrRatio;
+  public int userDownscaleFactor;
 
   @Override
   protected final List<String> getFieldOrder() {

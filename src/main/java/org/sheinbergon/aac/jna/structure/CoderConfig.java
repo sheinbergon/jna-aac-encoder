@@ -8,12 +8,22 @@ import java.util.List;
 /**
  * Maps to CODER_CONFIG struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
-public class CoderConfig extends Structure {
+public final class CoderConfig extends Structure {
+
+  private static final int RAW_CONFIG_SIZE = 64;
 
   private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(CoderConfig.class);
+
+  /**
+   * AAC Coder Config instantiation, disabling memory allocation alignment.
+   */
+  public CoderConfig() {
+    setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
+    read(); // Read once after initialize from provided pointer
+  }
 
   /**
    * Audio Object Type (AOT).
@@ -28,6 +38,10 @@ public class CoderConfig extends Structure {
    */
   public int channelMode;
   /**
+   * Use channel config zero + pce although a standard channel config could be signaled.
+   */
+  public byte channelConfigZero;
+  /**
    * Sampling rate.
    */
   public int samplingRate;
@@ -35,6 +49,10 @@ public class CoderConfig extends Structure {
    * Extended samplerate (SBR).
    */
   public int extSamplingRate;
+  /**
+   * Downscale sampling rate (ELD downscaled mode).
+   */
+  public int downscaleSamplingRate;
   /**
    * Average bitRate.
    */
@@ -85,6 +103,14 @@ public class CoderConfig extends Structure {
    * 0: implicit signaling, 1: backwards compatible explicit signaling, 2: hierarcical explicit signaling.
    */
   public int sbrSignaling;
+  /**
+   * Raw codec specific config as bit stream.
+   */
+  public byte[] rawConfig = new byte[RAW_CONFIG_SIZE];
+  /**
+   * Size of rawConfig in bits.
+   */
+  public int rawConfigBits;
   public byte sbrPresent;
   public byte psPresent;
 

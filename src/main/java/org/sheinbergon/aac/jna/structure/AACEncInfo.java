@@ -23,7 +23,8 @@ public class AACEncInfo extends Structure {
   public int inBufFillLevel;
   public int inputChannels;
   public int frameLength;
-  public int encoderDelay;
+  public int nDelay;
+  public int nDelayCore;
   public byte[] confBuf = new byte[CONF_BUF_SIZE];
   public int confSize;
 
