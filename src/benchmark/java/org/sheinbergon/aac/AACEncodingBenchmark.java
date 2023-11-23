@@ -54,7 +54,7 @@ public class AACEncodingBenchmark {
   private static final String PREFIX = "benchmark";
 
   private static final int DURATION = 500;
-  private static final int FORKS = 0;
+  private static final int FORKS = 1;
   private static final int ITERATIONS = 12;
   private static final int WARMUPS = 3;
 
