@@ -3,12 +3,14 @@ package org.sheinbergon.aac.jna;
 import com.sun.jna.Memory;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
+import lombok.extern.java.Log;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
 import org.sheinbergon.aac.jna.structure.AACEncInArgs;
 import org.sheinbergon.aac.jna.structure.AACEncInfo;
 import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
+import org.sheinbergon.aac.jna.structure.LibInfo;
 import org.sheinbergon.aac.jna.util.AACEncError;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 import org.sheinbergon.aac.jna.util.FdkAACLibException;
@@ -17,7 +19,15 @@ import org.sheinbergon.aac.jna.util.JNASupport;
 import javax.annotation.Nonnull;
 import java.util.Optional;
 
+@Log
 public final class FdkAACLibFacade {
+
+  static {
+    LibInfo info = new LibInfo();
+    FdkAACLib.aacEncGetLibInfo(info);
+    info.read();
+    log.info(String.format("=== FDK-AAC Library reported version - %s ===", new String(info.versionStr)));
+  }
 
   private static final int IN_BUFFER_COUNT = 1;
   private static final int IN_BUFFER_IDENTIFIER = 0;
