@@ -1,11 +1,10 @@
 # jna-aac-encoder
 
 [![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/sheinbergon/jna-aac-encoder/Multi%20Platform%20CI?style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3A"Multi+Platform+CI")
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sheinbergon/jna-aac-encoder/ossrh-publication.yml?style=for-the-badge&branch=main)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3A"Multi+Platform+CI")
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
 [![Coveralls](https://img.shields.io/coveralls/github/sheinbergon/jna-aac-encoder?style=for-the-badge&logo=coveralls)](https://coveralls.io/github/sheinbergon/jna-aac-encoder)
-[![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/sheinbergon/jna-aac-encoder?color=432f95&logo=snyk&style=for-the-badge)](https://app.snyk.io/org/sheinbergon/project/e56757ea-c9f2-45a1-8544-5083d087faf8)
 [![Codacy grade](https://img.shields.io/codacy/grade/8f822d4bfbfa48809d439d4e8e92d287?style=for-the-badge&logo=codacy)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
 [![Liberapay](https://img.shields.io/liberapay/patrons/sheinbergon?logo=liberapay&style=for-the-badge)](https://liberapay.com/sheinbergon/donate)                
                                                                                                                                                                                                                                                                                  
