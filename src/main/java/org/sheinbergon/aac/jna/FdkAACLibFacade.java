@@ -4,6 +4,7 @@ import com.sun.jna.Memory;
 import com.sun.jna.ptr.IntByReference;
 import com.sun.jna.ptr.PointerByReference;
 import lombok.extern.java.Log;
+import lombok.val;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
 import org.sheinbergon.aac.jna.structure.AACEncInArgs;
@@ -44,8 +45,8 @@ public final class FdkAACLibFacade {
   public static AACEncoder openEncoder(
       final int modules,
       final int maxChannels) {
-    PointerByReference pointerRef = new PointerByReference();
-    AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncOpen(pointerRef, modules, maxChannels));
+    val pointerRef = new PointerByReference();
+    val result = AACEncError.valueOf(FdkAACLib.aacEncOpen(pointerRef, modules, maxChannels));
     verifyResult(result, FdkAACLib.Functions.OPEN);
     return AACEncoder.of(pointerRef);
   }
@@ -56,8 +57,8 @@ public final class FdkAACLibFacade {
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
   public static void closeEncoder(final @Nonnull AACEncoder encoder) {
-    PointerByReference pointerRef = new PointerByReference(encoder.getPointer());
-    AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
+    val pointerRef = new PointerByReference(encoder.getPointer());
+    val result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
     verifyResult(result, FdkAACLib.Functions.CLOSE);
   }
 
@@ -67,7 +68,7 @@ public final class FdkAACLibFacade {
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
   public static void initEncoder(final @Nonnull AACEncoder encoder) {
-    AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, null, null, null, null));
+    val result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, null, null, null, null));
     verifyResult(result, FdkAACLib.Functions.ENCODE);
   }
 
@@ -113,8 +114,8 @@ public final class FdkAACLibFacade {
    * @return the give encoder's information payload
    */
   public static AACEncInfo getEncoderInfo(final @Nonnull AACEncoder encoder) {
-    AACEncInfo info = new AACEncInfo();
-    AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));
+    val info = new AACEncInfo();
+    val result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));
     verifyResult(result, FdkAACLib.Functions.INFO);
     info.read();
     return info;
@@ -132,7 +133,7 @@ public final class FdkAACLibFacade {
       final @Nonnull AACEncoder encoder,
       final @Nonnull AACEncParam param,
       final int value) {
-    AACEncError result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
+    val result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
     verifyResult(result, FdkAACLib.Functions.SET_PARAM);
   }
 
@@ -159,7 +160,7 @@ public final class FdkAACLibFacade {
    * @return an out-buffer descriptor structure
    */
   public static AACEncBufDesc outBufferDescriptor(final @Nonnull Memory buffer) {
-    AACEncBufDesc descriptor = new AACEncBufDesc();
+    val descriptor = new AACEncBufDesc();
     descriptor.numBufs = OUT_BUFFER_COUNT;
     descriptor.bufs = new PointerByReference(buffer);
     descriptor.bufSizes = new IntByReference((int) buffer.size());
@@ -177,7 +178,7 @@ public final class FdkAACLibFacade {
    * @return an in-buffer descriptor structure
    */
   public static AACEncBufDesc inBufferDescriptor(final @Nonnull Memory buffer) {
-    AACEncBufDesc descriptor = new AACEncBufDesc();
+    val descriptor = new AACEncBufDesc();
     descriptor.numBufs = IN_BUFFER_COUNT;
     descriptor.bufs = new PointerByReference(buffer);
     descriptor.bufSizes = new IntByReference((int) buffer.size());

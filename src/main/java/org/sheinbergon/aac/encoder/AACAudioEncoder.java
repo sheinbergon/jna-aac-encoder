@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
+import lombok.val;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
@@ -145,10 +146,10 @@ public final class AACAudioEncoder implements AutoCloseable {
       } else if (profile == AACEncodingProfile.HE_AAC_V2 && channels != PARAMETRIC_STEREO_CHANNEL_COUNT) {
         throw new AACAudioEncoderException("HE-AACv2 only supports 2 channels (stereo) mode");
       } else {
-        AACEncoder encoder = FdkAACLibFacade.openEncoder(ENCODER_MODULES_MASK, MAX_ENCODER_CHANNELS);
+        val encoder = FdkAACLibFacade.openEncoder(ENCODER_MODULES_MASK, MAX_ENCODER_CHANNELS);
         setEncoderParams(encoder);
         FdkAACLibFacade.initEncoder(encoder);
-        AACEncInfo info = FdkAACLibFacade.getEncoderInfo(encoder);
+        val info = FdkAACLibFacade.getEncoderInfo(encoder);
         return new AACAudioEncoder(encoder, info);
       }
     }
@@ -165,12 +166,12 @@ public final class AACAudioEncoder implements AutoCloseable {
     int read;
     verifyState();
     try {
-      AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
-      ByteArrayInputStream inputStream = new ByteArrayInputStream(input.data());
-      byte[] buffer = new byte[inputBufferSize()];
+      val accumulator = AACAudioOutput.accumulator();
+      val inputStream = new ByteArrayInputStream(input.data());
+      val buffer = new byte[inputBufferSize()];
       while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
         populateInputBuffer(buffer, read);
-        byte[] encoded = FdkAACLibFacade
+        val encoded = FdkAACLibFacade
             .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
             .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
         accumulator.accumulate(encoded);
@@ -192,7 +193,7 @@ public final class AACAudioEncoder implements AutoCloseable {
     verifyState();
     try {
       inBufferDescriptor.clear();
-      AACAudioOutput.Accumulator accumulator = AACAudioOutput.accumulator();
+      val accumulator = AACAudioOutput.accumulator();
       while ((optional = FdkAACLibFacade
           .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, WAVAudioSupport.EOS))
           .isPresent()) {
