@@ -36,13 +36,13 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>2.0.0</version>
+    <version>2.1.0</version>
 </dependency>
 ```
 
 **_Gradle_**
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:2.0.0'
+compile 'org.sheinbergon:jna-aac-encoder:2.1.0'
 ```
 
 #### Additional information
@@ -51,7 +51,8 @@ compile 'org.sheinbergon:jna-aac-encoder:2.0.0'
     * Windows (64-bit)
     * OSX (Intel 64-bit / Apple Silicon, compiled with Xcode 13.3 SDK)
   * Tested with FDK-AAC version is 2.0.2
-  * Lower `2.0.x` versions of FDK-AAC might work, but haven't been tested.
+  * Earlier `2.0.x` versions of FDK-AAC might work, but haven't been tested.
+  * For JDK 8 compatibility, please use version `2.0.0` of this library
   * For `0.1.6`/`0.1.5` FDK-AAC support and Windows 32 bit support, please use version `0.1.9` of this library  
  
 ### Encoding using the JVM AudioSystem
@@ -92,7 +93,7 @@ the encoding process to fail.
 
 Additional restrictions:
   * A maximum of 6 audio input/output channels
-  * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported  
+  * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported
 
 ## Roadmap
   * Improved lower-level interface (with examples).
