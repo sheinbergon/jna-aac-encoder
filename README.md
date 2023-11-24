@@ -51,7 +51,7 @@ compile 'org.sheinbergon:jna-aac-encoder:2.0.0'
     * Linux (64-bit) 
     * Windows (64-bit)
     * OSX (Intel 64-bit / Apple Silicon, compiled with Xcode 13.3 SDK)
-  * Provided fdk-aac version is 2.0.2
+  * Tested with FDK-AAC version is 2.0.2
   * Lower `2.0.x` versions of FDK-AAC might work, but haven't been tested.
   * For `0.1.6`/`0.1.5` FDK-AAC support and Windows 32 bit support, please use version `0.1.9` of this library  
  
