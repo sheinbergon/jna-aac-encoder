@@ -78,7 +78,7 @@ sourceCompatibility = JavaVersion.VERSION_1_8
 
 test {
 
-    systemProperties = ['jna.debug_load': true]
+    systemProperties = ['jna.debug_load': false]
     afterSuite { desc, result ->
         if (!desc.parent) {
             println ""
