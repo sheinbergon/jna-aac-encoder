@@ -16,7 +16,7 @@ plugins {
 ext {
     depVersions = [
             lombok      : '1.18.30',
-            jna         : '5.12.1',
+            jna         : '5.13.0',
             commonsLang3: '3.14.0',
             jsr305      : '3.0.2'
     ]
@@ -40,7 +40,7 @@ ext {
 }
 
 group 'org.sheinbergon'
-version '2.0.0'
+version '2.1.0'
 
 repositories {
     mavenCentral()
@@ -74,7 +74,7 @@ dependencies {
     benchmarkImplementation "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
 }
 
-sourceCompatibility = JavaVersion.VERSION_1_8
+sourceCompatibility = JavaVersion.VERSION_11
 
 test {
 
@@ -105,7 +105,7 @@ jacoco {
 }
 
 checkstyle {
-    toolVersion '9.3'
+    toolVersion '10.12.5'
     configFile file("$rootDir/checkstyle.xml")
 }
 

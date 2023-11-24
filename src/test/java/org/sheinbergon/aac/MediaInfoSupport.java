@@ -6,8 +6,7 @@ import org.sheinbergon.mediainfo.jna.MediaInfoLibFacade;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.File;
-import java.util.Arrays;
-import java.util.HashSet;
+import java.util.Set;
 
 @SuppressWarnings("MissingJavadocMethod")
 public final class MediaInfoSupport {
@@ -35,19 +34,19 @@ public final class MediaInfoSupport {
       final AACEncodingProfile profile) {
     boolean opened = false;
     try {
-      if (opened = MEDIA_INFO.open(aac)) {
+      if (!(opened = MEDIA_INFO.open(aac))) {
+        throw new IllegalStateException("Could not open AAC file " + aac + " via the mediainfo shared library");
+      } else {
         Assertions
             .assertEquals(EXPECTED_AUDIO_STREAMS_COUNT, MEDIA_INFO.streamCount(MediaInfoLibFacade.StreamKind.Audio));
         Assertions.assertEquals(inputFormat.getSampleRate(),
             Float.valueOf(getParam("SamplingRate")).floatValue());
         Assertions.assertEquals(inputFormat.getChannels(), Integer.valueOf(getParam("Channel(s)")).intValue());
         Assertions.assertEquals(AAC_MEDIAINFO_FORMAT, getParam("Format"));
-        Assertions.assertTrue(new HashSet<>(Arrays.asList(
+        Assertions.assertTrue(Set.of(
             getParam("Format_AdditionalFeatures"),
             getParam("Format_Commercial")
-        )).contains(profile.code()));
-      } else {
-        throw new IllegalStateException("Could not open AAC file " + aac + " via the mediainfo shared library");
+        ).contains(profile.code()));
       }
     } finally {
       if (opened) {

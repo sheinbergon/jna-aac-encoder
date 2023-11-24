@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
@@ -41,12 +40,10 @@ public class AACEncodingBenchmark {
   private static final String AAC_ENC_COMMAND_TEMPLATE = AAC_ENC_BIN + " -r %d -t %d -a 1 %s %s";
 
   @SuppressWarnings("MagicNumber")
-  private static final Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = new HashMap<AACEncodingProfile, Float>() {
-    {
-      put(AACEncodingProfile.AAC_LC, 1.5f);
-      put(AACEncodingProfile.HE_AAC, 0.625f);
-    }
-  };
+  private static final Map<AACEncodingProfile, Float> AAC_ENCODING_PROFILE_BITRATE_FACTOR = Map.of(
+      AACEncodingProfile.AAC_LC, 1.5f,
+      AACEncodingProfile.HE_AAC, 0.625f
+  );
 
   private static final AudioFileFormat.Type WAV = AudioFileFormat.Type.WAVE;
   private static final String WAV_EXT = "." + WAV.getExtension();
@@ -60,14 +57,11 @@ public class AACEncodingBenchmark {
 
   private static final String INPUT_RESOURCE_NAME = "africa-toto.wav";
 
-  private static final Map<AACEncodingProfile, AudioFileFormat.Type> ENCODING_PROFILES_TO_FILE_TYPES =
-      new HashMap<AACEncodingProfile, AudioFileFormat.Type>() {
-        {
-          put(AACEncodingProfile.AAC_LC, AACFileTypes.AAC_LC);
-          put(AACEncodingProfile.HE_AAC, AACFileTypes.AAC_HE);
-          put(AACEncodingProfile.HE_AAC_V2, AACFileTypes.AAC_HE_V2);
-        }
-      };
+  private static final Map<AACEncodingProfile, AudioFileFormat.Type> ENCODING_PROFILES_TO_FILE_TYPES = Map.of(
+      AACEncodingProfile.AAC_LC, AACFileTypes.AAC_LC,
+      AACEncodingProfile.HE_AAC, AACFileTypes.AAC_HE,
+      AACEncodingProfile.HE_AAC_V2, AACFileTypes.AAC_HE_V2
+  );
 
   /* This is manually set by each benchmark iteration. @Param annotations are not used
    * in order to allow better visualization via JMH visualizer.

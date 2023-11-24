@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
@@ -29,14 +28,11 @@ public final class AACFileWriter extends AudioFileWriter {
 
   private static final int INPUT_BUFFER_MULTIPLIER = 16;
 
-  private static final Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES =
-      new HashMap<AudioFileFormat.Type, AACEncodingProfile>() {
-        {
-          put(AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC);
-          put(AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC);
-          put(AACFileTypes.AAC_HE_V2, AACEncodingProfile.HE_AAC_V2);
-        }
-      };
+  private static final Map<AudioFileFormat.Type, AACEncodingProfile> FILE_TYPES_TO_ENCODING_PROFILES = Map.of(
+      AACFileTypes.AAC_LC, AACEncodingProfile.AAC_LC,
+      AACFileTypes.AAC_HE, AACEncodingProfile.HE_AAC,
+      AACFileTypes.AAC_HE_V2, AACEncodingProfile.HE_AAC_V2
+  );
 
   @Override
   public AudioFileFormat.Type[] getAudioFileTypes() {
