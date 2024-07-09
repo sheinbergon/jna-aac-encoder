@@ -47,7 +47,7 @@ public final class FdkAACLibFacade {
       final int maxChannels) {
     val pointerRef = new PointerByReference();
     val result = AACEncError.valueOf(FdkAACLib.aacEncOpen(pointerRef, modules, maxChannels));
-    verifyResult(result, FdkAACLib.Functions.OPEN);
+    verifyResult(result, FdkAACLib.Functions.ENCODER_OPEN);
     return AACEncoder.of(pointerRef);
   }
 
@@ -59,7 +59,7 @@ public final class FdkAACLibFacade {
   public static void closeEncoder(final @Nonnull AACEncoder encoder) {
     val pointerRef = new PointerByReference(encoder.getPointer());
     val result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
-    verifyResult(result, FdkAACLib.Functions.CLOSE);
+    verifyResult(result, FdkAACLib.Functions.ENCODER_CLOSE);
   }
 
   /**
@@ -69,7 +69,7 @@ public final class FdkAACLibFacade {
    */
   public static void initEncoder(final @Nonnull AACEncoder encoder) {
     val result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, null, null, null, null));
-    verifyResult(result, FdkAACLib.Functions.ENCODE);
+    verifyResult(result, FdkAACLib.Functions.ENCODER_ENCODE);
   }
 
   /**
@@ -101,7 +101,7 @@ public final class FdkAACLibFacade {
         .filter(result -> result != AACEncError.AACENC_ENCODE_EOF)
         .map(result -> {
           outArgs.readField("numOutBytes");
-          verifyResult(result, FdkAACLib.Functions.ENCODE);
+          verifyResult(result, FdkAACLib.Functions.ENCODER_ENCODE);
           return outBufferDescriptor.bufs
               .getValue().getByteArray(0, outArgs.numOutBytes);
         });
@@ -116,7 +116,7 @@ public final class FdkAACLibFacade {
   public static AACEncInfo getEncoderInfo(final @Nonnull AACEncoder encoder) {
     val info = new AACEncInfo();
     val result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));
-    verifyResult(result, FdkAACLib.Functions.INFO);
+    verifyResult(result, FdkAACLib.Functions.ENCODER_INFO);
     info.read();
     return info;
   }
@@ -134,7 +134,7 @@ public final class FdkAACLibFacade {
       final @Nonnull AACEncParam param,
       final int value) {
     val result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
-    verifyResult(result, FdkAACLib.Functions.SET_PARAM);
+    verifyResult(result, FdkAACLib.Functions.ENCODER_SET_PARAM);
   }
 
   /**
