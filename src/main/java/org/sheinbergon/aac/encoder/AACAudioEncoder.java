@@ -34,6 +34,7 @@ public final class AACAudioEncoder implements AutoCloseable {
 
   @SuppressWarnings("MagicNumber")
   private static final Set<Integer> SAMPLE_RATES = Set.of(
+      8000,
       16000,
       22050,
       24000,
