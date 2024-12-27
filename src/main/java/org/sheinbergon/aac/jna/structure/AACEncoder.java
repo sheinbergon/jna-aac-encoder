@@ -5,10 +5,8 @@ import com.sun.jna.Structure;
 import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.ptr.ShortByReference;
-import org.sheinbergon.aac.jna.util.JNASupport;
 
 import javax.annotation.Nonnull;
-import java.util.List;
 
 /**
    * Maps to AACENCODER struct.
@@ -22,11 +20,15 @@ import java.util.List;
     "MagicNumber",
     "MemberName"
 })
+@Structure.FieldOrder({"extParam", "coderConfig", "aacConfig", "hAacEnc", "hEnvEnc",
+    "hMetadataEnc", "metaDataAllowed", "hMpsEnc", "hTpEnc", "inputBuffer",
+    "outBuffer", "inputBufferSize", "inputBufferSizePerChannel", "outBufferInBytes", "inputBufferOffset",
+    "nSamplesToRead", "nSamplesRead", "nZerosAppended", "nDelay", "nDelayCore",
+    "extPayload", "InitFlags", "nMaxAacElements", "nMaxAacChannels", "nMaxSbrElements",
+    "nMaxSbrChannels", "encoder_modis", "CAPF_tpEnc"})
 public final class AACEncoder extends Structure {
 
   private static final int MAX_TOTAL_EXT_PAYLOADS = 12;
-
-  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncoder.class);
 
   // TODO - Protect against null values
   public static AACEncoder of(final PointerByReference pointerReference) {
@@ -73,9 +75,4 @@ public final class AACEncoder extends Structure {
   public int nMaxSbrChannels;
   public int encoder_modis;
   public int CAPF_tpEnc;
-
-  @Override
-  protected List<String> getFieldOrder() {
-    return FIELD_ORDER;
-  }
 }
