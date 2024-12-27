@@ -1,9 +1,6 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import org.sheinbergon.aac.jna.util.JNASupport;
-
-import java.util.List;
 
 /**
  * Maps to CODER_CONFIG struct.
@@ -11,11 +8,14 @@ import java.util.List;
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
+@Structure.FieldOrder({"aot", "extAOT", "channelMode", "channelConfigZero", "samplingRate",
+    "extSamplingRate", "downscaleSamplingRate", "bitRate", "samplesPerFrame", "noChannels",
+    "bitsFrame", "nSubFrames", "BSACnumOfSubFrame", "BSAClayerLength", "flags",
+    "matrixMixdownA", "headerPeriod", "stereoConfigIndex", "sbrMode", "sbrSignaling",
+    "rawConfig", "rawConfigBits", "sbrPresent", "psPresent"})
 public final class CoderConfig extends Structure {
 
   private static final int RAW_CONFIG_SIZE = 64;
-
-  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(CoderConfig.class);
 
   /**
    * AAC Coder Config instantiation, disabling memory allocation alignment.
@@ -113,9 +113,4 @@ public final class CoderConfig extends Structure {
   public int rawConfigBits;
   public byte sbrPresent;
   public byte psPresent;
-
-  @Override
-  protected List<String> getFieldOrder() {
-    return FIELD_ORDER;
-  }
 }

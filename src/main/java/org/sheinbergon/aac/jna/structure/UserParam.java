@@ -1,9 +1,6 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import org.sheinbergon.aac.jna.util.JNASupport;
-
-import java.util.List;
 
 /**
  * Maps to USER_PARAM struct.
@@ -11,9 +8,13 @@ import java.util.List;
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
+@Structure.FieldOrder({"userAOT", "userSamplerate", "nChannels", "userChannelMode", "userBitrate",
+    "userBitrateMode", "userBandwidth", "userAfterburner", "userFramelength", "userAncDataRate",
+    "userPeakBitrate", "userTns", "userPns", "userIntensity", "userTpType",
+    "userTpSignaling", "userTpNsubFrames", "userTpAmxv", "userTpProtection", "userTpHeaderPeriod",
+    "userErTools", "userPceAdditions", "userMetaDataMode", "userSbrEnabled", "userSbrRatio",
+    "userDownscaleFactor"})
 public class UserParam extends Structure {
-
-  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(UserParam.class);
 
   public int userAOT;
   public int userSamplerate;
@@ -41,9 +42,4 @@ public class UserParam extends Structure {
   public byte userSbrEnabled;
   public int userSbrRatio;
   public int userDownscaleFactor;
-
-  @Override
-  protected final List<String> getFieldOrder() {
-    return FIELD_ORDER;
-  }
 }

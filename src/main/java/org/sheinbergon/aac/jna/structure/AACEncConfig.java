@@ -1,9 +1,6 @@
 package org.sheinbergon.aac.jna.structure;
 
 import com.sun.jna.Structure;
-import org.sheinbergon.aac.jna.util.JNASupport;
-
-import java.util.List;
 
 /**
  * Maps to AACENC_CONFIG struct.
@@ -11,9 +8,13 @@ import java.util.List;
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
+@Structure.FieldOrder({"sampleRate", "bitRate", "ancDataBitRate", "nSubFrames", "audioObjectType",
+    "averageBits", "bitrateMode", "nChannels", "channelOrder", "bandWidth",
+    "channelMode", "framelength", "syntaxFlags", "epConfig", "anc_Rate",
+    "maxAncBytesPerAU", "minBitsPerFrame", "maxBitsPerFrame", "audioMuxVersion", "sbrRatio",
+    "useTns", "usePns", "useIS", "useMS", "useRequant",
+    "downscaleFactor"})
 public class AACEncConfig extends Structure {
-
-  private static final List<String> FIELD_ORDER = JNASupport.structureFieldOrder(AACEncConfig.class);
 
   public int sampleRate;
   public int bitRate;
@@ -41,9 +42,4 @@ public class AACEncConfig extends Structure {
   public byte useMS;
   public byte useRequant;
   public int downscaleFactor;
-
-  @Override
-  protected final List<String> getFieldOrder() {
-    return FIELD_ORDER;
-  }
 }
