@@ -14,7 +14,7 @@ import java.util.stream.Stream;
  */
 @Getter
 @RequiredArgsConstructor
-public enum AACEncError {
+public enum AACEncError implements AACError {
 
   AACENC_UNKNOWN(-0x0001),
   AACENC_OK(0x0000),
@@ -27,6 +27,9 @@ public enum AACEncError {
   AACENC_INIT_SBR_ERROR(0x0042),
   AACENC_INIT_TP_ERROR(0x0043),
   AACENC_INIT_META_ERROR(0x0044),
+  /** MPS library initialization error. */
+  AACENC_INIT_MPS_ERROR(0x0045),
+  /** The encoding process was interrupted by an unexpected error. */
   AACENC_ENCODE_ERROR(0x0060),
   AACENC_ENCODE_EOF(0x0080);
 
