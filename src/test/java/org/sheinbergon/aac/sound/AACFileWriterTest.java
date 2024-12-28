@@ -61,8 +61,8 @@ public final class AACFileWriterTest {
 
   @Test
   @DisplayName("Supported audio types encoding (LC/HE-AAC/HE-AACv2)")
-  public void supportedAudioOutputStreamEncoding() {
-    Assertions.assertAll(Stream.of(AAC_FILE_TYPES).map(audioType -> () -> {
+  public void supportedAudioOutputStreamEncoding() throws IOException, UnsupportedAudioFileException {
+    for (var audioType : AAC_FILE_TYPES) {
       val aac = TestSupport.tempAACOutputFile();
       try (val input = TestSupport.supportedWAVAudioInputStream();
            val output = new FileOutputStream(aac)) {
@@ -75,7 +75,7 @@ public final class AACFileWriterTest {
           Files.delete(aac.toPath());
         }
       }
-    }));
+    };
   }
 
   @Test

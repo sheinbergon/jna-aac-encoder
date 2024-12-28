@@ -176,7 +176,7 @@ public final class FdkAACLibFacade {
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_SETPARAM);
   }
   
-  public static @Nonnull CStreamInfo decoderStreamInfo(@Nonnull AACDecoderHandle self) {
+  public static @Nonnull CStreamInfo getDecoderInfo(@Nonnull AACDecoderHandle self) {
     var result = aacDecoder_GetStreamInfo(self);
     if (result == null || result.equals(Pointer.NULL))
       throw new FdkAACLibException(AACDecoderError.AAC_DEC_UNKNOWN, FdkAACLib.Functions.DECODER_STREAMINFO.libraryFunctionName());
@@ -221,7 +221,8 @@ public final class FdkAACLibFacade {
   }
   
   /**
-   * Decode one audio frame
+   * Decode one audio frame, if enough data to do so is available.
+   * If there is not enough coded data, returns without modifying the buffer's position.
    *
    * @param self        AAC decoder handle
    * @param buffer      output buffer where the decoded PCM samples will be written
@@ -232,21 +233,24 @@ public final class FdkAACLibFacade {
    *                <li> AACDEC_INTR: Input data is discontinuous. Resynchronize any internals as necessary.
    *                <li> AACDEC_CLRHIS: Clear all signal delay lines and history buffers.
    * </ul>
-   * @throws FdkAACLibException if frame cannot be decoded
+   * @return bytes decoded (frameSize x numChannels x 2), or 0 if none
+   * @throws FdkAACLibException if frame cannot be decoded for reasons other than not enough input data
    */
-  public static void decoderDecodeFrame(@Nonnull AACDecoderHandle self, @Nonnull ByteBuffer buffer, @Nonnull AACDecodeFrameFlag... flags) throws FdkAACLibException {
+  public static int decoderDecodeFrame(@Nonnull AACDecoderHandle self, @Nonnull ByteBuffer buffer, @Nonnull AACDecodeFrameFlag... flags) throws FdkAACLibException {
     int flagsInt = 0;
     for (var flag : flags)
         flagsInt |= flag.getValue();
     int result = aacDecoder_DecodeFrame(self, buffer, buffer.remaining() / IN_SAMPLES_DIVISOR, flagsInt);
     if (result == AACDecoderError.AAC_DEC_NOT_ENOUGH_BITS.getValue())
-        return;
+        return 0;
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_DECODEFRAME);
     // Setting the buffer position is tricky.
     // Stream info must be called after decode.
     // However, perhaps flags and params can affect it? Not sure. But I see downmixing is reflected correctly.
-    var info = decoderStreamInfo(self);
-    buffer.position(buffer.position() + info.frameSize * info.numChannels * IN_SAMPLES_DIVISOR);
+    var info = getDecoderInfo(self);
+    var size = info.frameSize * info.numChannels * IN_SAMPLES_DIVISOR;
+    buffer.position(buffer.position() + size);
+    return size;
   }
 
   /**
