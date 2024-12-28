@@ -19,7 +19,7 @@ public final class FdkAACLibFacadeTest {
   @DisplayName("Invalid call result verification")
   public void invalidLibCallResultVerification() {
     // Passing a null encoder instance triggers an invalid return code;
-    Assertions.assertThrows(FdkAACLibException.class, () ->
+    Assertions.assertThrows(NullPointerException.class, () ->
         FdkAACLibFacade.encode(null,
             new AACEncBufDesc(),
             new AACEncBufDesc(),

@@ -56,6 +56,7 @@ public final class FdkAACLibFacade {
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
   public static void closeEncoder(final @Nonnull AACEncoder encoder) {
+    if (encoder == null) throw new NullPointerException("encoder is null");
     val pointerRef = new PointerByReference(encoder.getPointer());
     val result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
     verifyResult(result, FdkAACLib.Functions.ENCODER_CLOSE);
@@ -67,6 +68,7 @@ public final class FdkAACLibFacade {
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
   public static void initEncoder(final @Nonnull AACEncoder encoder) {
+    if (encoder == null) throw new NullPointerException("encoder is null");
     val result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, null, null, null, null));
     verifyResult(result, FdkAACLib.Functions.ENCODER_ENCODE);
   }
@@ -92,6 +94,7 @@ public final class FdkAACLibFacade {
       final @Nonnull AACEncInArgs inArgs,
       final @Nonnull AACEncOutArgs outArgs,
       final int size) {
+    if (encoder == null) throw new NullPointerException("encoder is null");
     JNASupport.clearStructureMemory(inArgs, outArgs);
     inArgs.numInSamples = (size == WAVAudioSupport.EOS) ? size : size / IN_SAMPLES_DIVISOR;
     inArgs.writeField("numInSamples");
@@ -113,6 +116,7 @@ public final class FdkAACLibFacade {
    * @return the give encoder's information payload
    */
   public static AACEncInfo getEncoderInfo(final @Nonnull AACEncoder encoder) {
+    if (encoder == null) throw new NullPointerException("encoder is null");
     val info = new AACEncInfo();
     val result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));
     verifyResult(result, FdkAACLib.Functions.ENCODER_INFO);
@@ -132,6 +136,7 @@ public final class FdkAACLibFacade {
       final @Nonnull AACEncoder encoder,
       final @Nonnull AACEncParam param,
       final int value) {
+    if (encoder == null) throw new NullPointerException("encoder is null");
     val result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
     verifyResult(result, FdkAACLib.Functions.ENCODER_SET_PARAM);
   }
@@ -160,6 +165,7 @@ public final class FdkAACLibFacade {
    * @param decoder an {@link AACDecoderHandle} instance, previously returned by {@link #openDecoder}
    */
   public static void closeDecoder(final @Nonnull AACDecoderHandle decoder) {
+    if (decoder == null) throw new NullPointerException("decoder is null");
     FdkAACLib.aacDecoder_Close(decoder);
   }
   
@@ -172,11 +178,13 @@ public final class FdkAACLibFacade {
    * @throws FdkAACLibException if parameter cannot be set
    */
   public static void setDecoderParam(@Nonnull AACDecoderHandle decoder, @Nonnull AACDecParam param, int value) throws FdkAACLibException {
+    if (decoder == null) throw new NullPointerException("decoder is null");
     int result = FdkAACLib.aacDecoder_SetParam(decoder, param.getValue(), value);
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_SETPARAM);
   }
   
   public static @Nonnull CStreamInfo getDecoderInfo(@Nonnull AACDecoderHandle decoder) {
+    if (decoder == null) throw new NullPointerException("decoder is null");
     var result = aacDecoder_GetStreamInfo(decoder);
     if (result == null || result.equals(Pointer.NULL))
       throw new FdkAACLibException(AACDecoderError.AAC_DEC_UNKNOWN, FdkAACLib.Functions.DECODER_STREAMINFO.libraryFunctionName());
@@ -199,6 +207,7 @@ public final class FdkAACLibFacade {
    * @throws FdkAACLibException if decoder's internal buffer cannot be filled
    */
   public static void decoderFill(@Nonnull AACDecoderHandle decoder, @Nonnull ByteBuffer buffer) throws FdkAACLibException {
+    if (decoder == null) throw new NullPointerException("decoder is null");
     var size = buffer.remaining();
     int result;
     if (buffer.isDirect()) {
@@ -237,6 +246,7 @@ public final class FdkAACLibFacade {
    * @throws FdkAACLibException if frame cannot be decoded for reasons other than not enough input data
    */
   public static int decoderDecodeFrame(@Nonnull AACDecoderHandle decoder, @Nonnull ByteBuffer buffer, @Nonnull AACDecodeFrameFlag... flags) throws FdkAACLibException {
+    if (decoder == null) throw new NullPointerException("decoder is null");
     int flagsInt = 0;
     for (var flag : flags)
         flagsInt |= flag.getValue();
