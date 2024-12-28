@@ -149,9 +149,9 @@ public final class FdkAACLibFacade {
     var result = FdkAACLib.aacDecoder_Open(transportType.getValue(), numberOfTransportLayers);
     if (result == null || result.equals(Pointer.NULL))
       throw new FdkAACLibException(AACDecoderError.AAC_DEC_UNKNOWN, FdkAACLib.Functions.DECODER_OPEN.libraryFunctionName());
-    var self = new AACDecoderHandle();
-    self.setPointer(result);
-    return self;
+    var decoder = new AACDecoderHandle();
+    decoder.setPointer(result);
+    return decoder;
   }
   
   /**
@@ -166,18 +166,18 @@ public final class FdkAACLibFacade {
   /**
    * Set one single decoder parameter.
    *
-   * @param self   AAC decoder handle.
+   * @param decoder   AAC decoder handle.
    * @param param  Parameter to be set.
    * @param value  Parameter value.
    * @throws FdkAACLibException if parameter cannot be set
    */
-  public static void setDecoderParam(@Nonnull AACDecoderHandle self, @Nonnull AACDecParam param, int value) throws FdkAACLibException {
-    int result = FdkAACLib.aacDecoder_SetParam(self, param.getValue(), value);
+  public static void setDecoderParam(@Nonnull AACDecoderHandle decoder, @Nonnull AACDecParam param, int value) throws FdkAACLibException {
+    int result = FdkAACLib.aacDecoder_SetParam(decoder, param.getValue(), value);
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_SETPARAM);
   }
   
-  public static @Nonnull CStreamInfo getDecoderInfo(@Nonnull AACDecoderHandle self) {
-    var result = aacDecoder_GetStreamInfo(self);
+  public static @Nonnull CStreamInfo getDecoderInfo(@Nonnull AACDecoderHandle decoder) {
+    var result = aacDecoder_GetStreamInfo(decoder);
     if (result == null || result.equals(Pointer.NULL))
       throw new FdkAACLibException(AACDecoderError.AAC_DEC_UNKNOWN, FdkAACLib.Functions.DECODER_STREAMINFO.libraryFunctionName());
     var info = new CStreamInfo();
@@ -194,17 +194,17 @@ public final class FdkAACLibFacade {
    * %aacDecoder_Fill(), the right position in pBuffer can be determined to grab
    * the next data.
    *
-   * @param self        AAC decoder handle.
+   * @param decoder     AAC decoder handle.
    * @param buffer      Input buffer.
    * @throws FdkAACLibException if decoder's internal buffer cannot be filled
    */
-  public static void decoderFill(@Nonnull AACDecoderHandle self, @Nonnull ByteBuffer buffer) throws FdkAACLibException {
+  public static void decoderFill(@Nonnull AACDecoderHandle decoder, @Nonnull ByteBuffer buffer) throws FdkAACLibException {
     var size = buffer.remaining();
     int result;
     if (buffer.isDirect()) {
       var memoryReference = new PointerByReference(Native.getDirectBufferPointer(buffer));
       var bytesValid = new IntByReference(size);
-      result = aacDecoder_Fill(self, memoryReference, new IntByReference(size), bytesValid);
+      result = aacDecoder_Fill(decoder, memoryReference, new IntByReference(size), bytesValid);
       buffer.position(buffer.position() + (size - bytesValid.getValue()));
     }
     else {
@@ -214,7 +214,7 @@ public final class FdkAACLibFacade {
       memory.write(0, data, 0, size);
       var memoryReference = new PointerByReference(memory.share(0));
       var bytesValid = new IntByReference(size);
-      result = aacDecoder_Fill(self, memoryReference, new IntByReference(size), bytesValid);
+      result = aacDecoder_Fill(decoder, memoryReference, new IntByReference(size), bytesValid);
       buffer.position(buffer.position() - bytesValid.getValue());
     }
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_SETPARAM);
@@ -224,7 +224,7 @@ public final class FdkAACLibFacade {
    * Decode one audio frame, if enough data to do so is available.
    * If there is not enough coded data, returns without modifying the buffer's position.
    *
-   * @param self        AAC decoder handle
+   * @param decoder     AAC decoder handle
    * @param buffer      output buffer where the decoded PCM samples will be written
    * @param flags       flags for the decoder:
    * <ul>
@@ -236,18 +236,18 @@ public final class FdkAACLibFacade {
    * @return bytes decoded (frameSize x numChannels x 2), or 0 if none
    * @throws FdkAACLibException if frame cannot be decoded for reasons other than not enough input data
    */
-  public static int decoderDecodeFrame(@Nonnull AACDecoderHandle self, @Nonnull ByteBuffer buffer, @Nonnull AACDecodeFrameFlag... flags) throws FdkAACLibException {
+  public static int decoderDecodeFrame(@Nonnull AACDecoderHandle decoder, @Nonnull ByteBuffer buffer, @Nonnull AACDecodeFrameFlag... flags) throws FdkAACLibException {
     int flagsInt = 0;
     for (var flag : flags)
         flagsInt |= flag.getValue();
-    int result = aacDecoder_DecodeFrame(self, buffer, buffer.remaining() / IN_SAMPLES_DIVISOR, flagsInt);
+    int result = aacDecoder_DecodeFrame(decoder, buffer, buffer.remaining() / IN_SAMPLES_DIVISOR, flagsInt);
     if (result == AACDecoderError.AAC_DEC_NOT_ENOUGH_BITS.getValue())
         return 0;
     verifyResult(AACDecoderError.valueOf(result), FdkAACLib.Functions.DECODER_DECODEFRAME);
     // Setting the buffer position is tricky.
     // Stream info must be called after decode.
     // However, perhaps flags and params can affect it? Not sure. But I see downmixing is reflected correctly.
-    var info = getDecoderInfo(self);
+    var info = getDecoderInfo(decoder);
     var size = info.frameSize * info.numChannels * IN_SAMPLES_DIVISOR;
     buffer.position(buffer.position() + size);
     return size;
