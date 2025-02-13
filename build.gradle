@@ -9,7 +9,7 @@ plugins {
     id 'maven-publish'
     id "io.morethan.jmhreport" version "0.9.0"
     id 'com.github.kt3k.coveralls' version '2.12.2'
-    id "io.github.gradle-nexus.publish-plugin" version "1.3.0"
+    id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
     id 'io.franzbecker.gradle-lombok' version '5.0.0'
 }
 
