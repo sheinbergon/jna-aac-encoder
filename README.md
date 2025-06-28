@@ -70,9 +70,7 @@ compile 'org.sheinbergon:jna-aac-encoder:2.1.0'
 ```java
 AudioInputStream input = AudioSystem.getAudioInputStream(...);
 File output = new File(...);
-  AudioSystem.
-
-write(input, AACFileTypes.AAC_LC, output);
+AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
 ## Performance
