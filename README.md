@@ -1,7 +1,7 @@
 # jna-aac-encoder
 
 [![GitHub](https://img.shields.io/github/license/sheinbergon/jna-aac-encoder?color=pink&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/blob/master/LICENSE)
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sheinbergon/jna-aac-encoder/ossrh-publication.yml?style=for-the-badge&branch=main)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3A"Multi+Platform+CI")
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/sheinbergon/jna-aac-encoder/central-release.yml?style=for-the-badge&branch=main)](https://github.com/sheinbergon/jna-aac-encoder/actions?query=workflow%3A"Central+Release+Publication")
 [![GitHub release (latest by date)](https://img.shields.io/github/v/release/sheinbergon/jna-aac-encoder?color=%2340E0D0&style=for-the-badge)](https://github.com/sheinbergon/jna-aac-encoder/releases/latest)
 [![Maven Central](https://img.shields.io/maven-central/v/org.sheinbergon/jna-aac-encoder?color=Crimson&style=for-the-badge)](https://search.maven.org/search?q=g:org.sheinbergon%20a:jna-aac-encoder*)
 [![Coveralls](https://img.shields.io/coveralls/github/sheinbergon/jna-aac-encoder?style=for-the-badge&logo=coveralls)](https://coveralls.io/github/sheinbergon/jna-aac-encoder)
