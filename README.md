@@ -40,14 +40,14 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>2.1.0</version>
+    <version>2.1.1</version>
 </dependency>
 ```
 
 **_Gradle_**
 
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:2.1.0'
+compile 'org.sheinbergon:jna-aac-encoder:2.1.1'
 ```
 
 #### Additional information
