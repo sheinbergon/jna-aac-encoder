@@ -9,23 +9,15 @@ import com.sun.jna.ptr.ShortByReference;
 import javax.annotation.Nonnull;
 
 /**
-   * Maps to AACENCODER struct.
+ * Maps to AACENCODER struct.
  *
  * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
-@SuppressWarnings({
-    "JavadocVariable",
-    "VisibilityModifier",
-    "MissingJavadocMethod",
-    "MagicNumber",
-    "MemberName"
-})
-@Structure.FieldOrder({"extParam", "coderConfig", "aacConfig", "hAacEnc", "hEnvEnc",
-    "hMetadataEnc", "metaDataAllowed", "hMpsEnc", "hTpEnc", "inputBuffer",
-    "outBuffer", "inputBufferSize", "inputBufferSizePerChannel", "outBufferInBytes", "inputBufferOffset",
-    "nSamplesToRead", "nSamplesRead", "nZerosAppended", "nDelay", "nDelayCore",
-    "extPayload", "InitFlags", "nMaxAacElements", "nMaxAacChannels", "nMaxSbrElements",
-    "nMaxSbrChannels", "encoder_modis", "CAPF_tpEnc"})
+@SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MissingJavadocMethod", "MagicNumber", "MemberName"})
+@Structure.FieldOrder({"extParam", "coderConfig", "aacConfig", "hAacEnc", "hEnvEnc", "pSbrPayload", "hMetadataEnc", "metaDataAllowed", "hMpsEnc",
+  "hTpEnc", "inputBuffer", "outBuffer", "inputBufferSize", "inputBufferSizePerChannel", "outBufferInBytes", "inputBufferOffset", "nSamplesToRead",
+  "nSamplesRead", "nZerosAppended", "nDelay", "nDelayCore", "extPayload", "InitFlags", "nMaxAacElements", "nMaxAacChannels", "nMaxSbrElements",
+  "nMaxSbrChannels", "encoder_modis", "CAPF_tpEnc"})
 public final class AACEncoder extends Structure {
 
   private static final int MAX_TOTAL_EXT_PAYLOADS = 12;
@@ -46,6 +38,7 @@ public final class AACEncoder extends Structure {
   public AACEncConfig aacConfig;
   public Pointer hAacEnc;
   public Pointer hEnvEnc;
+  public Pointer pSbrPayload;
   public Pointer hMetadataEnc;
   public int metaDataAllowed;
   public Pointer hMpsEnc;

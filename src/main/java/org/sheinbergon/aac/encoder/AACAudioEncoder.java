@@ -34,12 +34,12 @@ public final class AACAudioEncoder implements AutoCloseable {
 
   @SuppressWarnings("MagicNumber")
   private static final Set<Integer> SAMPLE_RATES = Set.of(
-      16000,
-      22050,
-      24000,
-      32000,
-      44100,
-      48000);
+    16000,
+    22050,
+    24000,
+    32000,
+    44100,
+    48000);
 
   // Some fdk-aac internal constants
   private static final int PARAMETRIC_STEREO_CHANNEL_COUNT = 2;
@@ -69,8 +69,8 @@ public final class AACAudioEncoder implements AutoCloseable {
   private volatile boolean closed = false;
 
   private AACAudioEncoder(
-      final @Nonnull AACEncoder aacEncoder,
-      final @Nonnull AACEncInfo aacEncoderInfo) {
+    final @Nonnull AACEncoder aacEncoder,
+    final @Nonnull AACEncInfo aacEncoderInfo) {
     this.encoder = aacEncoder;
     this.inputBufferSize = aacEncoderInfo.inputChannels * aacEncoderInfo.frameLength * 2;
     this.inBuffer = new Memory(inputBufferSize);
@@ -104,9 +104,9 @@ public final class AACAudioEncoder implements AutoCloseable {
      */
     @SuppressWarnings("MagicNumber")
     private static final Map<AACEncodingProfile, Float> SAMPLES_TO_BIT_RATE_RATIO = Map.of(
-        AACEncodingProfile.AAC_LC, 1.5f,
-        AACEncodingProfile.HE_AAC, 0.625f,
-        AACEncodingProfile.HE_AAC_V2, 0.5f
+      AACEncodingProfile.AAC_LC, 1.5f,
+      AACEncodingProfile.HE_AAC, 0.625f,
+      AACEncodingProfile.HE_AAC_V2, 0.5f
     );
 
     // Defaults
@@ -122,8 +122,7 @@ public final class AACAudioEncoder implements AutoCloseable {
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_TRANSMUX, ADTS_TRANSMUX);
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AOT, profile.aot());
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELORDER, WAV_INPUT_CHANNEL_ORDER);
-      FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE,
-          AACEncodingChannelMode.valueOf(channels).mode());
+      FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_CHANNELMODE, AACEncodingChannelMode.valueOf(channels).mode());
     }
 
     private int deduceBitRate() {
@@ -172,8 +171,8 @@ public final class AACAudioEncoder implements AutoCloseable {
       while ((read = inputStream.read(buffer)) != WAVAudioSupport.EOS) {
         populateInputBuffer(buffer, read);
         val encoded = FdkAACLibFacade
-            .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
-            .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
+          .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, read)
+          .orElseThrow(() -> new IllegalStateException("No encoded audio data returned"));
         accumulator.accumulate(encoded);
       }
       return accumulator.done();
@@ -195,8 +194,8 @@ public final class AACAudioEncoder implements AutoCloseable {
       inBufferDescriptor.clear();
       val accumulator = AACAudioOutput.accumulator();
       while ((optional = FdkAACLibFacade
-          .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, WAVAudioSupport.EOS))
-          .isPresent()) {
+        .encode(encoder, inBufferDescriptor, outBufferDescriptor, inArgs, outArgs, WAVAudioSupport.EOS))
+        .isPresent()) {
         accumulator.accumulate(optional.get());
       }
       return accumulator.done();

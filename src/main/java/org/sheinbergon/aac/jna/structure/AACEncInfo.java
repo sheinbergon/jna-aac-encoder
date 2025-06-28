@@ -10,7 +10,7 @@ import com.sun.jna.Structure;
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 @Structure.FieldOrder({"maxOutBufBytes", "maxAncBytes", "inBufFillLevel", "inputChannels", "frameLength",
-    "nDelay", "nDelayCore", "confBuf", "confSize"})
+  "nDelay", "nDelayCore", "confBuf", "confSize"})
 public class AACEncInfo extends Structure {
 
   private static final int CONF_BUF_SIZE = 64;

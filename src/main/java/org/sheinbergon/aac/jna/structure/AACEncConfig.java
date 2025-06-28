@@ -9,11 +9,11 @@ import com.sun.jna.Structure;
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
 @Structure.FieldOrder({"sampleRate", "bitRate", "ancDataBitRate", "nSubFrames", "audioObjectType",
-    "averageBits", "bitrateMode", "nChannels", "channelOrder", "bandWidth",
-    "channelMode", "framelength", "syntaxFlags", "epConfig", "anc_Rate",
-    "maxAncBytesPerAU", "minBitsPerFrame", "maxBitsPerFrame", "audioMuxVersion", "sbrRatio",
-    "useTns", "usePns", "useIS", "useMS", "useRequant",
-    "downscaleFactor"})
+  "averageBits", "bitrateMode", "nChannels", "channelOrder", "bandWidth",
+  "channelMode", "framelength", "syntaxFlags", "epConfig", "anc_Rate",
+  "maxAncBytesPerAU", "minBitsPerFrame", "maxBitsPerFrame", "audioMuxVersion", "sbrRatio",
+  "useTns", "usePns", "useIS", "useMS", "useRequant",
+  "downscaleFactor"})
 public class AACEncConfig extends Structure {
 
   public int sampleRate;

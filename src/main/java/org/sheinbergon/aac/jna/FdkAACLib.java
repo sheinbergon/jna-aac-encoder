@@ -38,11 +38,11 @@ public final class FdkAACLib {
   static native int aacEncClose(PointerByReference handle);
 
   static native int aacEncEncode(
-      AACEncoder hAacEncoder,
-      AACEncBufDesc inBufDesc,
-      AACEncBufDesc outBufDesc,
-      AACEncInArgs inargs,
-      AACEncOutArgs outargs);
+    AACEncoder hAacEncoder,
+    AACEncBufDesc inBufDesc,
+    AACEncBufDesc outBufDesc,
+    AACEncInArgs inargs,
+    AACEncOutArgs outargs);
 
   static native int aacEncInfo(AACEncoder hAacEncoder, AACEncInfo pInfo);
 

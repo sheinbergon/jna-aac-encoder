@@ -9,11 +9,11 @@ import com.sun.jna.Structure;
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 @Structure.FieldOrder({"userAOT", "userSamplerate", "nChannels", "userChannelMode", "userBitrate",
-    "userBitrateMode", "userBandwidth", "userAfterburner", "userFramelength", "userAncDataRate",
-    "userPeakBitrate", "userTns", "userPns", "userIntensity", "userTpType",
-    "userTpSignaling", "userTpNsubFrames", "userTpAmxv", "userTpProtection", "userTpHeaderPeriod",
-    "userErTools", "userPceAdditions", "userMetaDataMode", "userSbrEnabled", "userSbrRatio",
-    "userDownscaleFactor"})
+  "userBitrateMode", "userBandwidth", "userAfterburner", "userFramelength", "userAncDataRate",
+  "userPeakBitrate", "userTns", "userPns", "userIntensity", "userTpType",
+  "userTpSignaling", "userTpNsubFrames", "userTpAmxv", "userTpProtection", "userTpHeaderPeriod",
+  "userErTools", "userPceAdditions", "userMetaDataMode", "userSbrEnabled", "userSbrRatio",
+  "userDownscaleFactor"})
 public class UserParam extends Structure {
 
   public int userAOT;

@@ -9,10 +9,10 @@ import com.sun.jna.Structure;
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
 @Structure.FieldOrder({"aot", "extAOT", "channelMode", "channelConfigZero", "samplingRate",
-    "extSamplingRate", "downscaleSamplingRate", "bitRate", "samplesPerFrame", "noChannels",
-    "bitsFrame", "nSubFrames", "BSACnumOfSubFrame", "BSAClayerLength", "flags",
-    "matrixMixdownA", "headerPeriod", "stereoConfigIndex", "sbrMode", "sbrSignaling",
-    "rawConfig", "rawConfigBits", "sbrPresent", "psPresent"})
+  "extSamplingRate", "downscaleSamplingRate", "bitRate", "samplesPerFrame", "noChannels",
+  "bitsFrame", "nSubFrames", "BSACnumOfSubFrame", "BSAClayerLength", "flags",
+  "matrixMixdownA", "headerPeriod", "stereoConfigIndex", "sbrMode", "sbrSignaling",
+  "rawConfig", "rawConfigBits", "sbrPresent", "psPresent"})
 public final class CoderConfig extends Structure {
 
   private static final int RAW_CONFIG_SIZE = 64;
