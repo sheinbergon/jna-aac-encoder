@@ -11,6 +11,7 @@ import lombok.val;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
+import org.sheinbergon.aac.encoder.util.NotThreadSafe;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.FdkAACLibFacade;
 import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
@@ -27,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
-// Not thread-safe
+@NotThreadSafe
 @Accessors(fluent = true)
 public final class AACAudioEncoder implements AutoCloseable {
 
