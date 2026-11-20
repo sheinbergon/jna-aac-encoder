@@ -14,6 +14,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
+      # One OS at a time, parallel builds trip Maven Central rate limits (HTTP 429)
+      max-parallel: 1
       matrix:
         os: [ ubuntu-26.04, windows-2025, macos-15 ]
     env:
