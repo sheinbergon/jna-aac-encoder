@@ -74,6 +74,23 @@ File output = new File(...);
 AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ```
 
+## Dependency Locking
+
+Dependencies are pinned via Gradle [dependency locking](https://docs.gradle.org/current/userguide/dependency_locking.html).
+Lock state lives in `gradle.lockfile` (project dependencies) and `buildscript-gradle.lockfile` (plugin classpath).
+
+Locking is enabled for the following configurations only: `api`, `compileClasspath`, `implementation`,
+`runtimeOnly`, `runtimeClasspath`, `testImplementation`, `testRuntimeOnly`, `testCompileClasspath`,
+`testRuntimeClasspath`.
+
+Refresh the lockfiles after changing dependencies or versions:
+
+```bash
+./gradlew lock
+```
+
+The `lock` task auto-enables `--write-locks`, so no extra flag is needed.
+
 ## Performance
 
 Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are available
