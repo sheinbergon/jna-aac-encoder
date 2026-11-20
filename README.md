@@ -8,7 +8,7 @@
 [![Codacy grade](https://img.shields.io/codacy/grade/8f822d4bfbfa48809d439d4e8e92d287?style=for-the-badge&logo=codacy)](https://app.codacy.com/manual/sheinbergon/jna-aac-encoder)
 [![Liberapay](https://img.shields.io/liberapay/patrons/sheinbergon?logo=liberapay&style=for-the-badge)](https://liberapay.com/sheinbergon/donate)
 
-This library provides AAC encoding capabilities for the JVM.
+This library provides AAC encoding and decoding capabilities for the JVM.
 It utilizes the [FDK AAC](https://github.com/mstorsjo/fdk-aac) library via JNA in order to do so.
 
 ## License
@@ -40,14 +40,14 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>2.1.2</version>
+    <version>2.2.0</version>
 </dependency>
 ```
 
 **_Gradle_**
 
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:2.1.2'
+compile 'org.sheinbergon:jna-aac-encoder:2.2.0'
 ```
 
 #### Additional information
@@ -61,7 +61,7 @@ compile 'org.sheinbergon:jna-aac-encoder:2.1.2'
 
 | Library Version | FDK-AAC Version | JDK Version | Supported Platforms                         |
 |-----------------|-----------------|-------------|---------------------------------------------|
-| 2.1.2           | 2.0.3           | 17          | Linux, Windows, OSX (Intel / Apple Silicon) |
+| 2.1.2 - 2.2.0   | 2.0.3           | 17          | Linux, Windows, OSX (Intel / Apple Silicon) |
 | 2.1.0 - 2.1.1   | 2.0.2           | 11          | Linux, Windows, OSX (Intel / Apple Silicon) |
 | 2.0.0           | 2.0.2           | 8           | Linux, Windows, OSX (Intel / Apple Silicon) |
 | 0.1.9           | 0.1.6           | 8           | Linux, Windows (64/32 Bit), OSX (Intel)     |
@@ -72,6 +72,17 @@ compile 'org.sheinbergon:jna-aac-encoder:2.1.2'
 AudioInputStream input = AudioSystem.getAudioInputStream(...);
 File output = new File(...);
 AudioSystem.write(input, AACFileTypes.AAC_LC, output);
+```
+
+### Decoding using the JVM AudioSystem
+
+ADTS framed AAC audio (`.aac` files, AAC-LC/HE-AAC/HE-AACv2) is detected automatically and decoded to
+16 bit signed little-endian PCM:
+
+```java
+AudioInputStream aac = AudioSystem.getAudioInputStream(new File(...));
+AudioInputStream pcm = AudioSystem.getAudioInputStream(AudioFormat.Encoding.PCM_SIGNED, aac);
+AudioSystem.write(pcm, AudioFileFormat.Type.WAVE, new File(...));
 ```
 
 ## Dependency Locking
@@ -135,10 +146,11 @@ Additional restrictions:
 
 * A maximum of 6 audio input/output channels
 * Only the AAC-LC/HE-AAC/HE-AACv2 encoding profiles are supported
+* Decoding supports ADTS framed AAC only (no M4A/MP4 containers). Encoder priming samples are not trimmed,
+  so decoded audio is slightly longer than the original input
 
 ## Roadmap
 
 * Improved lower-level interface (with examples).
 * Support for 24 bit WAV input (via conversion).
-* M4A encoding.
-* AAC decoding ???  
+* M4A encoding/decoding.
