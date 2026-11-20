@@ -1,5 +1,3 @@
-import org.gradle.internal.os.OperatingSystem
-
 plugins {
     id 'java'
     id 'jacoco'
@@ -39,7 +37,8 @@ ext {
 }
 
 group = 'org.sheinbergon'
-version = '2.1.2'
+// Ensure snapshot versions differ from release ones
+version = nexus.target == 'SNAPSHOT' ? '2.1.2-SNAPSHOT' : '2.1.2'
 
 repositories {
     mavenCentral()
@@ -75,11 +74,15 @@ dependencies {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+    withJavadocJar()
 }
 
-test {
+tasks.named('test', Test) {
+    systemProperty 'jna.debug_load', false
+    // Set the DLL library path
+    systemProperty 'jna.library.path', providers.gradleProperty('libPath').getOrElse(System.getProperty('java.library.path'))
 
-    systemProperties = ['jna.debug_load': false]
     addTestListener(new TestListener() {
         void beforeSuite(TestDescriptor desc) {}
 
@@ -102,10 +105,9 @@ test {
     testLogging {
         exceptionFormat = 'full'
         showStandardStreams = true
-        events "passed", "skipped", "failed"
+        events 'passed', 'skipped', 'failed'
     }
-    finalizedBy jacocoTestReport
-
+    finalizedBy tasks.named('jacocoTestReport')
 }
 
 jacoco {
@@ -114,11 +116,11 @@ jacoco {
 
 checkstyle {
     toolVersion = '12.3.1'
-    configFile = file("$rootDir/checkstyle.xml")
+    configFile = layout.projectDirectory.file('checkstyle.xml').asFile
 }
 
-jacocoTestReport {
-    dependsOn test
+tasks.named('jacocoTestReport', JacocoReport) {
+    dependsOn tasks.named('test')
     reports {
         xml.required = true
         csv.required = false
@@ -126,82 +128,44 @@ jacocoTestReport {
     }
 }
 
-
-afterEvaluate {
-    // Ensure snapshot versions defer from release ones
-    version = nexus.target.equals('SNAPSHOT') ? "$version-${nexus.target}" : version
-
-    // Set the DLL library path
-    def task = tasks.getByName('test')
-    def libPath = project.findProperty('libPath') ?: System.properties['java.library.path']
-    task.systemProperty "jna.library.path", libPath
-
-    // Setup signing based on nexus-target
-    signing {
-        required = { nexus.target == 'RELEASE' }
-        useInMemoryPgpKeys(signing.gpgPrivateKey, signing.gpgPassphrase)
-        publishing.publications.forEach {
-            sign(it)
-        }
-    }
-}
+def benchmarkReportDir = layout.buildDirectory.dir('reports/benchmark')
 
 jmhReport {
-    jmhResultPath = project.file('build/reports/benchmark/result.json')
-    jmhReportOutput = project.file('build/reports/benchmark')
+    jmhResultPath = benchmarkReportDir.get().file('result.json').asFile
+    jmhReportOutput = benchmarkReportDir.get().asFile
 }
 
-task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
+tasks.register('jmh', JavaExec) {
+    description = 'Executing JMH benchmarks'
 
-    doFirst {
-        def aacEncBin = project.findProperty('aacEncBin') ?: "/usr/bin/aac-enc"
-        assert file(aacEncBin).exists()
-        assert OperatingSystem.current().isLinux()
-        systemProperties = ['benchmark.aac.enc.bin': aacEncBin, 'jna.debug_load': true]
-    }
+    def aacEncBin = providers.gradleProperty('aacEncBin').getOrElse('/usr/bin/aac-enc')
+    def format = providers.gradleProperty('format').getOrElse('json')
+    def resultFile = benchmarkReportDir.get().file("result.${format}").asFile
 
     classpath = sourceSets.benchmark.runtimeClasspath
     mainClass = 'org.openjdk.jmh.Main'
-    def format = project.findProperty('format') ?: 'json'
-    def resultFile = file("build/reports/benchmark/result.${format}")
-    resultFile.parentFile.mkdirs()
+    systemProperty 'benchmark.aac.enc.bin', aacEncBin
+    systemProperty 'jna.debug_load', true
+    args 'Benchmark.*', '-rf', format, '-rff', resultFile.path
 
-    args 'Benchmark.*'
-    args '-rf', format
-    args '-rff', resultFile
+    doFirst {
+        assert new File(aacEncBin).exists()
+        assert System.getProperty('os.name').toLowerCase().contains('linux')
+        resultFile.parentFile.mkdirs()
+    }
 }
 
-jar {
-    archiveClassifier.set('')
-    from sourceSets.main.output
-    from("$resources") {
-        include '*.dll'
-        include '*.so'
-        include '*.so.*'
-        include '*.dylib'
-    }
-    from("$projectDir") {
+tasks.named('jar', Jar) {
+    from(layout.projectDirectory) {
         include 'NOTICE'
     }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    archiveClassifier.set('sources')
-    from sourceSets.main.allSource
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    archiveClassifier.set('javadoc')
-    from javadoc.destinationDir
 }
 
 publishing {
     publications {
         maven(MavenPublication) {
             from components.java
-            artifactId = "jna-aac-encoder"
-            artifact tasks.javadocJar
-            artifact tasks.sourcesJar
+            artifactId = 'jna-aac-encoder'
             pom {
                 name = project.name
                 description = 'AAC encoding capabiltiies for the JVM'
@@ -229,38 +193,44 @@ publishing {
                     developerConnection = 'scm:git@github.com:sheinbergon/jna-aac-encoder.git'
                 }
             }
-
-            repositories {
-                mavenLocal()
-                maven {
-                    name = "oss-sonatype-nexus"
-                    url = nexus.url
-                    credentials {
-                        username = nexus.username
-                        password = nexus.password
-                    }
-                }
+        }
+    }
+    repositories {
+        mavenLocal()
+        maven {
+            name = 'oss-sonatype-nexus'
+            url = nexus.url
+            credentials {
+                username = nexus.username
+                password = nexus.password
             }
         }
     }
 }
 
-wrapper {
+// Setup signing based on nexus-target
+signing {
+    required = { nexus.target == 'RELEASE' }
+    useInMemoryPgpKeys(signing.gpgPrivateKey, signing.gpgPassphrase)
+    sign publishing.publications
+}
+
+tasks.named('wrapper', Wrapper) {
     gradleVersion = '9.9.2'
 }
 
 nexusPublishing {
     transitionCheckOptions {
-        maxRetries.set(100)
-        delayBetween.set(Duration.ofSeconds(5))
+        maxRetries = 100
+        delayBetween = Duration.ofSeconds(5)
     }
-    useStaging = (provider { "${nexus.target}".toString() == "RELEASE" })
+    useStaging = provider { nexus.target == 'RELEASE' }
     repositories {
         sonatype {
             username = nexus.username
             password = nexus.password
-            nexusUrl = uri("https://ossrh-staging-api.central.sonatype.com/service/local/")
-            snapshotRepositoryUrl = uri("https://central.sonatype.com/repository/maven-snapshots/")
+            nexusUrl = uri('https://ossrh-staging-api.central.sonatype.com/service/local/')
+            snapshotRepositoryUrl = uri('https://central.sonatype.com/repository/maven-snapshots/')
         }
     }
 }
