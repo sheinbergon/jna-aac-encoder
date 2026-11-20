@@ -18,6 +18,11 @@ jobs:
           java-version: 17
           distribution: "zulu"
 
+      # The bundled test libmediainfo.so links against libraries missing from current Ubuntu images
+      - name: Install MediaInfo (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y --no-install-recommends mediainfo
+
       - name: Run Tests
         run: ./gradlew clean build check test
 
