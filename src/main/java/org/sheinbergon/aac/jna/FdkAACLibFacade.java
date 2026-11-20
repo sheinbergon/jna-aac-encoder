@@ -16,7 +16,7 @@ import org.sheinbergon.aac.jna.util.AACEncParam;
 import org.sheinbergon.aac.jna.util.FdkAACLibException;
 import org.sheinbergon.aac.jna.util.JNASupport;
 
-import org.jspecify.annotations.NonNull;
+import jakarta.annotation.Nonnull;
 import java.util.Optional;
 
 
@@ -56,7 +56,7 @@ public final class FdkAACLibFacade {
    *
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
-  public static void closeEncoder(final @NonNull AACEncoder encoder) {
+  public static void closeEncoder(final @Nonnull AACEncoder encoder) {
     val pointerRef = new PointerByReference(encoder.getPointer());
     val result = AACEncError.valueOf(FdkAACLib.aacEncClose(pointerRef));
     verifyResult(result, FdkAACLib.Functions.CLOSE);
@@ -67,7 +67,7 @@ public final class FdkAACLibFacade {
    *
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    */
-  public static void initEncoder(final @NonNull AACEncoder encoder) {
+  public static void initEncoder(final @Nonnull AACEncoder encoder) {
     val result = AACEncError.valueOf(FdkAACLib.aacEncEncode(encoder, null, null, null, null));
     verifyResult(result, FdkAACLib.Functions.ENCODE);
   }
@@ -87,11 +87,11 @@ public final class FdkAACLibFacade {
    * @return the encoded AAC bytes, if any are present
    */
   public static Optional<byte[]> encode(
-      final @NonNull AACEncoder encoder,
-      final @NonNull AACEncBufDesc inBufferDescriptor,
-      final @NonNull AACEncBufDesc outBufferDescriptor,
-      final @NonNull AACEncInArgs inArgs,
-      final @NonNull AACEncOutArgs outArgs,
+      final @Nonnull AACEncoder encoder,
+      final @Nonnull AACEncBufDesc inBufferDescriptor,
+      final @Nonnull AACEncBufDesc outBufferDescriptor,
+      final @Nonnull AACEncInArgs inArgs,
+      final @Nonnull AACEncOutArgs outArgs,
       final int size) {
     JNASupport.clearStructureMemory(inArgs, outArgs);
     inArgs.numInSamples = (size == WAVAudioSupport.EOS) ? size : size / IN_SAMPLES_DIVISOR;
@@ -113,7 +113,7 @@ public final class FdkAACLibFacade {
    * @param encoder an {@link AACEncoder} instance, previously opened by the fdk-aac library
    * @return the give encoder's information payload
    */
-  public static AACEncInfo getEncoderInfo(final @NonNull AACEncoder encoder) {
+  public static AACEncInfo getEncoderInfo(final @Nonnull AACEncoder encoder) {
     val info = new AACEncInfo();
     val result = AACEncError.valueOf(FdkAACLib.aacEncInfo(encoder, info));
     verifyResult(result, FdkAACLib.Functions.INFO);
@@ -130,8 +130,8 @@ public final class FdkAACLibFacade {
    * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v0.1.6/libAACenc/include/aacenc_lib.h">fdk-aac/libAACenc/include/aacenc_lib.h</a>
    */
   public static void setEncoderParam(
-      final @NonNull AACEncoder encoder,
-      final @NonNull AACEncParam param,
+      final @Nonnull AACEncoder encoder,
+      final @Nonnull AACEncParam param,
       final int value) {
     val result = AACEncError.valueOf(FdkAACLib.aacEncoder_SetParam(encoder, param.getValue(), value));
     verifyResult(result, FdkAACLib.Functions.SET_PARAM);
@@ -144,8 +144,8 @@ public final class FdkAACLibFacade {
    * @param function the execution library function
    */
   private static void verifyResult(
-      final @NonNull AACEncError result,
-      final FdkAACLib.@NonNull Functions function) {
+      final @Nonnull AACEncError result,
+      final @Nonnull FdkAACLib.Functions function) {
     Optional.of(result)
         .filter(error -> !error.equals(AACEncError.AACENC_OK))
         .ifPresent(error -> {
@@ -159,7 +159,7 @@ public final class FdkAACLibFacade {
    * @param buffer a pre-allocated native memory region to be used by this descriptor
    * @return an out-buffer descriptor structure
    */
-  public static AACEncBufDesc outBufferDescriptor(final @NonNull Memory buffer) {
+  public static AACEncBufDesc outBufferDescriptor(final @Nonnull Memory buffer) {
     val descriptor = new AACEncBufDesc();
     descriptor.numBufs = OUT_BUFFER_COUNT;
     descriptor.bufs = new PointerByReference(buffer);
@@ -177,7 +177,7 @@ public final class FdkAACLibFacade {
    * @param buffer a pre-allocated native memory region to be used by this descriptor
    * @return an in-buffer descriptor structure
    */
-  public static AACEncBufDesc inBufferDescriptor(final @NonNull Memory buffer) {
+  public static AACEncBufDesc inBufferDescriptor(final @Nonnull Memory buffer) {
     val descriptor = new AACEncBufDesc();
     descriptor.numBufs = IN_BUFFER_COUNT;
     descriptor.bufs = new PointerByReference(buffer);

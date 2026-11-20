@@ -15,7 +15,7 @@ ext {
             lombok      : '1.18.48',
             jna         : '5.19.1',
             commonsLang3: '3.22.0',
-            jspecify    : '1.0.1'
+            jakarta     : '3.0.0'
     ]
     testDepVersions = [
             junitPlatform: '6.1.3',
@@ -82,7 +82,7 @@ dependencies {
 
     // Utility
     api "org.apache.commons:commons-lang3:${depVersions.commonsLang3}"
-    api "org.jspecify:jspecify:${depVersions.jspecify}"
+    api "jakarta.annotation:jakarta.annotation-api:${depVersions.jakarta}"
 
     // Lombok
     compileOnly "org.projectlombok:lombok:${depVersions.lombok}"

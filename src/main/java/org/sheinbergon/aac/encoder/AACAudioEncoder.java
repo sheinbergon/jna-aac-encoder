@@ -21,7 +21,7 @@ import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 
-import org.jspecify.annotations.NonNull;
+import jakarta.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
@@ -69,8 +69,8 @@ public final class AACAudioEncoder implements AutoCloseable {
   private volatile boolean closed = false;
 
   private AACAudioEncoder(
-    final @NonNull AACEncoder aacEncoder,
-    final @NonNull AACEncInfo aacEncoderInfo) {
+    final @Nonnull AACEncoder aacEncoder,
+    final @Nonnull AACEncInfo aacEncoderInfo) {
     this.encoder = aacEncoder;
     this.inputBufferSize = aacEncoderInfo.inputChannels * aacEncoderInfo.frameLength * 2;
     this.inBuffer = new Memory(inputBufferSize);
@@ -87,7 +87,7 @@ public final class AACAudioEncoder implements AutoCloseable {
    *
    * @return the builder instance
    */
-  @NonNull
+  @Nonnull
   public static Builder builder() {
     return new Builder();
   }
@@ -115,7 +115,7 @@ public final class AACAudioEncoder implements AutoCloseable {
     private int channels = 2;
     private int sampleRate = DEFAULT_SAMPLE_RATE;
 
-    private void setEncoderParams(final @NonNull AACEncoder encoder) {
+    private void setEncoderParams(final @Nonnull AACEncoder encoder) {
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_AFTERBURNER, afterBurner ? 1 : 0);
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_SAMPLERATE, sampleRate);
       FdkAACLibFacade.setEncoderParam(encoder, AACEncParam.AACENC_BITRATE, deduceBitRate());
@@ -136,7 +136,7 @@ public final class AACAudioEncoder implements AutoCloseable {
      *
      * @return the verified encoder instance
      */
-    @NonNull
+    @Nonnull
     public AACAudioEncoder build() {
       if (!SAMPLE_RATES.contains(sampleRate)) {
         throw new AACAudioEncoderException("sampleRate", sampleRate);
@@ -206,7 +206,7 @@ public final class AACAudioEncoder implements AutoCloseable {
     }
   }
 
-  private void populateInputBuffer(final byte @NonNull [] buffer, final int size) {
+  private void populateInputBuffer(final @Nonnull byte[] buffer, final int size) {
     inBuffer.write(0, buffer, 0, size);
     if (size != inputBufferSize) {
       inBufferDescriptor.bufSizes = new IntByReference(size);

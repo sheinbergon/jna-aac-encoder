@@ -6,7 +6,7 @@ import com.sun.jna.ptr.ByteByReference;
 import com.sun.jna.ptr.PointerByReference;
 import com.sun.jna.ptr.ShortByReference;
 
-import org.jspecify.annotations.NonNull;
+import jakarta.annotation.Nonnull;
 
 /**
  * Maps to AACENCODER struct.
@@ -27,7 +27,7 @@ public final class AACEncoder extends Structure {
     return new AACEncoder(pointerReference.getValue());
   }
 
-  private AACEncoder(final @NonNull Pointer pointer) {
+  private AACEncoder(final @Nonnull Pointer pointer) {
     super(pointer);
     setAlignType(Structure.ALIGN_NONE); // Make sure field size alignments are as expected
     read(); // Read once after initialize from provided pointer

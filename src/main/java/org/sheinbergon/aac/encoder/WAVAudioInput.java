@@ -11,7 +11,7 @@ import org.sheinbergon.aac.encoder.util.WAVAudioFormat;
 import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
-import org.jspecify.annotations.NonNull;
+import jakarta.annotation.Nonnull;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Objects;
@@ -30,7 +30,7 @@ public class WAVAudioInput {
    * @param length valid bytes count
    * @return returns the audio-input descriptor
    */
-  @NonNull
+  @Nonnull
   public static WAVAudioInput pcms16le(final byte[] data, final int length) {
     return builder().audioFormat(WAVAudioFormat.PCM)
         .endianness(ByteOrder.LITTLE_ENDIAN)
@@ -45,7 +45,7 @@ public class WAVAudioInput {
    *
    * @return returns the builder instance
    */
-  @NonNull
+  @Nonnull
   public static Builder builder() {
     return new Builder();
   }
@@ -67,7 +67,7 @@ public class WAVAudioInput {
      *
      * @return the valid audio-input instance
      */
-    @NonNull
+    @Nonnull
     public WAVAudioInput build() {
       if (ArrayUtils.isEmpty(data)) {
         throw new WAVAudioInputException("data", "Empty/Null array");
