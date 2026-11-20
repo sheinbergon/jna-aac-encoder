@@ -51,7 +51,7 @@ ext {
 
 group = 'org.sheinbergon'
 // Ensure snapshot versions differ from release ones
-version = nexus.target == 'SNAPSHOT' ? '2.1.2-SNAPSHOT' : '2.1.2'
+version = nexus.target == 'SNAPSHOT' ? '2.2.0-SNAPSHOT' : '2.2.0'
 
 repositories {
     mavenCentral()
