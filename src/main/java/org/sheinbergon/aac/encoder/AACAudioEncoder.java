@@ -11,6 +11,7 @@ import lombok.val;
 import org.sheinbergon.aac.encoder.util.AACAudioEncoderException;
 import org.sheinbergon.aac.encoder.util.AACEncodingChannelMode;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
+import org.sheinbergon.aac.encoder.util.NotThreadSafe;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 import org.sheinbergon.aac.jna.FdkAACLibFacade;
 import org.sheinbergon.aac.jna.structure.AACEncBufDesc;
@@ -20,8 +21,7 @@ import org.sheinbergon.aac.jna.structure.AACEncOutArgs;
 import org.sheinbergon.aac.jna.structure.AACEncoder;
 import org.sheinbergon.aac.jna.util.AACEncParam;
 
-import javax.annotation.Nonnull;
-import javax.annotation.concurrent.NotThreadSafe;
+import jakarta.annotation.Nonnull;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;

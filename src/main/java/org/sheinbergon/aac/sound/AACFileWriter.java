@@ -7,7 +7,7 @@ import org.sheinbergon.aac.encoder.WAVAudioInput;
 import org.sheinbergon.aac.encoder.util.AACEncodingProfile;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import javax.sound.sampled.AudioFileFormat;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;

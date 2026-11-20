@@ -5,5 +5,9 @@ pluginManagement {
     }
 }
 
+if ('lock' in startParameter.taskNames) {
+    startParameter.writeDependencyLocks = true
+}
+
 rootProject.name = 'jna-aac-encoder'
 

@@ -11,7 +11,7 @@ import org.sheinbergon.aac.encoder.util.WAVAudioFormat;
 import org.sheinbergon.aac.encoder.util.WAVAudioInputException;
 import org.sheinbergon.aac.encoder.util.WAVAudioSupport;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Objects;

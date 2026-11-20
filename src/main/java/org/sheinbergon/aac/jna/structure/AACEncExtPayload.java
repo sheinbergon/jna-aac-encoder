@@ -6,7 +6,7 @@ import com.sun.jna.ptr.ByteByReference;
 /**
  * Maps to AACENC_EXT_PAYLOAD struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.3/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 @Structure.FieldOrder({"pData", "dataSize", "dataType", "associatedChElement"})

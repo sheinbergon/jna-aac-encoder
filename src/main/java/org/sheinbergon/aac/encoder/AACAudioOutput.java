@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import org.apache.commons.lang3.ArrayUtils;
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 
 @Getter
 @Accessors(chain = true, fluent = true)

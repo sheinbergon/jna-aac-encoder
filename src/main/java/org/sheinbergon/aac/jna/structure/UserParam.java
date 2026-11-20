@@ -5,7 +5,7 @@ import com.sun.jna.Structure;
 /**
  * Maps to USER_PARAM struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.3/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier"})
 @Structure.FieldOrder({"userAOT", "userSamplerate", "nChannels", "userChannelMode", "userBitrate",
