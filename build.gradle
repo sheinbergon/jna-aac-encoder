@@ -197,14 +197,6 @@ publishing {
     }
     repositories {
         mavenLocal()
-        maven {
-            name = 'oss-sonatype-nexus'
-            url = nexus.url
-            credentials {
-                username = nexus.username
-                password = nexus.password
-            }
-        }
     }
 }
 
