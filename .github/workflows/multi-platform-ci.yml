@@ -1,13 +1,8 @@
 name: Multi Platform CI
 
+# A single trigger, so every pull request (fork or not) is built exactly once, without access to secrets for forks
 on:
-  pull_request_target:
-    branches:
-      - '*'
-  push:
-    branches-ignore:
-      - main
-      - wip*
+  pull_request:
 # A newer push to the same branch (or pull request) cancels the run still in progress
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}
@@ -16,8 +11,6 @@ concurrency:
 jobs:
   ci:
     name: Build & test (${{ matrix.os }})
-    # Branches of this repository are already built by the push trigger, only build pull requests coming from forks
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
@@ -55,9 +48,9 @@ jobs:
           format: jacoco
           base-path: src/main/java
 
-      # Publish to the staging repository only once, from the Linux Runner
+      # Publish to the staging repository only once, from the Linux Runner. Forks have no access to the secrets
       - name: Publish to Staging repository
-        if: runner.os == 'Linux'
+        if: runner.os == 'Linux' && github.event.pull_request.head.repo.full_name == github.repository
         run: ./gradlew publishToSonatype
         env:
           NEXUS_TARGET: SNAPSHOT
