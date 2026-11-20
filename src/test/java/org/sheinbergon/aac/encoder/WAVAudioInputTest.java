@@ -20,6 +20,7 @@ public final class WAVAudioInputTest {
   private static final ByteOrder VALID_ENDIANNESS = ByteOrder.LITTLE_ENDIAN;
 
   private static final int INVALID_LENGTH = 100;
+  private static final int NEGATIVE_LENGTH = -1;
   private static final int INVALID_SAMPLE_SIZE = 24;
   private static final ByteOrder INVALID_ENDIANNESS = ByteOrder.BIG_ENDIAN;
 
@@ -43,6 +44,14 @@ public final class WAVAudioInputTest {
     Assertions.assertThrows(WAVAudioInputException.class, () ->
         builder.data(VALID_DATA)
             .length(INVALID_LENGTH).build());
+  }
+
+  @Test
+  @DisplayName("Negative WAV data length")
+  public void negativeLength() {
+    Assertions.assertThrows(WAVAudioInputException.class, () ->
+        builder.data(VALID_DATA)
+            .length(NEGATIVE_LENGTH).build());
   }
 
   @Test

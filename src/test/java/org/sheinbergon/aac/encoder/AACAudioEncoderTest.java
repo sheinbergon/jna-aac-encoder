@@ -61,6 +61,22 @@ public final class AACAudioEncoderTest {
   }
 
   @Test
+  @DisplayName("Disabled afterburner")
+  public void disabledAfterBurner() {
+    encoder = builder.sampleRate(VALID_SAMPLE_RATE)
+        .afterBurner(false)
+        .build();
+    Assertions.assertTrue(encoder.inputBufferSize() > 0);
+  }
+
+  @Test
+  @DisplayName("Missing audio input encoding")
+  public void missingInputEncoding() {
+    encoder = builder.sampleRate(VALID_SAMPLE_RATE).build();
+    Assertions.assertThrows(AACAudioEncoderException.class, () -> encoder.encode(null));
+  }
+
+  @Test
   @DisplayName("Stale/closed encoder encoding")
   public void closedEncoderEncoding() {
     Assertions.assertThrows(AACAudioEncoderException.class, () -> {
