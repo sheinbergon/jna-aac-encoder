@@ -10,7 +10,7 @@ on:
       - wip*
 jobs:
   ci:
-    name: run tests, style verification, measure code coverage and publish to nexus staging repository
+    name: ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false

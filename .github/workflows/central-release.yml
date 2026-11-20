@@ -5,7 +5,7 @@ on:
 
 jobs:
   ci:
-    name: publish to maven-central
+    name: publish
     runs-on: ubuntu-26.04
     steps:
 
