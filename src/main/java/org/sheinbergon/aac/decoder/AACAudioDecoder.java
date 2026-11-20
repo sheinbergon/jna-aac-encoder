@@ -71,7 +71,8 @@ public final class AACAudioDecoder implements AutoCloseable {
       feedDecoder();
       if (FdkAACLibFacade.decodeFrame(decoder, outBuffer)) {
         return decodedFrame();
-      } else if (eos && pending == 0) {
+      } else if (eos) {
+        // Input is only read once nothing is pending, so nothing is left to feed by now
         return null;
       }
     }

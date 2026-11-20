@@ -72,7 +72,7 @@ public final class AACFormatConversionProvider extends FormatConversionProvider 
   }
 
   @RequiredArgsConstructor
-  private static final class DecodingInputStream extends InputStream {
+  static final class DecodingInputStream extends InputStream {
 
     private static final int BYTE_MASK = 0xFF;
 
