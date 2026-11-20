@@ -8,9 +8,14 @@ on:
     branches-ignore:
       - main
       - wip*
+# A newer push to the same branch (or pull request) cancels the run still in progress
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   ci:
-    name: ${{ matrix.os }}
+    name: Build & test (${{ matrix.os }})
     # Branches of this repository are already built by the push trigger, only build pull requests coming from forks
     if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name != github.repository
     runs-on: ${{ matrix.os }}
