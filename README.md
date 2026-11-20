@@ -77,7 +77,7 @@ AudioSystem.write(input, AACFileTypes.AAC_LC, output);
 ## Dependency Locking
 
 Dependencies are pinned via Gradle [dependency locking](https://docs.gradle.org/current/userguide/dependency_locking.html).
-Lock state lives in `gradle.lockfile` (project dependencies) and `buildscript-gradle.lockfile` (plugin classpath).
+Lock state lives in `gradle.lockfile` at the repo root.
 
 Locking is enabled for the following configurations only: `api`, `compileClasspath`, `implementation`,
 `runtimeOnly`, `runtimeClasspath`, `testImplementation`, `testRuntimeOnly`, `testCompileClasspath`,
