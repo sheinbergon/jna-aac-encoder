@@ -5,7 +5,7 @@ import com.sun.jna.Structure;
 /**
  * Maps to AACENC_CONFIG struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.3/libAACenc/src/aacenc.h">fdk-aac/libAACenc/src/aacenc.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
 @Structure.FieldOrder({"sampleRate", "bitRate", "ancDataBitRate", "nSubFrames", "audioObjectType",

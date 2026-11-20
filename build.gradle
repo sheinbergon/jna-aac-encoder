@@ -8,7 +8,6 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id "io.morethan.jmhreport" version "0.9.6"
-    id 'com.github.kt3k.coveralls' version '2.12.2'
     id "io.github.gradle-nexus.publish-plugin" version "2.0.0"
     id 'io.franzbecker.gradle-lombok' version '6.0.0'
 }
@@ -39,8 +38,8 @@ ext {
     ]
 }
 
-group 'org.sheinbergon'
-version '2.1.1'
+group = 'org.sheinbergon'
+version = '2.1.2'
 
 repositories {
     mavenCentral()
@@ -68,26 +67,36 @@ dependencies {
     testImplementation "org.junit.platform:junit-platform-launcher:${testDepVersions.junitPlatform}"
 
     // JMH Benchmarking
-    benchmarkImplementation project
+    benchmarkImplementation project(':')
     benchmarkImplementation "org.openjdk.jmh:jmh-core:${benchmarkDepVersions.jmh}"
     benchmarkAnnotationProcessor "org.openjdk.jmh:jmh-generator-annprocess:${benchmarkDepVersions.jmh}"
     benchmarkImplementation "commons-io:commons-io:${benchmarkDepVersions.commonsIO}"
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+}
 
 test {
 
     systemProperties = ['jna.debug_load': false]
-    afterSuite { desc, result ->
-        if (!desc.parent) {
-            println "Test result: ${result.resultType}"
-            println "Test summary: ${result.testCount} tests, " +
-                    "${result.successfulTestCount} succeeded, " +
-                    "${result.failedTestCount} failed, " +
-                    "${result.skippedTestCount} skipped"
+    addTestListener(new TestListener() {
+        void beforeSuite(TestDescriptor desc) {}
+
+        void beforeTest(TestDescriptor desc) {}
+
+        void afterTest(TestDescriptor desc, TestResult result) {}
+
+        void afterSuite(TestDescriptor desc, TestResult result) {
+            if (!desc.parent) {
+                println "Test result: ${result.resultType}"
+                println "Test summary: ${result.testCount} tests, " +
+                        "${result.successfulTestCount} succeeded, " +
+                        "${result.failedTestCount} failed, " +
+                        "${result.skippedTestCount} skipped"
+            }
         }
-    }
+    })
 
     useJUnitPlatform()
     testLogging {
@@ -104,8 +113,8 @@ jacoco {
 }
 
 checkstyle {
-    toolVersion '12.3.1'
-    configFile file("$rootDir/checkstyle.xml")
+    toolVersion = '12.3.1'
+    configFile = file("$rootDir/checkstyle.xml")
 }
 
 jacocoTestReport {
@@ -118,22 +127,18 @@ jacocoTestReport {
 }
 
 
-coveralls {
-    jacocoReportPath "$buildDir/reports/jacoco/test/jacocoTestReport.xml"
-}
-
 afterEvaluate {
     // Ensure snapshot versions defer from release ones
     version = nexus.target.equals('SNAPSHOT') ? "$version-${nexus.target}" : version
 
     // Set the DLL library path
     def task = tasks.getByName('test')
-    def libPath = project.hasProperty('libPath') ? project.properties['libPath'] : System.properties['java.library.path']
+    def libPath = project.findProperty('libPath') ?: System.properties['java.library.path']
     task.systemProperty "jna.library.path", libPath
 
     // Setup signing based on nexus-target
     signing {
-        required { nexus.target == 'RELEASE' }
+        required = { nexus.target == 'RELEASE' }
         useInMemoryPgpKeys(signing.gpgPrivateKey, signing.gpgPassphrase)
         publishing.publications.forEach {
             sign(it)
@@ -149,15 +154,15 @@ jmhReport {
 task jmh(type: JavaExec, description: 'Executing JMH benchmarks') {
 
     doFirst {
-        def aacEncBin = project.properties.getOrDefault('aacEncBin', "/usr/bin/aac-enc")
+        def aacEncBin = project.findProperty('aacEncBin') ?: "/usr/bin/aac-enc"
         assert file(aacEncBin).exists()
         assert OperatingSystem.current().isLinux()
         systemProperties = ['benchmark.aac.enc.bin': aacEncBin, 'jna.debug_load': true]
     }
 
     classpath = sourceSets.benchmark.runtimeClasspath
-    main = 'org.openjdk.jmh.Main'
-    def format = project.properties.getOrDefault('format', 'json')
+    mainClass = 'org.openjdk.jmh.Main'
+    def format = project.findProperty('format') ?: 'json'
     def resultFile = file("build/reports/benchmark/result.${format}")
     resultFile.parentFile.mkdirs()
 
@@ -228,8 +233,8 @@ publishing {
             repositories {
                 mavenLocal()
                 maven {
-                    name "oss-sonatype-nexus"
-                    url nexus.url
+                    name = "oss-sonatype-nexus"
+                    url = nexus.url
                     credentials {
                         username = nexus.username
                         password = nexus.password
@@ -241,7 +246,7 @@ publishing {
 }
 
 wrapper {
-    gradleVersion = '8.14.2'
+    gradleVersion = '9.9.2'
 }
 
 nexusPublishing {

@@ -11,7 +11,7 @@ import org.jspecify.annotations.NonNull;
 /**
  * Maps to AACENCODER struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.3/libAACenc/src/aacenc_lib.cpp">fdk-aac/libAACenc/src/aacenc_lib.cpp</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MissingJavadocMethod", "MagicNumber", "MemberName"})
 @Structure.FieldOrder({"extParam", "coderConfig", "aacConfig", "hAacEnc", "hEnvEnc", "pSbrPayload", "hMetadataEnc", "metaDataAllowed", "hMpsEnc",

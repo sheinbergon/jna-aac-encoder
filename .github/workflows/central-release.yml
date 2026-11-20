@@ -18,10 +18,15 @@ jobs:
           java-version: 17
           distribution: "zulu"
 
-      - name: Run Tests and upload coverage
-        run: ./gradlew clean build check test coveralls
-        env:
-          COVERALLS_REPO_TOKEN: ${{ secrets.COVERALLS_REPO_TOKEN }}
+      - name: Run Tests
+        run: ./gradlew clean build check test
+
+      - name: Upload coverage
+        uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+        with:
+          file: build/reports/jacoco/test/jacocoTestReport.xml
+          format: jacoco
+          base-path: src/main/java
 
       - name: Publish To Release Repository
         run: ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository

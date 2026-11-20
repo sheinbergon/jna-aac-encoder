@@ -5,7 +5,7 @@ import com.sun.jna.Structure;
 /**
  * Maps to CODER_CONFIG struct.
  *
- * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.2/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
+ * @see <a href="https://github.com/mstorsjo/fdk-aac/blob/v2.0.3/libSYS/include/FDK_audio.h">fdk-aac/libSYS/include/FDK_audio.h</a>
  */
 @SuppressWarnings({"JavadocVariable", "VisibilityModifier", "MemberName"})
 @Structure.FieldOrder({"aot", "extAOT", "channelMode", "channelConfigZero", "samplingRate",

@@ -40,14 +40,14 @@ Artifacts are available on maven central:
 <dependency>
     <groupId>org.sheinbergon</groupId>
     <artifactId>jna-aac-encoder</artifactId>
-    <version>2.1.1</version>
+    <version>2.1.2</version>
 </dependency>
 ```
 
 **_Gradle_**
 
 ```groovy
-compile 'org.sheinbergon:jna-aac-encoder:2.1.1'
+compile 'org.sheinbergon:jna-aac-encoder:2.1.2'
 ```
 
 #### Additional information
@@ -55,13 +55,14 @@ compile 'org.sheinbergon:jna-aac-encoder:2.1.1'
 * Single artifact containing _libfdk-aac_ shared libraries cross-compiled for:
     * Linux (64-bit)
     * Windows (64-bit)
-    * OSX (Intel 64-bit / Apple Silicon, compiled with Xcode 13.3 SDK)
+    * OSX (Intel 64-bit / Apple Silicon, compiled with the macOS 15.5 SDK)
 
 #### Version matrix
 
 | Library Version | FDK-AAC Version | JDK Version | Supported Platforms                         |
 |-----------------|-----------------|-------------|---------------------------------------------|
-| 2.1.x           | 2.0.2           | 11          | Linux, Windows, OSX (Intel / Apple Silicon) |
+| 2.1.2           | 2.0.3           | 17          | Linux, Windows, OSX (Intel / Apple Silicon) |
+| 2.1.0 - 2.1.1   | 2.0.2           | 11          | Linux, Windows, OSX (Intel / Apple Silicon) |
 | 2.0.0           | 2.0.2           | 8           | Linux, Windows, OSX (Intel / Apple Silicon) |
 | 0.1.9           | 0.1.6           | 8           | Linux, Windows (64/32 Bit), OSX (Intel)     |
 
@@ -84,7 +85,7 @@ and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 To run the benchmarks locally:
 
 * Clone this repository onto a Linux host
-* Ensure that you have `libfdk-aac.so` __2.0.2__ library installed (either from an external repository or manually
+* Ensure that you have `libfdk-aac.so` __2.0.3__ library installed (either from an external repository or manually
   compiled)
 * Ensure that you have the `aac-enc` binary installed (either from an external repository or manually compiled)
 * Run the following command (from within the cloned repository)
