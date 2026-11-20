@@ -80,7 +80,7 @@ Performance benchmarks comparing JNA to a BINARY application(`aac-enc`) are avai
 using [JMH](http://openjdk.java.net/projects/code-tools/jmh/)
 and [JMH Visualizer](https://github.com/jzillmann/jmh-visualizer):
 
-![alt text](assets/jmh-results-23112023.png)
+![alt text](assets/jmh-results-20112026.png)
 
 To run the benchmarks locally:
 
