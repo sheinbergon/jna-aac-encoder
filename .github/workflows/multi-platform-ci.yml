@@ -32,6 +32,7 @@ jobs:
         with:
           java-version: 17
           distribution: "zulu"
+          cache: gradle
 
       # The bundled test libmediainfo.so links against libraries missing from current Ubuntu images
       - name: Install MediaInfo (Linux)
